@@ -44,10 +44,10 @@ EXPOSE 5090
 RUN apt-get update && apt-get -y install cron
 
 # Copy hello-cron file to the cron.d directory
-COPY hello-cron /etc/cron.d/hello-cron
+COPY scraper-cron /etc/cron.d/scraper-cron
 
 # Give execution rights on the cron job
-RUN chmod 0644 /etc/cron.d/hello-cron
+RUN chmod 0644 /etc/cron.d/scraper-cron
 
 # Apply cron job
 RUN crontab /etc/cron.d/scraper-cron
