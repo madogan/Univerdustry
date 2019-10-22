@@ -17,7 +17,7 @@ class MarmaraUniversityAuthorsSpider(scrapy.Spider):
         domains = ['marmara.edu.tr']
         # Request to authors listed page for every university.
         for domain in domains:
-            yield scrapy.Request(url=(self.base_query_url + domain), callback=self.parse, meta={"mail_domain": domain})
+            yield scrapy.Request(url=(self.base_query_url + domain), callback=self.parse, meta={"university_domain": domain})
 
     def parse(self, response):
         # This is Google defined unique id.
@@ -31,16 +31,16 @@ class MarmaraUniversityAuthorsSpider(scrapy.Spider):
             yield {
                 "author_id": self.get_author_id(author_section), 
                 "author_name": self.get_author_name(author_section),
-                "university": self.get_university(author_section), 
-                "mail_domain": response.meta["mail_domain"]
+                "affiliation": self.get_affiliation(author_section), 
+                "university_domain": response.meta["university_domain"]
             }
 
         # If next page button is not disabled, request to next page.
         next_page_button = self.get_next_page_button(response)
         if next_page_button.attrib.get('disabled', '') != 'disabled':
-            next_page_url = self.paginator_url.format(domain=response.meta["mail_domain"], last_author_id=next_page_button.attrib["onclick"].split('\\')[-3][3:], num=next(self.num_generator))
+            next_page_url = self.paginator_url.format(domain=response.meta["university_domain"], last_author_id=next_page_button.attrib["onclick"].split('\\')[-3][3:], num=next(self.num_generator))
             print(f"next_page_url: {next_page_url}")
-            yield scrapy.Request(next_page_url, callback=self.parse, meta={"first": False, "mail_domain": response.meta["mail_domain"]})
+            yield scrapy.Request(next_page_url, callback=self.parse, meta={"first": False, "university_domain": response.meta["university_domain"]})
 
     def get_next_page_url(self, next_page_button):
         return self.base_url + unquote(next_page_button.attrib["onclick"].split("=")[-1])[1:-1]
@@ -54,7 +54,7 @@ class MarmaraUniversityAuthorsSpider(scrapy.Spider):
         author_id = href.split("=")[-1]
         return author_id
     
-    def get_university(self, author_section):
+    def get_affiliation(self, author_section):
         result = author_section.css("div.gs_ai_aff::text").get()
         # Make it camel case.
         if result:
