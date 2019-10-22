@@ -1,0 +1,69 @@
+version: '3'
+services:
+  database:
+    build: ./database
+    volumes:
+      - "db_data:/var/lib/postgresql/9.3/main"
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    env_file:
+      - env_file
+    networks:
+      - db_nw
+    ports:
+      - "5432:5432"
+  # scraper:
+  #   build: ./scraper
+  #   volumes:
+  application:
+    build: ./application
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    env_file:
+      - env_file
+    networks:
+      - db_nw
+      - app_nw
+    depends_on:
+      - database
+  nginx:
+    build: ./nginx
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    ports:
+      - "8080:80"
+    networks:
+      - app_nw
+    depends_on:
+      - application
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.7.2
+    container_name: elasticsearch
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+    depends_on:
+      - scraper
+networks:
+  db_nw:
+  app_nw:
+  esnet:
+volumes:
+  db_data:
+  esdata1:
+    driver: local
+  esdata2:
+    driver: local

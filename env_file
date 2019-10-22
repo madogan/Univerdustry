@@ -1,0 +1,12 @@
+FLASK_APP=allconfig_app/app
+FLASK_ENV=development
+SECRET_KEY="nothing"
+DOCKER_ACTIVE=True
+DATABASE_URL=postgres://univerdustry_root:univerdustry_root@database:5432/univerdustry
+EXPOSE_PORT=5090
+FILE_LOG_LEVEL=DEBUG
+CONSOLE_LOG_LEVE=INFO
+PASV_ADDRESS=0.0.0.0
+PASV_MIN=21200
+PASV_MAX=21210
+UMASK=022
