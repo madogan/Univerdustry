@@ -1,1 +1,5 @@
 Scrapy-1.7.3-py2.py3-none-any.whl
+beautifulsoup4==4.8.1
+requests==2.22.0
+bibtexparser==1.1.0
+arrow==0.15.2
