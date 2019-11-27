@@ -1,0 +1,15 @@
+POSTGREST_VERSION="v6.0.2"
+PGRST_DB_URI=postgres://univerdustry:univerdustry@database:5432/univerdustry
+PGRST_DB_SCHEMA=public
+PGRST_DB_ANON_ROLE=univerdustry
+POSTGRES_DB=univerdustry
+POSTGRES_USER=univerdustry
+POSTGRES_PASSWORD=univerdustry
+ES_JAVA_OPTS=-Xms512m -Xmx512m
+ALLOW_EMPTY_PASSWORD=yes
+DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+FLOWER_BROKER=redis://redis:6379/0
+CELERY_BROKER=redis://redis:6379/0
+DATABASE_REST_URL=http://database_rest:3000
+ELASTICSEARCH_URL=http://elasticsearch:9200
+OPERATOR_URL=http://operator:6000

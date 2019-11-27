@@ -1,0 +1,16 @@
+gunicorn==20.0.2
+Flask==1.0.2
+Flask-SQLAlchemy==2.4.1
+SQLAlchemy-Utils==0.35.0
+loguru==0.3.2
+celery==4.3.0
+arrow==0.15.2
+beautifulsoup4==4.7.1
+bibtexparser==1.1.0
+PySocks==1.6.8
+psycopg2==2.8.3
+requests==2.21.0
+pdfminer==20191103
+pdfminer.six==20191110
+redis==3.3.11
+elasticsearch==7.0.5
