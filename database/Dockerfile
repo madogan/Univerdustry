@@ -11,7 +11,12 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc
 # Install ``python-software-properties``, ``software-properties-common`` and PostgreSQL 9.3
 # There are some warnings (in red) that show up during the build. 
 # You can hide them by prefixing each apt-get statement with DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y python-software-properties software-properties-common postgresql-9.5 postgresql-client-9.5 postgresql-contrib-9.5
+RUN apt-get update && apt-get install -y libpq-dev python-software-properties software-properties-common postgresql-9.5 postgresql-client-9.5 postgresql-contrib-9.5 postgresql-server-dev-9.5
+
+# Install python dependencies.
+RUN add-apt-repository ppa:jonathonf/python-3.6
+RUN apt-get update
+RUN apt-get install -y build-essential python3.6 python3.6-dev python3-pip
 
 # Note: The official Debian and Ubuntu images automatically ``apt-get clean`` after each ``apt-get``
 
@@ -27,7 +32,6 @@ RUN    /etc/init.d/postgresql start &&\
    psql --command "GRANT USAGE ON SCHEMA public TO readaccess;" && \
    psql --command "GRANT SELECT ON ALL TABLES IN SCHEMA public TO readaccess;" && \
    psql --command "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO readaccess;"
-
 
 # Adjust PostgreSQL configuration so that remote connections to the
 # database are possible.

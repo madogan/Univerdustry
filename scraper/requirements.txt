@@ -1,5 +1,5 @@
-Scrapy-1.7.3-py2.py3-none-any.whl
-beautifulsoup4==4.8.1
-requests==2.22.0
-bibtexparser==1.1.0
-arrow==0.15.2
+gunicorn==20.0.2
+Flask==1.0.2
+loguru==0.3.2
+requests==2.21.0
+Scrapy==1.7.3

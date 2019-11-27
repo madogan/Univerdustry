@@ -1,1 +1,0 @@
-DEFAULT_PROFILE_IMAGE_URL = "https://www.chcf.org/wp-content/themes/chcf_theme/images/default-profile-pic.jpg"

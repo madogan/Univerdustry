@@ -1,69 +1,113 @@
 version: '3'
+
 services:
   database:
     build: ./database
     volumes:
-      - "db_data:/var/lib/postgresql/9.3/main"
-      - /etc/localtime:/etc/localtime
-      - /etc/timezone:/etc/timezone
+      - "db_data:/var/lib/postgresql/9.5/main"
     env_file:
       - env_file
     networks:
       - db_nw
     ports:
       - "5432:5432"
-  # scraper:
-  #   build: ./scraper
-  #   volumes:
-  application:
-    build: ./application
+    env_file:
+      - env_file
+  database_rest:
+    build: ./postgrest
+    ports:
+      - "3000:3000"
+    networks:
+      - db_nw
+    env_file:
+      - env_file
+    depends_on:
+      - database
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
     volumes:
-      - /etc/localtime:/etc/localtime
-      - /etc/timezone:/etc/timezone
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - search_nw
+    env_file:
+      - env_file
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.0.1
+    volumes:
+      - ./kibana:/usr/share/kibana/config/
+    ports:
+      - "5601:5601"
+    networks:
+      - search_nw
+    env_file:
+      - env_file
+    depends_on:
+      - elasticsearch
+  redis:
+    image: 'bitnami/redis:latest'
+    ports:
+      - "6379:6379"
+    networks:
+      - app_nw
+    volumes:
+      - 'redis_data:/bitnami'
+    env_file:
+      - env_file
+  operator:
+    build: ./operator
+    env_file:
+      - env_file
+    ports:
+      - 6000:6000
+    networks:
+      - db_nw
+      - app_nw
+      - search_nw
+    depends_on:
+      - database_rest
+  scraper:
+    build: ./scraper
+    env_file:
+      - env_file
+    ports:
+      - 7000:7000
+    networks:
+      - app_nw
+    depends_on:
+      - operator
+  worker:
+    build: ./worker
     env_file:
       - env_file
     networks:
       - db_nw
       - app_nw
+      - search_nw
+    env_file:
+      - env_file
     depends_on:
-      - database
-  nginx:
-    build: ./nginx
-    volumes:
-      - /etc/localtime:/etc/localtime
-      - /etc/timezone:/etc/timezone
-    ports:
-      - "8080:80"
+      - redis
+  flower:
+    image: zoomeranalytics/flower:0.9.1-4.0.2
     networks:
       - app_nw
-    depends_on:
-      - application
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.7.2
-    container_name: elasticsearch
-    environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - esdata1:/usr/share/elasticsearch/data
+    env_file:
+      - env_file
     ports:
-      - 9200:9200
-    networks:
-      - esnet
+      - "5555:5555"
+    env_file:
+      - env_file
     depends_on:
-      - scraper
+      - redis
+
 networks:
-  db_nw:
   app_nw:
-  esnet:
+  db_nw:
+  search_nw:
+
 volumes:
   db_data:
-  esdata1:
-    driver: local
-  esdata2:
-    driver: local
+  redis_data:
