@@ -1,6 +1,6 @@
 FROM python:3.6-alpine3.7
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
-COPY . /app
+COPY ../operator /app
 WORKDIR /app
 RUN apk update
 RUN apk add postgresql-libs
