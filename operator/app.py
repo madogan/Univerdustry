@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Summary
-
-Description.
-
-TODO:
-    *
-"""
+""""""
 
 # Import system level libraries.
 import os
@@ -27,15 +21,12 @@ logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
            rotation="100 MB",  # Every log file max size.
            retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))  # Remove logs older than 3 days.
 
-# Import neccessary libraries.
-from scholary import scholary
+# Import necessary libraries.
 from config import DATABASE_URL
 from flask.helpers import url_for
-from flask.wrappers import Response
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, abort, json, jsonify, request
+from flask import Flask, jsonify, request
 from sqlalchemy_utils import database_exists, create_database
-
 
 # Create application instance.
 app = Flask(__name__)
@@ -46,6 +37,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Update json encoder
 from custom_json_encoder import CustomJsonEncoder
+
 app.json_encoder = CustomJsonEncoder
 
 # Create and init database instance.
@@ -90,7 +82,7 @@ def index():
 def add_author():
     # Posted data must be json.
     if not request.is_json:
-        return jsonify({"status": "error", 
+        return jsonify({"status": "error",
                         "message": "Bad request. Posted data must be json."
                                    "Check your headers."}), 400
 
@@ -102,7 +94,7 @@ def add_author():
 
     # ``author_name`` must be provided.
     if author_name is None:
-        return jsonify({"status": "error", 
+        return jsonify({"status": "error",
                         "message": "Bad request. ``author_name`` field not "
                                    "found in posted data."}), 400
 
@@ -111,7 +103,8 @@ def add_author():
     # Add task to queue.
     task = get_author_and_publications.apply_async(args=[author_name])
 
-    return jsonify({"status": "ok", "message": "Added to queue."}), 202, {'Location': url_for("check_task_status", task_id=task.id)}
+    return jsonify({"status": "ok", "message": "Added to queue."}), 202, {"Location": url_for("check_task_status",
+                                                                                              task_id=task.id)}
 
 
 @app.route("/univerdustry/task/<task_id>/status")

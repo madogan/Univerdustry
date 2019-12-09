@@ -6,7 +6,6 @@ import requests
 from scholary import scholary
 from string import ascii_letters
 from pdfminer.pdfpage import PDFPage
-from pdfminer.layout import LAParams
 from elasticsearch import Elasticsearch
 from pdfminer.converter import TextConverter
 from pdfminer.pdfparser import PDFSyntaxError
@@ -19,43 +18,37 @@ from app import logger, celery
 es = Elasticsearch(ELASTICSEARCH_URL)
 
 
-def extract_pdf(url, title, publication_id):
-    logger.debug(f'{DATABASE_REST_URL} - {ELASTICSEARCH_URL}')
-
-
+def extract_pdf(url, title):
     pdf_logger = logging.getLogger("pdfminer")
     pdf_logger.setLevel(logging.CRITICAL)
     pdf_logger.disabled = True
 
     title = "".join([c for c in title if c in (ascii_letters + " ")])
     filename = title.replace(" ", "_").lower()
-    
+
     logger.info(f'Starting pdf extraction for Publication({filename})')
 
     dir_name = os.path.join("files")
-    
+
     raw = requests.get(url).content
 
     file_path = os.path.join(dir_name, filename + ".pdf")
-    
+
     with open(file_path, "wb+") as f:
         f.write(raw)
-    
+
     resource_manager = PDFResourceManager()
     fake_file_handle = io.StringIO()
     converter = TextConverter(resource_manager, fake_file_handle)
     page_interpreter = PDFPageInterpreter(resource_manager, converter)
-    
-    raw = None
+
     with open(file_path, 'rb') as f:
-        for page in PDFPage.get_pages(f, 
-                                      caching=True,
-                                      check_extractable=True):
+        for page in PDFPage.get_pages(f, caching=True, check_extractable=True):
             page_interpreter.process_page(page)
- 
+
         text = fake_file_handle.getvalue()
         raw = f.read()
- 
+
     # close open handles
     converter.close()
     fake_file_handle.close()
@@ -74,7 +67,7 @@ def get_author_and_publications(self, author_name):
     All data sends to Elasticsearch and PostgreSQL Database.
 
     Arguments:
-        author_info: Author information has gotten from scholary.
+        author_name: Author information has gotten from scholary.
     """
 
     query_result = scholary.search_author(author_name)
@@ -89,7 +82,7 @@ def get_author_and_publications(self, author_name):
         logger.info(f'Author ({author_name}) not found.')
         return False
 
-    logger.info(f'\nAuthor({author_name}) found.\nAffilation: {getattr(author_info, "affiliation", None)}')
+    logger.info(f'\nAuthor({author_name}) found.\nAffiliation: {getattr(author_info, "affiliation", None)}')
 
     # Parse to dictionary as suitable with database columns.
     author = {
@@ -106,7 +99,8 @@ def get_author_and_publications(self, author_name):
     }
 
     # Insert author information.
-    response = requests.post(f"{DATABASE_REST_URL}/author", json=author, headers={"Prefer": "resolution=merge-duplicates"})
+    response = requests.post(f"{DATABASE_REST_URL}/author", json=author,
+                             headers={"Prefer": "resolution=merge-duplicates"})
     logger.info(f'Response for Author({author["name"]}): {response}')
 
     # Iterate over all publications.
@@ -120,7 +114,7 @@ def get_author_and_publications(self, author_name):
         if len(pub_in_db) > 0:
             logger.info(f'Publication already exists.')
             continue
-        
+
         # Get details of the publication.
         publication_info = pub.fill()
 
@@ -133,34 +127,33 @@ def get_author_and_publications(self, author_name):
             "source_url": publication_info.bib.get("eprint", None),
             "cited_by": getattr(publication_info, "citedby", 0)
         }
-        
+
         # If eprint url is found, get and extract PDF.
         if publication_dictionary["source_url"] is not None:
             try:
-                raw, text = extract_pdf(publication_dictionary["source_url"], 
-                                        publication_dictionary["title"], 
-                                        publication_dictionary["ident"])
+                raw, text = extract_pdf(publication_dictionary["source_url"], publication_dictionary["title"])
                 logger.info(f'Source url is found.')
 
-                publication_dictionary["content_text"] = text.strip().replace("\n", " ").replace("\t", " ").replace("\r", " ")
+                publication_dictionary["content_text"] = text.strip().replace("\n", " ").replace("\t", " ")\
+                    .replace("\r", " ")
                 logger.info(f'Len. Content Text: {len(publication_dictionary.get("content_text", []))}')
             except PDFSyntaxError:
                 logger.error(f'While extracting text from pdf there is an error occured. Syntax Error.')
-          
+
         logger.info(f'Posting data of Publication({publication_dictionary["title"]}) of Author({author["name"]})')
-        
+
         # Insert publication to database.
         try:
-            response = requests.post(f"{DATABASE_REST_URL}/publication", 
-                                     json=publication_dictionary, 
+            response = requests.post(f"{DATABASE_REST_URL}/publication",
+                                     json=publication_dictionary,
                                      headers={"Prefer": "resolution=merge-duplicates"})
         except requests.exceptions.ConnectionError:
             logger.info(f'We received and error but insertion is correct. We did not solve yet.')
 
         logger.info(f'Response for Publication({publication_dictionary["title"]}): {response}')
         response = requests.post(f"{DATABASE_REST_URL}/asc_author_publication",
-                                json={"author_id": author["ident"], "publication_id": publication_dictionary["ident"]}, 
-                                headers={"Prefer": "resolution=merge-duplicates"})
+                                 json={"author_id": author["ident"], "publication_id": publication_dictionary["ident"]},
+                                 headers={"Prefer": "resolution=merge-duplicates"})
 
         # Insert to elasticsearch.
         es.index(index="marmara_edu_tr", body={"author": author, "publication": publication_dictionary})

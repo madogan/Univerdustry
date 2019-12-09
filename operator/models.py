@@ -1,5 +1,3 @@
-import psycopg2 as pg
-import sqlalchemy as sql
 import sqlalchemy.dialects.postgresql as sql_pg
 
 from sqlalchemy.orm import relationship
