@@ -3,6 +3,7 @@ version: '3'
 services:
   database:
     build: ./database
+    container_name: database
     volumes:
       - "db_data:/var/lib/postgresql/9.5/main"
     env_file:
@@ -11,10 +12,9 @@ services:
       - db_nw
     ports:
       - "5432:5432"
-    env_file:
-      - env_file
   database_rest:
     build: ./postgrest
+    container_name: database_rest
     ports:
       - "3000:3000"
     networks:
@@ -24,7 +24,8 @@ services:
     depends_on:
       - database
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
+    container_name: elasticsearch
     volumes:
       - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
@@ -32,18 +33,18 @@ services:
       - "9300:9300"
     networks:
       - search_nw
-    env_file:
-      - env_file
+      - app_nw
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
   kibana:
     image: docker.elastic.co/kibana/kibana:6.0.1
+    container_name: kibana
     volumes:
-      - ./kibana:/usr/share/kibana/config/
+      - ./kibana/:/usr/share/kibana/config/
     ports:
       - "5601:5601"
     networks:
       - search_nw
-    env_file:
-      - env_file
     depends_on:
       - elasticsearch
   redis:
@@ -79,9 +80,7 @@ services:
     depends_on:
       - operator
   worker:
-    build: ./worker
-    env_file:
-      - env_file
+    build: ./operator
     networks:
       - db_nw
       - app_nw
@@ -98,10 +97,22 @@ services:
       - env_file
     ports:
       - "5555:5555"
+    depends_on:
+      - redis
+  gateway:
+    build: ./gateway
+    networks:
+      - db_nw
+      - app_nw
+      - search_nw
+    ports:
+      - "5090:5090"
     env_file:
       - env_file
     depends_on:
-      - redis
+      - database_rest
+      - elasticsearch
+      - operator
 
 networks:
   app_nw:
