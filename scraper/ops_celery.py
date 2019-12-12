@@ -8,8 +8,10 @@ def make_celery(app):
         CELERY_BROKER_URL=os.getenv("CELERY_BROKER"),
         CELERY_RESULT_BACKEND=os.getenv("CELERY_BROKER")
     )
-    celery = Celery(app.import_name, backend=app.config["CELERY_RESULT_BACKEND"],
-                    broker=app.config["CELERY_BROKER_URL"], include=[app.import_name])
+    celery = Celery(app.import_name,
+                    backend=app.config["CELERY_RESULT_BACKEND"],
+                    broker=app.config["CELERY_BROKER_URL"],
+                    include=[app.import_name])
     celery.conf.update(app.config)
     TaskBase = celery.Task
 

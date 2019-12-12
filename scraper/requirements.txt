@@ -5,3 +5,4 @@ requests==2.21.0
 Scrapy==1.7.3
 celery==4.3.0
 redis==3.3.11
+billiard==3.6.1.0

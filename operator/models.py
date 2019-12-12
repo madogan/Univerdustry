@@ -1,7 +1,8 @@
+import os
+
 import sqlalchemy.dialects.postgresql as sql_pg
 
 from sqlalchemy.orm import relationship
-from config import DEFAULT_PROFILE_IMAGE_URL
 
 from app import db
 
@@ -25,7 +26,8 @@ class Author(db.Model):
     hindex = db.Column(db.Integer, default=0, nullable=True)
     i10index = db.Column(db.Integer, default=0, nullable=True)
     interests = db.Column(db.JSON, default=None, nullable=True)
-    url_picture = db.Column(db.String, nullable=True, default=DEFAULT_PROFILE_IMAGE_URL)
+    url_picture = db.Column(db.String, nullable=True,
+                            default=os.getenv("DEFAULT_PROFILE_IMAGE_URL"))
 
     # Many to many relation with `publication` table.
     # Every author has many publications. and

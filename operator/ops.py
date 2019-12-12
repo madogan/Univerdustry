@@ -10,9 +10,12 @@ from elasticsearch import Elasticsearch
 from pdfminer.converter import TextConverter
 from pdfminer.pdfparser import PDFSyntaxError
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-from config import DEFAULT_PROFILE_IMAGE_URL, DATABASE_REST_URL, ELASTICSEARCH_URL
 
 from app import logger, celery
+
+DATABASE_REST_URL = os.getenv("DATABASE_REST_URL")
+ELASTICSEARCH_URL = os.getenv("ELASTICSEARCH_URL")
+DEFAULT_PROFILE_IMAGE_URL = os.getenv("DEFAULT_PROFILE_IMAGE_URL")
 
 
 es = Elasticsearch(ELASTICSEARCH_URL)
@@ -30,28 +33,36 @@ def extract_pdf(url, title):
 
     dir_name = os.path.join("files")
 
-    raw = requests.get(url).content
+    try:
+        resp = requests.get(url)
+        raw = resp.content
+    except Exception:
+        return None, None
 
     file_path = os.path.join(dir_name, filename + ".pdf")
 
     with open(file_path, "wb+") as f:
         f.write(raw)
 
-    resource_manager = PDFResourceManager()
-    fake_file_handle = io.StringIO()
-    converter = TextConverter(resource_manager, fake_file_handle)
-    page_interpreter = PDFPageInterpreter(resource_manager, converter)
+    try:
+        resource_manager = PDFResourceManager()
+        fake_file_handle = io.StringIO()
+        converter = TextConverter(resource_manager, fake_file_handle)
+        page_interpreter = PDFPageInterpreter(resource_manager, converter)
 
-    with open(file_path, 'rb') as f:
-        for page in PDFPage.get_pages(f, caching=True, check_extractable=True):
-            page_interpreter.process_page(page)
+        with open(file_path, 'rb') as f:
+            for page in PDFPage.get_pages(f, caching=True,
+                                          check_extractable=True):
+                page_interpreter.process_page(page)
 
-        text = fake_file_handle.getvalue()
-        raw = f.read()
+            text = fake_file_handle.getvalue()
+            raw = f.read()
 
-    # close open handles
-    converter.close()
-    fake_file_handle.close()
+        # close open handles
+        converter.close()
+        fake_file_handle.close()
+    except Exception:
+        return None, None
 
     return raw, text
 
@@ -69,8 +80,11 @@ def get_author_and_publications(self, author_name):
     Arguments:
         author_name: Author information has gotten from scholary.
     """
+    logger.info(f'I am in get_author_and_publications with {author_name}')
 
     query_result = scholary.search_author(author_name)
+
+    logger.info(f'Query_result: {query_result}')
 
     try:
         author_info = next(query_result).fill()
@@ -82,7 +96,8 @@ def get_author_and_publications(self, author_name):
         logger.info(f'Author ({author_name}) not found.')
         return False
 
-    logger.info(f'\nAuthor({author_name}) found.\nAffiliation: {getattr(author_info, "affiliation", None)}')
+    logger.info(f'\nAuthor({author_name}) found.\nAffiliation: '
+                f'{getattr(author_info, "affiliation", None)}')
 
     # Parse to dictionary as suitable with database columns.
     author = {
@@ -95,7 +110,8 @@ def get_author_and_publications(self, author_name):
         "hindex": getattr(author_info, "hindex", 0),
         "i10index": getattr(author_info, "i10index", 0),
         "interests": getattr(author_info, "interests", []),
-        "url_picture": getattr(author_info, "url_picture", DEFAULT_PROFILE_IMAGE_URL)
+        "url_picture": getattr(author_info, "url_picture",
+                               DEFAULT_PROFILE_IMAGE_URL)
     }
 
     # Insert author information.
@@ -130,17 +146,22 @@ def get_author_and_publications(self, author_name):
 
         # If eprint url is found, get and extract PDF.
         if publication_dictionary["source_url"] is not None:
-            try:
-                raw, text = extract_pdf(publication_dictionary["source_url"], publication_dictionary["title"])
+            raw, text = extract_pdf(publication_dictionary["source_url"],
+                                    publication_dictionary["title"])
+            if raw is not None and text is not None:
                 logger.info(f'Source url is found.')
 
-                publication_dictionary["content_text"] = text.strip().replace("\n", " ").replace("\t", " ")\
-                    .replace("\r", " ")
-                logger.info(f'Len. Content Text: {len(publication_dictionary.get("content_text", []))}')
-            except PDFSyntaxError:
-                logger.error(f'While extracting text from pdf there is an error occured. Syntax Error.')
+                publication_dictionary["content_text"] = \
+                    str(text).strip().replace("\n", " ")\
+                                     .replace("\t", " ") \
+                                     .replace("\r", " ")
 
-        logger.info(f'Posting data of Publication({publication_dictionary["title"]}) of Author({author["name"]})')
+                logger.info(f'Len. Content Text: '
+                            f'{len(publication_dictionary["content_text"])}')
+
+        logger.info(f'Posting data of '
+                    f'Publication({publication_dictionary["title"]}) '
+                    f'of Author({author["name"]})')
 
         # Insert publication to database.
         try:
@@ -156,4 +177,5 @@ def get_author_and_publications(self, author_name):
                                  headers={"Prefer": "resolution=merge-duplicates"})
 
         # Insert to elasticsearch.
-        es.index(index="marmara_edu_tr", body={"author": author, "publication": publication_dictionary})
+        es.index(index="univerdustry", doc_type="marmara_edu_tr",
+                 body={"author": author, "publication": publication_dictionary})

@@ -1,13 +1,11 @@
-version: '3'
+version: "3"
 
 services:
   database:
     build: ./database
     container_name: database
     volumes:
-      - "db_data:/var/lib/postgresql/9.5/main"
-    env_file:
-      - env_file
+      - db_data:/var/lib/postgresql/9.5/main
     networks:
       - db_nw
     ports:
@@ -32,7 +30,7 @@ services:
       - "9200:9200"
       - "9300:9300"
     networks:
-      - search_nw
+      - es_nw
       - app_nw
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
@@ -44,53 +42,75 @@ services:
     ports:
       - "5601:5601"
     networks:
-      - search_nw
+      - es_nw
+    env_file:
+      - env_file
     depends_on:
       - elasticsearch
-  redis:
-    image: 'bitnami/redis:latest'
+  operator:
+    build: ./operator
+    container_name: operator
+    ports:
+      - "6000:6000"
+    networks:
+      - db_nw
+      - es_nw
+      - app_nw
+    env_file:
+      - env_file
+    depends_on:
+      - database_rest
+      - elasticsearch
+  broker:
+    image: bitnami/redis:latest
+    container_name: broker
     ports:
       - "6379:6379"
     networks:
       - app_nw
     volumes:
-      - 'redis_data:/bitnami'
+      - redis_data:/bitnami
     env_file:
       - env_file
-  operator:
+  worker_1:
     build: ./operator
-    env_file:
-      - env_file
-    ports:
-      - 6000:6000
+    container_name: worker_1
+    command: ["celery", "worker", "-A", "app.celery", "--loglevel=info"]
     networks:
       - db_nw
       - app_nw
-      - search_nw
-    depends_on:
-      - database_rest
-  scraper:
-    build: ./scraper
+      - es_nw
     env_file:
       - env_file
-    ports:
-      - 7000:7000
-    networks:
-      - app_nw
     depends_on:
-      - operator
-  worker:
+      - broker
+  worker_2:
     build: ./operator
+    container_name: worker_2
+    command: ["celery", "worker", "-A", "app.celery", "--loglevel=info"]
     networks:
       - db_nw
       - app_nw
-      - search_nw
+      - es_nw
     env_file:
       - env_file
     depends_on:
-      - redis
+      - broker
+  worker_3:
+    build: ./operator
+    container_name: worker_3
+    command: ["celery", "worker", "-A", "app.celery", "--loglevel=info"]
+    networks:
+      - db_nw
+      - app_nw
+      - es_nw
+    env_file:
+      - env_file
+    depends_on:
+      - broker
   flower:
     image: zoomeranalytics/flower:0.9.1-4.0.2
+    container_name: flower
     networks:
       - app_nw
     env_file:
@@ -98,26 +118,37 @@ services:
     ports:
       - "5555:5555"
     depends_on:
-      - redis
+      - broker
+  scraper:
+    build: ./scraper
+    container_name: scraper
+    ports:
+      - "7000:7000"
+    networks:
+      - app_nw
+    env_file:
+      - env_file
+    depends_on:
+      - operator
   gateway:
     build: ./gateway
+    container_name: gateway
     networks:
       - db_nw
       - app_nw
-      - search_nw
     ports:
       - "5090:5090"
     env_file:
       - env_file
     depends_on:
-      - database_rest
-      - elasticsearch
+      - scraper
       - operator
+      - database
 
 networks:
   app_nw:
   db_nw:
-  search_nw:
+  es_nw:
 
 volumes:
   db_data:

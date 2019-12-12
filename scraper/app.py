@@ -1,13 +1,8 @@
-# -*- coding: utf-8 -*-
-""""""
-
 # Import system level libraries.
 import os
 import sys
 
 # Store path of application root in a variable.
-from threading import Thread
-
 ROOT_DIR = os.path.join(os.path.dirname(__file__), "..")
 
 # Import logging library.
@@ -16,12 +11,14 @@ from loguru import logger
 
 # File logger.
 logger.add(sink=sys.stderr,
-           format="|{time}| |{process}| |{level}| |{name}:{function}:{line}| {message}", serialize=True,
+           format="|{time}| |{process}| |{level}| |{name}:{function}:{line}| "
+                  "{message}", serialize=True,
            level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
 
 # Import necessary libraries.
+from flask import Flask, jsonify, request
 from scrapy.crawler import CrawlerProcess
-from flask import Flask, jsonify, request, url_for
+from werkzeug.exceptions import BadRequest
 from scrapy.utils.project import get_project_settings
 
 # Create application instance.
@@ -32,22 +29,19 @@ from custom_json_encoder import CustomJsonEncoder
 app.json_encoder = CustomJsonEncoder
 
 # Create and configure celery instance.
-from ops_celery import make_celery
-celery = make_celery(app)
-
-
-@celery.task(bind=True)
-def starter(self, organization_domain):
-    logger.debug(f'Starter for {organization_domain}')
-    process = CrawlerProcess(get_project_settings())
-
-    process.crawl(table[organization_domain])
-    process.start()  # the script will block here until the crawling is finished
-    logger.debug(f'Process started.')
-
-
-# Spiders match table.
-table = {"marmara.edu.tr": "marmara_university_authors_spider"}
+# from ops_celery import make_celery
+# celery = make_celery(app)
+#
+#
+# @celery.task(bind=True)
+# def starter(self, organization_domain):
+#     logger.debug(f'Starter for {organization_domain}')
+#
+#     process = CrawlerProcess(get_project_settings())
+#
+#     process.crawl(organization_domain)
+#
+#     logger.debug(f'Process started.')
 
 
 @app.route("/")
@@ -55,12 +49,11 @@ def index():
     return "Scraper is running."
 
 
-@app.route("/univerdustry/scraper/start", methods=["GET"])
+@app.route("/univerdustry/scraper/start", methods=["POST"])
 def get_university():
     # Posted data must be json.
     if not request.is_json:
-        return jsonify({"status": "error",
-                        "message": "Bad request. Posted data must be json. Check your headers."}), 400
+        return BadRequest
 
     # Get posted data as json.
     data = request.json
@@ -69,12 +62,18 @@ def get_university():
     organization_domain = data.get("organization_domain", None)
 
     # ``author_name`` must be provided.
-    if organization_domain is None or organization_domain not in table:
-        return jsonify({"status": "error", 
-                        "message": "Bad request. ``organization_domain`` field not "
-                                   "found in posted data or not supported."}), 400
+    if organization_domain is None:
+        return BadRequest
 
-    # Add task to queue.
-    task = starter.apply_async(args=[organization_domain])
+    try:
+        from threading import Thread
 
-    return jsonify({"status": "ok", "message": "Added to queue.", "task_id": task.id}), 202
+        process = CrawlerProcess(get_project_settings())
+
+        process.crawl(organization_domain)
+
+        Thread(target=process.start, daemon=True).start()
+    except Exception as e:
+        return jsonify({"status": "failure", "message": str(e)}), 500
+
+    return jsonify({"status": "ok"}), 202

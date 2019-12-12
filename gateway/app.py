@@ -16,13 +16,13 @@ from loguru import logger
 
 # Console logger.
 logger.add(sink=sys.stderr,
-           format="|{time}| |{process}| |{level}| |{name}:{function}:{line}| {message}", serialize=True,
+           format="|{time}| |{process}| |{level}| |{name}:{function}:{line}| "
+                  "{message}", serialize=True,
            level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
 
 # Import necessary libraries.
 import requests
-from flask import Flask, request, abort, jsonify
-from config import DATABASE_REST_URL, ELASTICSEARCH_URL, SCRAPER_URL
+from flask import Flask, jsonify
 
 
 # Create application instance.
@@ -34,7 +34,7 @@ from custom_json_encoder import CustomJsonEncoder
 app.json_encoder = CustomJsonEncoder
 
 from elasticsearch import Elasticsearch
-es = Elasticsearch(ELASTICSEARCH_URL)
+es = Elasticsearch(os.getenv("ELASTICSEARCH_URL"))
 
 
 @app.route("/")
@@ -43,38 +43,43 @@ def index(path):
     return "Gateway is working..."
 
 
-@app.route(f'/api/v{__version__}/search', methods=["GET"])
-def search():
-    data = request.args.json()
-
-    if "query" not in data:
-        abort(404)
-
-    result = es.search(index="marmara_edu_tr",
-                       body={"query": {"match": {"full_text": data["query"]}}})
-
-    return jsonify(result)
-
-
-@app.route(f'/api/v{__version__}/author/<author_id>', methods=["GET"])
-def get_author(author_id):
-    # TODO: Input check.
-    return jsonify(requests.get(DATABASE_REST_URL + f'/author?ident=eq.{author_id}'))
-
-
-@app.route(f'/api/v{__version__}/publication/<publication_id>', methods=["GET"])
-def get_publication(publication_id):
-    # TODO: Input check.
-    return jsonify(requests.get(DATABASE_REST_URL + f'/publication?ident=eq.{publication_id}'))
-
-
 @app.route(f'/api/v{__version__}/scrape/<organization_domain>', methods=["GET"])
 def scrape(organization_domain):
-    url = SCRAPER_URL + "/univerdustry/scraper/start"
+    url = os.getenv("SCRAPER_URL") + "/univerdustry/scraper/start"
 
-    response = requests.get(url, json={"organization_domain": organization_domain}).json()
+    data = {"organization_domain": organization_domain}
+    response = requests.post(url, json=data).json()
 
     if response["status"] == "ok":
         return jsonify(response), 202
     else:
-        return jsonify({"status": "error", "message": response["message"]}), 500
+        return jsonify({"status": "error", "message": response["message"]}), \
+               500
+
+#
+# @app.route(f'/api/v{__version__}/search', methods=["GET"])
+# def search():
+#     data = request.args.json()
+#
+#     if "query" not in data:
+#         abort(404)
+#
+#     result = es.search(index="marmara_edu_tr",
+#                        body={"query": {"match": {"full_text": data["query"]}}})
+#
+#     return jsonify(result)
+#
+#
+# @app.route(f'/api/v{__version__}/author/<author_id>', methods=["GET"])
+# def get_author(author_id):
+#     # TODO: Input check.
+#     return jsonify(requests.get(DATABASE_REST_URL + f'/author?ident=eq.{author_id}'))
+#
+#
+# @app.route(f'/api/v{__version__}/publication/<publication_id>', methods=["GET"])
+# def get_publication(publication_id):
+#     # TODO: Input check.
+#     return jsonify(requests.get(DATABASE_REST_URL + f'/publication?ident=eq.{publication_id}'))
+#
+#
+#

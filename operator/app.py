@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
-""""""
-
 # Import system level libraries.
 import os
 import sys
 
 # Store path of application root in a variable.
+from werkzeug.exceptions import BadRequest
+
 ROOT_DIR = os.path.join(os.path.dirname(__file__), "..")
 
 # Import logging library.
@@ -17,12 +16,13 @@ logger.add(sink=sys.stderr, level="DEBUG")
 
 # File logger.
 logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
-           format="|{time}| |{process}| |{level}| |{name}:{function}:{line}| {message}", serialize=True,
+           format="|{time}| |{process}| |{level}| |{name}:{function}:{line}| "
+                  "{message}", serialize=True,
            rotation="100 MB",  # Every log file max size.
-           retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))  # Remove logs older than 3 days.
+           # Remove logs older than 3 days.
+           retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
 
 # Import necessary libraries.
-from config import DATABASE_URL
 from flask.helpers import url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, jsonify, request
@@ -32,7 +32,7 @@ from sqlalchemy_utils import database_exists, create_database
 app = Flask(__name__)
 
 # Configure application.
-app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("PGRST_DB_URI")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Update json encoder
@@ -82,9 +82,7 @@ def index():
 def add_author():
     # Posted data must be json.
     if not request.is_json:
-        return jsonify({"status": "error",
-                        "message": "Bad request. Posted data must be json."
-                                   "Check your headers."}), 400
+        return BadRequest
 
     # Get posted data as json.
     data = request.json
@@ -94,17 +92,15 @@ def add_author():
 
     # ``author_name`` must be provided.
     if author_name is None:
-        return jsonify({"status": "error",
-                        "message": "Bad request. ``author_name`` field not "
-                                   "found in posted data."}), 400
+        return BadRequest
 
     logger.info(f'Queuing task for "{author_name}"')
 
     # Add task to queue.
     task = get_author_and_publications.apply_async(args=[author_name])
 
-    return jsonify({"status": "ok", "message": "Added to queue."}), 202, {"Location": url_for("check_task_status",
-                                                                                              task_id=task.id)}
+    return jsonify({"status": "ok", "message": "Added to queue."}), 202, \
+           {"Location": url_for("check_task_status", task_id=task.id)}
 
 
 @app.route("/univerdustry/task/<task_id>/status")
