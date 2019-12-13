@@ -1,6 +1,8 @@
 import io
 import os
 import logging
+from _md5 import md5
+
 import requests
 
 from scholary import scholary
@@ -8,9 +10,7 @@ from string import ascii_letters
 from pdfminer.pdfpage import PDFPage
 from elasticsearch import Elasticsearch
 from pdfminer.converter import TextConverter
-from pdfminer.pdfparser import PDFSyntaxError
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-from base64 import b64encode
 from app import logger, celery
 
 DATABASE_REST_URL = os.getenv("DATABASE_REST_URL")
@@ -31,7 +31,7 @@ def extract_pdf(url, title):
 
     logger.info(f'Starting pdf extraction for Publication({filename})')
 
-    filename = b64encode(filename.encode("utf-8")).decode("utf-8")
+    filename = md5(filename.encode("utf-8")).hexdigits()
 
     dir_name = os.path.join("files")
 
