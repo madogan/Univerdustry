@@ -21,17 +21,18 @@ DEFAULT_PROFILE_IMAGE_URL = os.getenv("DEFAULT_PROFILE_IMAGE_URL")
 es = Elasticsearch(ELASTICSEARCH_URL)
 
 
-def extract_pdf(url, title):
+def extract_pdf(url, pub_ident):
     pdf_logger = logging.getLogger("pdfminer")
     pdf_logger.setLevel(logging.CRITICAL)
     pdf_logger.disabled = True
 
-    title = "".join([c for c in title if c in (ascii_letters + " ")])
-    filename = title.replace(" ", "_").lower()
-
-    logger.info(f'Starting pdf extraction for Publication({filename})')
-
-    filename = md5(filename.encode("utf-8")).hexdigest()
+    # title = "".join([c for c in title if c in (ascii_letters + " ")])
+    # filename = title.replace(" ", "_").lower()
+    #
+    # logger.info(f'Starting pdf extraction for Publication({filename})')
+    #
+    # filename = md5(filename.encode("utf-8")).hexdigest()
+    filename = pub_ident
 
     dir_name = os.path.join("files")
 
@@ -149,7 +150,7 @@ def get_author_and_publications(self, author_name):
         # If eprint url is found, get and extract PDF.
         if publication_dictionary["source_url"] is not None:
             raw, text = extract_pdf(publication_dictionary["source_url"],
-                                    publication_dictionary["title"])
+                                    publication_dictionary["ident"])
             if raw is not None and text is not None:
                 logger.info(f'Source url is found.')
 
