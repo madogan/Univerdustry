@@ -31,7 +31,7 @@ def extract_pdf(url, title):
 
     logger.info(f'Starting pdf extraction for Publication({filename})')
 
-    filename = md5(filename.encode("utf-8")).hexdigits()
+    filename = md5(filename.encode("utf-8")).hexdigest()
 
     dir_name = os.path.join("files")
 
