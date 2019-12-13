@@ -10,7 +10,7 @@ from elasticsearch import Elasticsearch
 from pdfminer.converter import TextConverter
 from pdfminer.pdfparser import PDFSyntaxError
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-
+from base64 import b64encode
 from app import logger, celery
 
 DATABASE_REST_URL = os.getenv("DATABASE_REST_URL")
@@ -30,6 +30,8 @@ def extract_pdf(url, title):
     filename = title.replace(" ", "_").lower()
 
     logger.info(f'Starting pdf extraction for Publication({filename})')
+
+    filename = b64encode(filename.encode("utf-8")).decode("utf-8")
 
     dir_name = os.path.join("files")
 
