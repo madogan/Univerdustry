@@ -36,6 +36,9 @@ def extract_pdf(url, pub_ident):
 
     dir_name = os.path.join("files")
 
+    if not os.path.exists(dir_name):
+        os.makedirs(dir_name)
+
     try:
         resp = requests.get(url)
         raw = resp.content
