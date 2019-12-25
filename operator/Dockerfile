@@ -10,4 +10,4 @@ RUN python3 -m pip install --upgrade setuptools
 RUN python3 -m pip install -r requirements.txt
 RUN apk --purge del .build-deps
 EXPOSE 6000
-CMD python ./run.py
+

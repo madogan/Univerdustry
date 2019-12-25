@@ -9,4 +9,3 @@ RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install --upgrade setuptools
 RUN python3 -m pip install -r requirements.txt
 RUN apk --purge del .build-deps
-#CMD ["celery", "worker", "-A", "app.celery", "--loglevel=info"]
