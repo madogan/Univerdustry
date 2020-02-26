@@ -1,0 +1,1 @@
+from flask import Blueprintbp_index = Blueprint("bp_index", __name__)@bp_index.route("/", methods=["GET"])def index():    return "Univerdustry Database Rest is running..."

@@ -1,5 +1,1 @@
-* Investigate Scholar and design database.
-* Code an Rest API for database inside database container.
-* Send scraped data to database.
-* JWT Secret key and encryption issues.
-* Database authorization issue.
+TODO:    * Implementation of worker containers.    * Implementation of scraping mechanims.    * Adding kibana and elesticsearch.    * Research and experiment pydantic and fastapi and peewee.        https://medium.com/@mike.p.moritz/using-docker-compose-to-deploy-a-lightweight-python-rest-api-with-a-job-queue-37e6072a209b    *

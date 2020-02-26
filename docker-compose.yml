@@ -3,166 +3,43 @@ version: "3"
 services:
   database:
     build: ./database
-    container_name: database
-    volumes:
-      - db_data:/var/lib/postgresql/9.5/main
+    container_name: univerdustry_database
     networks:
       - db_nw
+    volumes:
+      - db_data:/var/lib/postgresql/9.5/main
     ports:
       - "5432:5432"
   database_rest:
-    build: ./postgrest
-    container_name: database_rest
-    ports:
-      - "3000:3000"
+    build: ./database_rest
+    container_name: univerdustry_database_rest
     networks:
       - db_nw
-    env_file:
-      - env_file
-    depends_on:
-      - database
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
-    container_name: elasticsearch
-    volumes:
-      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    networks:
-      - es_nw
-      - app_nw
-    environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-  kibana:
-    image: docker.elastic.co/kibana/kibana:6.0.1
-    container_name: kibana
-    volumes:
-      - ./kibana/:/usr/share/kibana/config/
-    ports:
-      - "5601:5601"
-    networks:
-      - es_nw
-    env_file:
-      - env_file
-    depends_on:
-      - elasticsearch
-  operator:
-    build: ./operator
-    container_name: operator
-    command: ["python3", "run.py"]
     ports:
       - "6000:6000"
-    networks:
-      - db_nw
-      - es_nw
-      - app_nw
-    env_file:
-      - env_file
-    depends_on:
-      - database_rest
-      - elasticsearch
-  broker:
+    environment:
+      - EXPOSE_PORT=6000
+      - FLASK_ENV=development
+      - SQLALCHEMY_DATABASE_URI=postgres://univerdustry:univerdustry@database:5432/univerdustry
+  redis:
     image: bitnami/redis:latest
-    container_name: broker
+    container_name: redis
     ports:
       - "6379:6379"
-    networks:
-      - app_nw
     volumes:
       - redis_data:/bitnami
-    env_file:
-      - env_file
-  worker_1:
-    build: ./operator
-    container_name: worker_1
-    command: ["celery", "worker", "-A", "app.celery", "--loglevel=info"]
-    networks:
-      - db_nw
-      - app_nw
-      - es_nw
-    env_file:
-      - env_file
-    depends_on:
-      - broker
-  worker_2:
-    build: ./operator
-    container_name: worker_2
-    command: ["celery", "worker", "-A", "app.celery", "--loglevel=info"]
-    networks:
-      - db_nw
-      - app_nw
-      - es_nw
-    env_file:
-      - env_file
-    depends_on:
-      - broker
-  worker_3:
-    build: ./operator
-    container_name: worker_3
-    command: ["celery", "worker", "-A", "app.celery", "--loglevel=info"]
-    networks:
-      - db_nw
-      - app_nw
-      - es_nw
-    env_file:
-      - env_file
-    depends_on:
-      - broker
-  flower:
-    image: zoomeranalytics/flower:0.9.1-4.0.2
-    container_name: flower
-    networks:
-      - app_nw
-    env_file:
-      - env_file
-    ports:
-      - "5555:5555"
-    depends_on:
-      - broker
-  scraper:
-    build: ./scraper
-    container_name: scraper
-    ports:
-      - "7000:7000"
-    networks:
-      - app_nw
-    env_file:
-      - env_file
-    depends_on:
-      - operator
-  gateway:
-    build: ./gateway
-    container_name: gateway
-    command: ["python3", "run.py"]
-    networks:
-      - db_nw
-      - app_nw
-    ports:
-      - "5090:5090"
-    env_file:
-      - env_file
-    depends_on:
-      - scraper
-      - operator
-      - database
-  nginx:
-    build: ./nginx
-    container_name: nginx
-    ports:
-      - "80:80"
-    networks:
-      - app_nw
-    depends_on:
-      - gateway
-    env_file:
-      - env_file
+    environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - TZ=Europe/Istanbul
+      - ALLOW_EMPTY_PASSWORD=yes
+      - DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
 
-networks:
-  app_nw:
-  db_nw:
-  es_nw:
 
 volumes:
   db_data:
   redis_data:
+
+networks:
+  db_nw:
