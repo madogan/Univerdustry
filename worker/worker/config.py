@@ -11,6 +11,7 @@ Attributes:
 """
 
 import os
+from _md5 import md5
 
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from worker.utils.custom_json_encoder import CustomJsonEncoder
@@ -20,68 +21,35 @@ class BaseConfig(object):
     """Base configuration class for application."""
 
     DEBUG = False
-    LANGUAGES = ["tr", "en"]
-    DEFAULT_LANGUAGE = "tr"
-    SYSTEM_USER_NAME = "AllConfig"
-    JWT_ALGORITHM = "HS256"
+
+    ENCODING = "utf-8"
 
     DATETIME_FORMAT = "%d-%m-%Y"
 
-    # Sqlalchemy forces us to use primary key. We need to avoid multiple
-    # rows for some tables. So, we use a string primary key for all single
-    # row tables, to avoid auto increment and multiple rows.
-    SINGLE_ROW_TABLES_PRIMARY_KEY = -1
-
-    SQLALCHEMY_ENGINE_OPTIONS = {
-        "pool_size": 256,
-        "pool_timeout": 3,
-        "max_overflow": 12
-    }
-
     RESTFUL_JSON = {'cls': CustomJsonEncoder}
 
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = md5("univerdustry".encode(ENCODING)).hexdigest()
 
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL").format("allconfig")
-
-    SECRET_KEY = os.urandom(16).hex()  # It results 32 length hex string.
-    AES_IV = os.urandom(16)
+    AES_IV = md5("univerdustry".encode(ENCODING)).hexdigest()[:16]\
+        .encode(ENCODING)
 
     # Enable CSRF tokens in the Forms.
     WTF_CSRF_ENABLED = True
-    FILES_PATH = os.path.join("application", "static", "files")
-    STATIC_DB_FILES_PATH = os.path.join("application", "static", "db")
 
-    SCHEDULER_API_ENABLED = True
+    FILES_PATH = os.path.join("worker", "files")
 
-    SCHEDULER_EXECUTORS = {'default': {'type': 'threadpool', 'max_workers': 8}}
-    SCHEDULER_JOBSTORES = {
-        'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
-    }
+    FLOWER_APP_URL = os.getenv("FLOWER_URL")
 
-    SOCKET_APP_URL = os.getenv("SOCKET_APP_URL")
-    FLOWER_APP_URL = os.getenv("FLOWER_APP_URL")
-    CELERY_BROKER_URL = os.getenv("CELERY_BROKER")
-    CELERY_RESULT_BACKEND = os.getenv("CELERY_BROKER")
+    CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+    CELERY_RESULT_BACKEND = os.getenv("CELERY_BROKER_URL")
 
     DB_HISTORY_DAYS_LIMIT = 30
-
-    HOST = None
 
 
 class DevelopmentConfig(BaseConfig):
     """Development specified configuration class."""
 
     DEBUG = True
-
-    # We are fixing this because sometimes when we recreate application
-    # Device users may not be reachable.
-    AES_IV = b'VCcbkFCUwOrtxBdr'
-
-    # This for avoiding token invalidation. Because every time application
-    # built, secret key will change. When secret key changed token will be
-    # invalid.
-    SECRET_KEY = "VCcbkFCUwOrtxBdrVCcbkFCUwOrtxBdr"
     CONSOLE_LOG_LEVEL = "DEBUG"
 
 
@@ -108,14 +76,12 @@ class TestingConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = "postgres://allconfig:allconfig@localhost:5432" \
                               "/allconfig_test"
 
-    STATIC_DB_FILES_PATH = os.path.join("..", "..", "application", "static",
-                                        "db", "role_table.json")
-
 
 class ProductionConfig(BaseConfig):
     """Production specified configuration class."""
 
     DEBUG = False
+    TESTING = False
 
 
 config = {

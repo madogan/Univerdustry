@@ -3,7 +3,6 @@
 
 from flask.json import JSONEncoder
 from datetime import date, datetime
-from worker.database.mixins import ModelMixin
 
 
 class CustomJsonEncoder(JSONEncoder):
@@ -16,9 +15,6 @@ class CustomJsonEncoder(JSONEncoder):
     def default(self, o):
         if isinstance(o, (date, datetime)):
             return o.isoformat()
-
-        if isinstance(o, ModelMixin):
-            return dict(o)
 
         if isinstance(o, bytes):
             return str(o)

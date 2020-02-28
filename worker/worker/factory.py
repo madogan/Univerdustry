@@ -104,7 +104,7 @@ def register_blueprints(_app: Flask) -> None:
     Args:
         _app: Address of :flask:`Flask` application instance.
     """
-    from worker.blueprints.index import index_bp
+    from worker.bps.index import index_bp
     _app.register_blueprint(index_bp)
 
 
@@ -147,13 +147,13 @@ def create_celery(app_name: str) -> Celery:
         result_serializer="json",
         enable_utc=True,
         task_create_missing_queues=True,
-        celery_queues=(
-            Queue("background", Exchange("background"),
-                  routing_key="background"),
-            Queue("foreground", Exchange("foreground"),
-                  routing_key="foreground")
-        ),
-        task_default_queue="background"
+        # celery_queues=(
+        #     Queue("background", Exchange("background"),
+        #           routing_key="background"),
+        #     Queue("foreground", Exchange("foreground"),
+        #           routing_key="foreground")
+        # ),
+        # task_default_queue="background"
     )
 
     # noinspection PyPep8Naming

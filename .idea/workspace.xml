@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="457810ca-234b-4059-bcae-067595fd1371" name="Default Changelist" comment="" />
+    <list default="true" id="457810ca-234b-4059-bcae-067595fd1371" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/worker/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/blueprints/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/bps/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/blueprints/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/bps/index.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/exceptions.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/exceptions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/factory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/tasks/download_pdf.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/tasks/download_pdf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/tasks/pdf_to_text.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/tasks/pdf_to_text.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/tasks/write_to_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/bps/tasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/utils/celery.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/utils/custom_json_encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/utils/custom_json_encoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/utils/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/utils/helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/worker/utils/parsers.py" beforeDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,8 +31,13 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1Xmt3CbpbS9vh1zzICNsOmxdZlY" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -99,10 +120,23 @@
       <workItem from="1581797029818" duration="1449000" />
       <workItem from="1582124324182" duration="6000" />
       <workItem from="1582719838399" duration="1726000" />
+      <workItem from="1582800360819" duration="32000" />
+      <workItem from="1582894078788" duration="4610000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

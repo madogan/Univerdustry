@@ -9,7 +9,7 @@ Attributes:
         root dir of application.
 """
 
-__version__ = "0.2"
+__version__ = "0.1"
 
 # This lib. provides safe threading. For more information: http://eventlet.net/
 import eventlet
