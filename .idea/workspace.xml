@@ -2,29 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="457810ca-234b-4059-bcae-067595fd1371" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/scholar_rest/application/bps/author.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scholar_rest/application/bps/publication.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scholar_rest/application/scholary/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scholar_rest/application/scholary/scholary.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/application/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/application/bps/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/application/bps/author.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/application/bps/index.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/application/bps/publication.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/application/config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/application/exceptions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/application/factory.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/application/utils/custom_json_encoder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/application/utils/generators.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/application/utils/helpers.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/application/utils/validators.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libgen_rest/run.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/bps/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/bps/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/bps/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/bps/util.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/database/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/database/functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/database/mixins.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/database/mixins.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/database/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/database/models/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/database/models/asc_author_publication.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/database/models/asc_author_publication.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/database/models/author.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/database/models/author.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/database/models/publication.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/database/models/publication.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/factory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/utils/contextor.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/utils/contextor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/utils/custom_json_encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/utils/custom_json_encoder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/worker/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/worker/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/factory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/worker/utils/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/worker/utils/helpers.py" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,36 +36,30 @@
   </component>
   <component name="ProjectId" id="1Xmt3CbpbS9vh1zzICNsOmxdZlY" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/scholar_rest/scholar_rest" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\pc\Desktop\Univerdustry\database_rest\application" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="C:\Users\pc\Desktop\Univerdustry\scholar_rest\scholar_rest" />
       <recent name="C:\Users\pc\Desktop\Univerdustry\scholar_rest" />
       <recent name="C:\Users\pc\Desktop\Univerdustry" />
       <recent name="C:\Users\pc\Desktop\Univerdustry\database_rest\application\utils" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\pc\Desktop\Univerdustry\database_rest\application" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager">
     <configuration name="docker-compose.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
@@ -87,26 +75,6 @@
         <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
       </list>
     </recent_temporary>
-  </component>
-  <component name="ServiceViewManager">
-    <option name="allServicesViewState">
-      <serviceView>
-        <treeState>
-          <expand>
-            <path>
-              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@5d12e058" type="9fbbdea:ServiceModel$ServiceNode" />
-            </path>
-            <path>
-              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@5d12e058" type="9fbbdea:ServiceModel$ServiceNode" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@1b84ab9e" type="9fbbdea:ServiceModel$ServiceNode" />
-            </path>
-          </expand>
-          <select />
-        </treeState>
-      </serviceView>
-    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -130,6 +98,7 @@
       <workItem from="1582800360819" duration="32000" />
       <workItem from="1582894078788" duration="4610000" />
       <workItem from="1582901317836" duration="2542000" />
+      <workItem from="1582904650726" duration="654000" />
     </task>
     <servers />
   </component>
@@ -148,5 +117,11 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="229" y="89" key="SettingsEditor" timestamp="1582904878878">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1582904878878" />
   </component>
 </project>
