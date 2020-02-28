@@ -10,11 +10,9 @@ Attributes:
     config (dict): It gives config according to key of environment.
 """
 
-import os
 from _md5 import md5
 
-from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
-from worker.utils.custom_json_encoder import CustomJsonEncoder
+from application.utils.custom_json_encoder import CustomJsonEncoder
 
 
 class BaseConfig(object):
@@ -30,20 +28,12 @@ class BaseConfig(object):
 
     SECRET_KEY = md5("univerdustry".encode(ENCODING)).hexdigest()
 
-    AES_IV = md5("univerdustry".encode(ENCODING)).hexdigest()[:16]\
-        .encode(ENCODING)
-
     # Enable CSRF tokens in the Forms.
     WTF_CSRF_ENABLED = True
 
-    FILES_PATH = os.path.join("worker", "files")
-
-    FLOWER_APP_URL = os.getenv("FLOWER_URL")
-
-    CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
-    CELERY_RESULT_BACKEND = os.getenv("CELERY_BROKER_URL")
-
     DB_HISTORY_DAYS_LIMIT = 30
+
+    DEFAULT_PROFILE_IMAGE_URL = "https://haberajandanet.com/img/anonim.png"
 
 
 class DevelopmentConfig(BaseConfig):
@@ -71,10 +61,6 @@ class TestingConfig(BaseConfig):
     # https://stackoverflow.com/questions/26647032/py-test-to-test-flask
     # -register-assertionerror-popped-wrong-request-context
     PRESERVE_CONTEXT_ON_EXCEPTION = False
-
-    # Test on different database.
-    SQLALCHEMY_DATABASE_URI = "postgres://allconfig:allconfig@localhost:5432" \
-                              "/allconfig_test"
 
 
 class ProductionConfig(BaseConfig):

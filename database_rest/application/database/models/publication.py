@@ -3,8 +3,8 @@
 
 from sqlalchemy.orm import relationship
 
-from worker import db
-from worker.database.mixins import ModelMixin
+from application import db
+from application.database.mixins import ModelMixin
 
 
 class Publication(db.Model, ModelMixin):

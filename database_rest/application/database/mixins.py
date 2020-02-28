@@ -7,7 +7,7 @@ lines. Also, it enables dictionary like operation_table.
 
 import datetime
 
-from worker import db
+from application import db
 from sqlalchemy import inspect
 
 

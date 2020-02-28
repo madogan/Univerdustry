@@ -4,8 +4,6 @@
 from flask.json import JSONEncoder
 from datetime import date, datetime
 
-from application.database.mixins import ModelMixin
-
 
 class CustomJsonEncoder(JSONEncoder):
     """ This class updates json encoder of application.
@@ -20,12 +18,6 @@ class CustomJsonEncoder(JSONEncoder):
 
         if isinstance(o, bytes):
             return str(o)
-
-        if isinstance(o, ModelMixin):
-            return dict(o)
-
-        if isinstance(o, list) and isinstance(o[0], ModelMixin):
-            return [dict(i) for i in o]
 
         try:
             o = super(CustomJsonEncoder, self).default(o)

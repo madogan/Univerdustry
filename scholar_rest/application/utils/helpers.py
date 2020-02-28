@@ -38,7 +38,7 @@ def push_app_context_if_has_not_app_context() -> [bool, None]:
     """Check app context and push an app context manually."""
     if not has_app_context():
         # If out of app context, push app context.
-        from worker import app
+        from scholar_rest import app
         ctx = app.app_context()
         ctx.push()
         return True
@@ -51,7 +51,7 @@ def pop_app_context_if_pushed(is_pushed: bool) -> None:
         is_pushed: If it is True, pop app context from stack.
     """
     if is_pushed is True:
-        from worker import app
+        from scholar_rest import app
         ctx = app.app_context()
         if ctx == _app_ctx_stack.top:
             ctx.pop()

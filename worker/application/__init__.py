@@ -8,7 +8,7 @@ Attributes:
     ROOT_DIR (str): This variable store absolute path of
         root dir of application.
 """
-# Version of the application.
+
 __version__ = "0.1"
 
 # This lib. provides safe threading. For more information: http://eventlet.net/
@@ -35,6 +35,7 @@ ROOT_DIR = os.path.join(os.path.dirname(__file__), "..")
 # More about loguru: https://loguru.readthedocs.io/en/stable/overview.html
 from loguru import logger
 
+
 # Console logger.
 logger.add(sink=sys.stderr, level=os.environ.get("CONSOLE_LOG_LEVEL", "INFO"),
            format="|{time}| |{process}| |{level}| |{name}:{function}:{line}| "
@@ -47,16 +48,14 @@ logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
            # Remove logs older than 3 days.
            retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
 
-# Create database instance.
-from flask_sqlalchemy import SQLAlchemy
-db = SQLAlchemy()
 
-# Create migration instance.
-from flask_migrate import Migrate
-migrate = Migrate()
+# Configure and create redis instance.
+from application.factory import create_redis
+redis = create_redis()
 
-# Import database models.
-from application.database import models
+# Configure and create celery instance.
+from application.factory import create_celery
+celery = create_celery(__name__)
 
 # Create application instance.
 from application.factory import create_app

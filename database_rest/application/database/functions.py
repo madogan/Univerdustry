@@ -4,10 +4,10 @@
 import os
 import json
 
-from worker import logger
+from application import logger
 from flask import json, current_app
 from sqlalchemy.engine import create_engine
-from worker.utils.contextor import ensure_app_context
+from application.utils.contextor import ensure_app_context
 from sqlalchemy_utils.functions.database import (database_exists,
                                                  create_database)
 
@@ -48,7 +48,7 @@ def check_database(url: str = None) -> bool:
 @ensure_app_context
 def init_db():
     """This function creates database and tables if does not exist."""
-    from worker import db
+    from scholar_rest import db
     from flask_migrate import migrate, init, upgrade
 
     if not check_database():

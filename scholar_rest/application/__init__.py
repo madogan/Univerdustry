@@ -48,15 +48,8 @@ logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
            # Remove logs older than 3 days.
            retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
 
-
-# Configure and create redis instance.
-from worker.factory import create_redis
-redis = create_redis()
-
-# Configure and create celery instance.
-from worker.factory import create_celery
-celery = create_celery(__name__)
+from scholarly import scholarly
 
 # Create application instance.
-from worker.factory import create_app
+from application.factory import create_app
 app = create_app()

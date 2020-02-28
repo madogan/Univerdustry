@@ -10,8 +10,6 @@ import os
 
 from flask import Flask
 
-from application import db, migrate
-
 
 def create_app(environment: str = "development") -> Flask:
     """Create application as fully configured and initialized.
@@ -44,28 +42,22 @@ def create_app(environment: str = "development") -> Flask:
     from flask import Flask
     app = Flask(__name__)
 
-    # This is to solve conflicts between `Vue.JS` and `Jinja` rendering of
-    # html files.
-    app.jinja_env.variable_start_string = "(|"
-    app.jinja_env.variable_end_string = "|)"
-
-    # Add special converter for comma separated arguments.
-    from scholar_rest.utils.url_converters import (ListConverter,
-                                                   IntListConverter)
-    app.url_map.converters["list"] = ListConverter
-    app.url_map.converters["int_list"] = IntListConverter
-
     # Get application environment from environmental variable if given.
     environment = os.getenv("FLASK_ENV") or environment
 
     # Configure application.
-    from scholar_rest.config import config
+    from application.config import config
     app.config.from_object(config[environment])
 
     # Update json encoder for more general serializing.
-    from scholar_rest.utils.custom_json_encoder import CustomJsonEncoder
+    from application.utils.custom_json_encoder import CustomJsonEncoder
     app.config.update({"RESTFUL_JSON": {"cls": CustomJsonEncoder}})
     app.json_encoder = CustomJsonEncoder
+
+    from flask import json
+
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"]["json_serializer"] = json.dumps
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"]["json_deserializer"] = json.loads
 
     # Set some functions runs before first request for initializing.
     set_before_first_request_functions(app)
@@ -106,14 +98,14 @@ def register_blueprints(_app: Flask) -> None:
     Args:
         _app: Address of :flask:`Flask` application instance.
     """
-    from scholar_rest.bps.index import bp_index
-    _app.register_blueprint(bp_index)
+    from application.bps.index import index_bp
+    _app.register_blueprint(index_bp)
+    
+    from application.bps.author import author_bp
+    _app.register_blueprint(author_bp)
 
-    from scholar_rest.bps.api import bp_api
-    _app.register_blueprint(bp_api)
-
-    from scholar_rest.bps.util import bp_util
-    _app.register_blueprint(bp_util)
+    from application.bps.publication import publication_bp
+    _app.register_blueprint(publication_bp)
 
 
 def initialize_extensions(_app: Flask) -> None:
@@ -122,8 +114,4 @@ def initialize_extensions(_app: Flask) -> None:
     Arguments:
         _app:  Flask application instance.
     """
-    # Init database.
-    db.init_app(_app)
-
-    # Init flask-migrate.
-    migrate.init_app(_app, db)
+    pass

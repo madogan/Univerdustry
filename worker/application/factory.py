@@ -8,12 +8,11 @@ function and extensions initialization function.
 
 import os
 
+from celery import Celery
 from flask import Flask
 from redis import Redis
-from celery import Celery
-from kombu import Exchange, Queue
 
-from worker.utils.helpers import ensure_app_context
+from application.utils.helpers import ensure_app_context
 
 
 def create_app(environment: str = "development") -> Flask:
@@ -51,11 +50,11 @@ def create_app(environment: str = "development") -> Flask:
     environment = os.getenv("FLASK_ENV") or environment
 
     # Configure application.
-    from worker.config import config
+    from application.config import config
     app.config.from_object(config[environment])
 
     # Update json encoder for more general serializing.
-    from worker.utils.custom_json_encoder import CustomJsonEncoder
+    from application.utils.custom_json_encoder import CustomJsonEncoder
     app.config.update({"RESTFUL_JSON": {"cls": CustomJsonEncoder}})
     app.json_encoder = CustomJsonEncoder
 
@@ -85,8 +84,7 @@ def set_before_first_request_functions(_app: Flask) -> None:
     Args:
         _app: Address of :flask:`Flask` application instance.
     """
-    from worker.utils.celery import clean_operation_statuses
-    _app.before_first_request_funcs.append(clean_operation_statuses)
+    pass
 
 
 def set_before_requests_functions(_app: Flask) -> None:
@@ -104,8 +102,11 @@ def register_blueprints(_app: Flask) -> None:
     Args:
         _app: Address of :flask:`Flask` application instance.
     """
-    from worker.bps.index import index_bp
+    from application.bps.index import index_bp
     _app.register_blueprint(index_bp)
+
+    from application.bps.tasks import tasks_bp
+    _app.register_blueprint(tasks_bp)
 
 
 def initialize_extensions(_app: Flask) -> None:

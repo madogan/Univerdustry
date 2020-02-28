@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """ORM Model of `asc_author_publication` table."""
 
-from worker import db
-from worker.database.mixins import ModelMixin
+from application import db
+from application.database.mixins import ModelMixin
 
 
 class AscAuthorPublication(db.Model, ModelMixin):
