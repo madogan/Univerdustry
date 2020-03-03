@@ -1,24 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="457810ca-234b-4059-bcae-067595fd1371" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/libgen_rest/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgen_rest/application/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgen_rest/application/bps/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgen_rest/application/bps/author.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgen_rest/application/bps/index.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgen_rest/application/bps/publication.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgen_rest/application/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgen_rest/application/exceptions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgen_rest/application/factory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgen_rest/application/utils/custom_json_encoder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgen_rest/application/utils/generators.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgen_rest/application/utils/helpers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgen_rest/application/utils/validators.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgen_rest/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libgen_rest/run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="457810ca-234b-4059-bcae-067595fd1371" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -61,6 +45,18 @@
       <recent name="C:\Users\pc\Desktop\Univerdustry\database_rest\application" />
     </key>
   </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
   <component name="RunManager">
     <configuration name="docker-compose.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
@@ -99,6 +95,7 @@
       <workItem from="1582894078788" duration="4610000" />
       <workItem from="1582901317836" duration="2542000" />
       <workItem from="1582904650726" duration="654000" />
+      <workItem from="1582905537846" duration="19000" />
     </task>
     <servers />
   </component>
