@@ -58,11 +58,6 @@ def create_app(environment: str = "development") -> Flask:
     app.config.update({"RESTFUL_JSON": {"cls": CustomJsonEncoder}})
     app.json_encoder = CustomJsonEncoder
 
-    from flask import json
-
-    app.config["SQLALCHEMY_ENGINE_OPTIONS"]["json_serializer"] = json.dumps
-    app.config["SQLALCHEMY_ENGINE_OPTIONS"]["json_deserializer"] = json.loads
-
     # Set some functions runs before first request for initializing.
     set_before_first_request_functions(app)
 

@@ -9,7 +9,6 @@ object.
 Attributes:
     config (dict): It gives config according to key of environment.
 """
-
 import os
 from _md5 import md5
 
@@ -20,32 +19,20 @@ class BaseConfig(object):
     """Base configuration class for application."""
 
     DEBUG = False
-
-    ENCODING = "utf-8"
-
     DATETIME_FORMAT = "%d-%m-%Y"
-
     RESTFUL_JSON = {'cls': CustomJsonEncoder}
-
-    SECRET_KEY = md5("univerdustry".encode(ENCODING)).hexdigest()
-
-    # Enable CSRF tokens in the Forms.
-    WTF_CSRF_ENABLED = True
-
-    FILES_PATH = os.path.join("application", "files")
-
-    FLOWER_APP_URL = os.getenv("FLOWER_URL")
-
-    CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
-    CELERY_RESULT_BACKEND = os.getenv("CELERY_BROKER_URL")
-
-    DB_HISTORY_DAYS_LIMIT = 30
+    SECRET_KEY = os.urandom(16).hex()  # It results 32 length hex string.
 
 
 class DevelopmentConfig(BaseConfig):
     """Development specified configuration class."""
 
     DEBUG = True
+
+    # This for avoiding token invalidation. Because every time application
+    # built, secret key will change. When secret key changed token will be
+    # invalid.
+    SECRET_KEY = "VCcbkFCUwOrtxBdrVCcbkFCUwOrtxBdr"
     CONSOLE_LOG_LEVEL = "DEBUG"
 
 
@@ -58,9 +45,6 @@ class TestingConfig(BaseConfig):
     # handling so that you get better error reports when performing test
     # requests against the application.
     TESTING = True
-
-    # Disable CSRF tokens in the Forms (only valid for testing purposes!)
-    WTF_CSRF_ENABLED = False
 
     # Because of the error: ``Popped wrong app context.``
     # See Also:

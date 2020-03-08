@@ -42,6 +42,12 @@ def create_app(environment: str = "development") -> Flask:
     from flask import Flask
     app = Flask(__name__)
 
+    # Add special converter for comma separated arguments.
+    from application.utils.url_converters import (ListConverter,
+                                                  IntListConverter)
+    app.url_map.converters["list"] = ListConverter
+    app.url_map.converters["int_list"] = IntListConverter
+
     # Get application environment from environmental variable if given.
     environment = os.getenv("FLASK_ENV") or environment
 
@@ -93,14 +99,8 @@ def register_blueprints(_app: Flask) -> None:
     Args:
         _app: Address of :flask:`Flask` application instance.
     """
-    from application.bps.index import index_bp
-    _app.register_blueprint(index_bp)
-    
-    from application.bps.author import author_bp
-    _app.register_blueprint(author_bp)
-
-    from application.bps.publication import publication_bp
-    _app.register_blueprint(publication_bp)
+    from application.bps.index import bp_index
+    _app.register_blueprint(bp_index)
 
 
 def initialize_extensions(_app: Flask) -> None:

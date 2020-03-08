@@ -48,7 +48,7 @@ def check_database(url: str = None) -> bool:
 @ensure_app_context
 def init_db():
     """This function creates database and tables if does not exist."""
-    from scholar_rest import db
+    from application import db
     from flask_migrate import migrate, init, upgrade
 
     if not check_database():

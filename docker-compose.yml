@@ -15,12 +15,44 @@ services:
     container_name: univerdustry_database_rest
     networks:
       - db_nw
+      - gateway_nw
     ports:
       - "6000:6000"
     environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - TZ=Europe/Istanbul
       - EXPOSE_PORT=6000
+      - FLASK_APP=application/app
       - FLASK_ENV=development
+      - FILE_LOG_LEVEL=DEBUG
+      - CONSOLE_LOG_LEVEL=INFO
       - SQLALCHEMY_DATABASE_URI=postgres://univerdustry:univerdustry@database:5432/univerdustry
+  gateway:
+    build: ./gateway
+    container_name: gateway
+    command: ["python3", "./run.py"]
+    volumes:
+      - "log_data:/application/logs"
+    ports:
+      - "7000:7000"
+    networks:
+      - gateway_nw
+      - worker_nw
+    depends_on:
+      - database_rest
+    environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - TZ=Europe/Istanbul
+      - EXPOSE_PORT=7000
+      - FLASK_APP=application/app
+      - FLASK_ENV=development
+      - FILE_LOG_LEVEL=DEBUG
+      - CONSOLE_LOG_LEVEL=INFO
+      - DATABASE_REST=http://database_rest:6000
   redis:
     image: bitnami/redis:latest
     container_name: redis
@@ -28,6 +60,8 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/bitnami
+    networks:
+      - worker_nw
     environment:
       - LANG=tr_TR.UTF-8
       - LANGUAGE=tr_TR:tr
@@ -35,11 +69,122 @@ services:
       - TZ=Europe/Istanbul
       - ALLOW_EMPTY_PASSWORD=yes
       - DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
-
+  worker_rest:
+    build: ./worker
+    container_name: worker_rest
+    command: ["python3", "./run.py"]
+    volumes:
+      - "log_data:/application/logs"
+      - "workers_data:/application/files"
+    ports:
+      - "8000:8000"
+    networks:
+      - worker_nw
+      - gateway_nw
+    depends_on:
+      - database_rest
+    environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - TZ=Europe/Istanbul
+      - EXPOSE_PORT=8000
+      - FLASK_APP=application/app
+      - FLASK_ENV=development
+      - FILE_LOG_LEVEL=DEBUG
+      - CONSOLE_LOG_LEVEL=INFO
+  worker_1:
+    build: ./worker
+    container_name: worker_1
+    command: ["celery", "worker", "-A", "application.celery", "-P", "eventlet", "--loglevel=info", "-n",
+              "worker_1"]
+    volumes:
+      - "log_data:/application/logs"
+      - "workers_data:/application/files"
+    networks:
+      - worker_nw
+    depends_on:
+      - redis
+      - worker_rest
+    environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - TZ=Europe/Istanbul
+      - FLASK_ENV=development
+      - FILE_LOG_LEVEL=DEBUG
+      - CONSOLE_LOG_LEVEL=INFO
+  worker_2:
+    build: ./worker
+    container_name: worker_2
+    command: ["celery", "worker", "-A", "application.celery", "-P", "eventlet", "--loglevel=info", "-n",
+              "worker_2"]
+    volumes:
+      - "log_data:/application/logs"
+      - "workers_data:/application/files"
+    networks:
+      - worker_nw
+    depends_on:
+      - redis
+      - worker_rest
+    environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - TZ=Europe/Istanbul
+      - FLASK_ENV=development
+      - FILE_LOG_LEVEL=DEBUG
+      - CONSOLE_LOG_LEVEL=INFO
+  worker_3:
+    build: ./worker
+    container_name: worker_3
+    command: ["celery", "worker", "-A", "application.celery", "-P", "eventlet", "--loglevel=info", "-n",
+              "worker_3"]
+    volumes:
+      - "log_data:/application/logs"
+      - "workers_data:/application/files"
+    networks:
+      - worker_nw
+    depends_on:
+      - redis
+      - worker_rest
+    environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - TZ=Europe/Istanbul
+      - FLASK_ENV=development
+      - FILE_LOG_LEVEL=DEBUG
+      - CONSOLE_LOG_LEVEL=INFO
+  flower:
+    image: mher/flower
+    container_name: flower
+    networks:
+      - worker_nw
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+    environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - FLOWER_BROKER_URL=redis://redis:6379/0
+      - TZ=Europe/Istanbul
+      - FLOWER_PORT=5555
 
 volumes:
   db_data:
   redis_data:
+  log_data:
+  workers_data:
 
 networks:
   db_nw:
+  gateway_nw:
+  worker_nw:

@@ -1,7 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="457810ca-234b-4059-bcae-067595fd1371" name="Default Changelist" comment="" />
+    <list default="true" id="457810ca-234b-4059-bcae-067595fd1371" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/gateway/application/bps/database_rest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/application/reqs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database_rest/application/bps/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/bps/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database_rest/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database_rest/application/database/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/database/functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database_rest/application/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/factory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database_rest/application/utils/contextor.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/utils/contextor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libgen_rest/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/libgen_rest/application/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libgen_rest/application/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/libgen_rest/application/factory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libgen_rest/application/utils/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/libgen_rest/application/utils/helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scholar_rest/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/scholar_rest/application/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scholar_rest/application/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/scholar_rest/application/factory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scholar_rest/application/utils/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/scholar_rest/application/utils/helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/worker/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/bps/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/bps/tasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/factory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/download_pdf.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/download_pdf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/pdf_to_text.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/pdf_to_text.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/utils/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/utils/helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/worker/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/run.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,20 +54,21 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/gateway" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\pc\Desktop\Univerdustry\gateway\application" />
+      <recent name="C:\Users\pc\Desktop\Univerdustry\database_rest\application" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\pc\Desktop\Univerdustry\gateway" />
+      <recent name="C:\Users\pc\Desktop\Univerdustry" />
       <recent name="$PROJECT_DIR$" />
       <recent name="C:\Users\pc\Desktop\Univerdustry\scholar_rest\scholar_rest" />
       <recent name="C:\Users\pc\Desktop\Univerdustry\scholar_rest" />
-      <recent name="C:\Users\pc\Desktop\Univerdustry" />
-      <recent name="C:\Users\pc\Desktop\Univerdustry\database_rest\application\utils" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\pc\Desktop\Univerdustry\database_rest\application" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -96,6 +122,9 @@
       <workItem from="1582901317836" duration="2542000" />
       <workItem from="1582904650726" duration="654000" />
       <workItem from="1582905537846" duration="19000" />
+      <workItem from="1583335414487" duration="61000" />
+      <workItem from="1583497161962" duration="610000" />
+      <workItem from="1583600739518" duration="7709000" />
     </task>
     <servers />
   </component>

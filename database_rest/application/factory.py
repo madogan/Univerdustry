@@ -50,7 +50,7 @@ def create_app(environment: str = "development") -> Flask:
     app.jinja_env.variable_end_string = "|)"
 
     # Add special converter for comma separated arguments.
-    from scholar_rest.utils.url_converters import (ListConverter,
+    from application.utils.url_converters import (ListConverter,
                                                    IntListConverter)
     app.url_map.converters["list"] = ListConverter
     app.url_map.converters["int_list"] = IntListConverter
@@ -59,11 +59,11 @@ def create_app(environment: str = "development") -> Flask:
     environment = os.getenv("FLASK_ENV") or environment
 
     # Configure application.
-    from scholar_rest.config import config
+    from application.config import config
     app.config.from_object(config[environment])
 
     # Update json encoder for more general serializing.
-    from scholar_rest.utils.custom_json_encoder import CustomJsonEncoder
+    from application.utils.custom_json_encoder import CustomJsonEncoder
     app.config.update({"RESTFUL_JSON": {"cls": CustomJsonEncoder}})
     app.json_encoder = CustomJsonEncoder
 
@@ -78,6 +78,14 @@ def create_app(environment: str = "development") -> Flask:
 
     # Register designed blueprints.
     register_blueprints(app)
+
+    @app.teardown_request
+    def shutdown_db_connexion(exception=None):
+        db.session.close()
+
+    @app.teardown_appcontext
+    def shutdown_db_connexion(exception=None):
+        db.session.close()
 
     return app
 
@@ -106,13 +114,13 @@ def register_blueprints(_app: Flask) -> None:
     Args:
         _app: Address of :flask:`Flask` application instance.
     """
-    from scholar_rest.bps.index import bp_index
+    from application.bps.index import bp_index
     _app.register_blueprint(bp_index)
 
-    from scholar_rest.bps.api import bp_api
+    from application.bps.api import bp_api
     _app.register_blueprint(bp_api)
 
-    from scholar_rest.bps.util import bp_util
+    from application.bps.util import bp_util
     _app.register_blueprint(bp_util)
 
 

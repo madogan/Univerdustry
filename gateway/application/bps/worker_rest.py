@@ -1,0 +1,1 @@
+from flask import Blueprintbp_worker_rest = Blueprint("bp_worker_rest", __name__,                           url_prefix="/worker-rest")@bp_worker_rest.route("/", methods=["GET"])def xxx():    return "Univerdustry Gateway is running..."
