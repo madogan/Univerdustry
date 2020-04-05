@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """This module consists custom json encoder class."""
 
-from flask.json import JSONEncoder
 from datetime import date, datetime
+
+from flask.json import JSONEncoder
 
 
 class CustomJsonEncoder(JSONEncoder):

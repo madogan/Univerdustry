@@ -1,32 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="457810ca-234b-4059-bcae-067595fd1371" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/gateway/application/bps/database_rest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gateway/application/reqs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/bps/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/bps/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/database/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/database/functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/factory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_rest/application/utils/contextor.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_rest/application/utils/contextor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/libgen_rest/application/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/application/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/libgen_rest/application/factory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/application/utils/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/libgen_rest/application/utils/helpers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/scholar_rest/application/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/scholar_rest/application/factory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/utils/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/scholar_rest/application/utils/helpers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/worker/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/application/bps/tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/bps/tasks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/application/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/factory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/application/tasks/download_pdf.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/download_pdf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/application/tasks/pdf_to_text.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/pdf_to_text.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/application/utils/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/utils/helpers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/worker/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/run.py" afterDir="false" />
-    </list>
+    <list default="true" id="1b4fed88-a539-4f04-9c30-42019d1a46f5" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,35 +15,27 @@
       </list>
     </option>
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  <component name="NamedScopeManager">
+    <scope name="libgen_rest" pattern="file[Univerdustry_v03]:libgen_rest//*" />
   </component>
-  <component name="ProjectId" id="1Xmt3CbpbS9vh1zzICNsOmxdZlY" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
-    <option name="showLibraryContents" value="true" />
-  </component>
+  <component name="ProjectId" id="1Z9lAad6gCCfcz6Uqs1CUl3PvP5" />
   <component name="PropertiesComponent">
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/gateway" />
-    <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/libgen_rest/application/utils" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\pc\Desktop\Univerdustry\gateway\application" />
-      <recent name="C:\Users\pc\Desktop\Univerdustry\database_rest\application" />
+      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\gateway\application\rests" />
+      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\gateway\application" />
+      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\gateway\application\utils" />
+      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\mongo_rest\application\utils" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\pc\Desktop\Univerdustry\gateway" />
-      <recent name="C:\Users\pc\Desktop\Univerdustry" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="C:\Users\pc\Desktop\Univerdustry\scholar_rest\scholar_rest" />
-      <recent name="C:\Users\pc\Desktop\Univerdustry\scholar_rest" />
+      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\libgen_rest\application\utils" />
+      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\worker\application\utils" />
+      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\scholar_rest\application\utils" />
+      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\worker\application" />
+      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\mongo_rest\application\utils" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -83,71 +50,34 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
-    <configuration name="docker-compose.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="sourceFilePath" value="docker-compose.yml" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
-      </list>
-    </recent_temporary>
-  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="457810ca-234b-4059-bcae-067595fd1371" name="Default Changelist" comment="" />
-      <created>1581662898481</created>
+      <changelist id="1b4fed88-a539-4f04-9c30-42019d1a46f5" name="Default Changelist" comment="" />
+      <created>1584259048776</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1581662898481</updated>
-      <workItem from="1581662919188" duration="4530000" />
-      <workItem from="1581680186818" duration="15596000" />
-      <workItem from="1581766798775" duration="780000" />
-      <workItem from="1581771484880" duration="144000" />
-      <workItem from="1581771649366" duration="6030000" />
-      <workItem from="1581788958589" duration="5373000" />
-      <workItem from="1581797029818" duration="1449000" />
-      <workItem from="1582124324182" duration="6000" />
-      <workItem from="1582719838399" duration="1726000" />
-      <workItem from="1582800360819" duration="32000" />
-      <workItem from="1582894078788" duration="4610000" />
-      <workItem from="1582901317836" duration="2542000" />
-      <workItem from="1582904650726" duration="654000" />
-      <workItem from="1582905537846" duration="19000" />
-      <workItem from="1583335414487" duration="61000" />
-      <workItem from="1583497161962" duration="610000" />
-      <workItem from="1583600739518" duration="7709000" />
+      <updated>1584259048776</updated>
+      <workItem from="1584259061793" duration="12215000" />
+      <workItem from="1584377838610" duration="28316000" />
+      <workItem from="1584470967915" duration="721000" />
+      <workItem from="1584523851121" duration="31439000" />
+      <workItem from="1584736622380" duration="172000" />
+      <workItem from="1585670441235" duration="6226000" />
+      <workItem from="1585752233105" duration="3803000" />
+      <workItem from="1585813491370" duration="814000" />
+      <workItem from="1585848963313" duration="1199000" />
+      <workItem from="1585911191702" duration="37000" />
+      <workItem from="1585924463094" duration="8872000" />
+      <workItem from="1586008509674" duration="7837000" />
+      <workItem from="1586018179223" duration="466000" />
+      <workItem from="1586026800376" duration="14000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="229" y="89" key="SettingsEditor" timestamp="1582904878878">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1582904878878" />
   </component>
 </project>

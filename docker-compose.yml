@@ -1,23 +1,32 @@
 version: "3"
 
 services:
-  database:
-    build: ./database
-    container_name: univerdustry_database
+  mongo:
+    image: mongo:latest
+    container_name: univerdustry_mongo
+    command: --quiet
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=univerdustry
+      - MONGO_INITDB_ROOT_PASSWORD=univerdustry
     networks:
-      - db_nw
+      - net_mongo
     volumes:
-      - db_data:/var/lib/postgresql/9.5/main
+      - data_mongo:/data/db
     ports:
-      - "5432:5432"
-  database_rest:
-    build: ./database_rest
-    container_name: univerdustry_database_rest
-    networks:
-      - db_nw
-      - gateway_nw
+      - "27017:27017"
+  mongo_rest:
+    build: ./mongo_rest
+    container_name: univerdustry_mongo_rest
+    command: ["python3", "./run.py"]
     ports:
       - "6000:6000"
+    volumes:
+      - data_log:/application/logs
+    networks:
+      - net_mongo
+      - net_mongo_rest
+    depends_on:
+      - mongo
     environment:
       - LANG=tr_TR.UTF-8
       - LANGUAGE=tr_TR:tr
@@ -28,20 +37,20 @@ services:
       - FLASK_ENV=development
       - FILE_LOG_LEVEL=DEBUG
       - CONSOLE_LOG_LEVEL=INFO
-      - SQLALCHEMY_DATABASE_URI=postgres://univerdustry:univerdustry@database:5432/univerdustry
+      - MONGO_URI=mongodb://univerdustry:univerdustry@univerdustry_mongo:27017/
   gateway:
     build: ./gateway
-    container_name: gateway
+    container_name: univerdustry_gateway
     command: ["python3", "./run.py"]
     volumes:
-      - "log_data:/application/logs"
+      - data_log:/application/logs
     ports:
       - "7000:7000"
     networks:
-      - gateway_nw
-      - worker_nw
+      - net_mongo_rest
+      - net_elasticsearch
     depends_on:
-      - database_rest
+      - mongo_rest
     environment:
       - LANG=tr_TR.UTF-8
       - LANGUAGE=tr_TR:tr
@@ -52,16 +61,43 @@ services:
       - FLASK_ENV=development
       - FILE_LOG_LEVEL=DEBUG
       - CONSOLE_LOG_LEVEL=INFO
-      - DATABASE_REST=http://database_rest:6000
+      - MONGO_REST=http://univerdustry_mongo_rest:6000
+      - SCHOLAR_REST=http://univerdustry_scholar_rest:9000
+      - ELASTICSEARCH_REST=http://univerdustry_elasticsearch:9200
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
+    container_name: univerdustry_elasticsearch
+    volumes:
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - net_elasticsearch
+    depends_on:
+      - scholar_rest
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.0.1
+    container_name: univerdustry_kibana
+    volumes:
+      - ./kibana/:/usr/share/kibana/config/
+    ports:
+      - "5601:5601"
+    networks:
+      - net_elasticsearch
+    depends_on:
+      - elasticsearch
   redis:
     image: bitnami/redis:latest
-    container_name: redis
+    container_name: univerdustry_redis
     ports:
       - "6379:6379"
     volumes:
-      - redis_data:/bitnami
+      - data_redis:/bitnami
     networks:
-      - worker_nw
+      - net_worker
     environment:
       - LANG=tr_TR.UTF-8
       - LANGUAGE=tr_TR:tr
@@ -69,102 +105,11 @@ services:
       - TZ=Europe/Istanbul
       - ALLOW_EMPTY_PASSWORD=yes
       - DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
-  worker_rest:
-    build: ./worker
-    container_name: worker_rest
-    command: ["python3", "./run.py"]
-    volumes:
-      - "log_data:/application/logs"
-      - "workers_data:/application/files"
-    ports:
-      - "8000:8000"
-    networks:
-      - worker_nw
-      - gateway_nw
-    depends_on:
-      - database_rest
-    environment:
-      - LANG=tr_TR.UTF-8
-      - LANGUAGE=tr_TR:tr
-      - LC_ALL=tr_TR.UTF-8
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - TZ=Europe/Istanbul
-      - EXPOSE_PORT=8000
-      - FLASK_APP=application/app
-      - FLASK_ENV=development
-      - FILE_LOG_LEVEL=DEBUG
-      - CONSOLE_LOG_LEVEL=INFO
-  worker_1:
-    build: ./worker
-    container_name: worker_1
-    command: ["celery", "worker", "-A", "application.celery", "-P", "eventlet", "--loglevel=info", "-n",
-              "worker_1"]
-    volumes:
-      - "log_data:/application/logs"
-      - "workers_data:/application/files"
-    networks:
-      - worker_nw
-    depends_on:
-      - redis
-      - worker_rest
-    environment:
-      - LANG=tr_TR.UTF-8
-      - LANGUAGE=tr_TR:tr
-      - LC_ALL=tr_TR.UTF-8
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - TZ=Europe/Istanbul
-      - FLASK_ENV=development
-      - FILE_LOG_LEVEL=DEBUG
-      - CONSOLE_LOG_LEVEL=INFO
-  worker_2:
-    build: ./worker
-    container_name: worker_2
-    command: ["celery", "worker", "-A", "application.celery", "-P", "eventlet", "--loglevel=info", "-n",
-              "worker_2"]
-    volumes:
-      - "log_data:/application/logs"
-      - "workers_data:/application/files"
-    networks:
-      - worker_nw
-    depends_on:
-      - redis
-      - worker_rest
-    environment:
-      - LANG=tr_TR.UTF-8
-      - LANGUAGE=tr_TR:tr
-      - LC_ALL=tr_TR.UTF-8
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - TZ=Europe/Istanbul
-      - FLASK_ENV=development
-      - FILE_LOG_LEVEL=DEBUG
-      - CONSOLE_LOG_LEVEL=INFO
-  worker_3:
-    build: ./worker
-    container_name: worker_3
-    command: ["celery", "worker", "-A", "application.celery", "-P", "eventlet", "--loglevel=info", "-n",
-              "worker_3"]
-    volumes:
-      - "log_data:/application/logs"
-      - "workers_data:/application/files"
-    networks:
-      - worker_nw
-    depends_on:
-      - redis
-      - worker_rest
-    environment:
-      - LANG=tr_TR.UTF-8
-      - LANGUAGE=tr_TR:tr
-      - LC_ALL=tr_TR.UTF-8
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - TZ=Europe/Istanbul
-      - FLASK_ENV=development
-      - FILE_LOG_LEVEL=DEBUG
-      - CONSOLE_LOG_LEVEL=INFO
   flower:
     image: mher/flower
-    container_name: flower
+    container_name: univerdustry_flower
     networks:
-      - worker_nw
+      - net_worker
     ports:
       - "5555:5555"
     depends_on:
@@ -173,18 +118,120 @@ services:
       - LANG=tr_TR.UTF-8
       - LANGUAGE=tr_TR:tr
       - LC_ALL=tr_TR.UTF-8
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - FLOWER_BROKER_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://univerdustry_redis:6379/0
+      - FLOWER_BROKER_URL=redis://univerdustry_redis:6379/0
       - TZ=Europe/Istanbul
       - FLOWER_PORT=5555
+  scholar_rest:
+    build: ./scholar_rest
+    container_name: univerdustry_scholar_rest
+    command: ["python3", "./run.py"]
+    volumes:
+      - data_log:/application/logs
+    ports:
+      - "9000:9000"
+    networks:
+      - net_worker
+    environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - TZ=Europe/Istanbul
+      - EXPOSE_PORT=9000
+      - FLASK_APP=application/app
+      - FLASK_ENV=development
+      - FILE_LOG_LEVEL=DEBUG
+      - CONSOLE_LOG_LEVEL=INFO
+  schedule_worker:
+    build: ./worker
+    container_name: univerdustry_schedule_worker
+    command: ["celery", "beat", "-A", "application.celery", "--loglevel=debug"]
+    volumes:
+      - data_log:/application/logs
+      - data_worker:/application/files
+    networks:
+      - net_worker
+      - net_mongo_rest
+      - net_elasticsearch
+    depends_on:
+      - redis
+    environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - CELERY_BROKER_URL=redis://univerdustry_redis:6379/0
+      - TZ=Europe/Istanbul
+      - FLASK_ENV=development
+      - FILE_LOG_LEVEL=DEBUG
+      - CONSOLE_LOG_LEVEL=INFO
+      - MONGO_REST=http://univerdustry_mongo_rest:6000
+      - SCHOLAR_REST=http://univerdustry_scholar_rest:9000
+      - ELASTICSEARCH_REST=http://univerdustry_elasticsearch:9200
+  worker_1:
+    build: ./worker
+    container_name: univerdustry_worker_1
+    command: ["celery", "worker", "-A", "application.celery", "-P", "eventlet", "--loglevel=info", "-n",
+              "worker_1"]
+    volumes:
+      - data_log:/application/logs
+      - data_worker:/application/files
+    networks:
+      - net_worker
+      - net_mongo_rest
+      - net_elasticsearch
+    depends_on:
+      - redis
+      - mongo_rest
+      - elasticsearch
+    environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - CELERY_BROKER_URL=redis://univerdustry_redis:6379/0
+      - TZ=Europe/Istanbul
+      - FLASK_ENV=development
+      - FILE_LOG_LEVEL=DEBUG
+      - CONSOLE_LOG_LEVEL=INFO
+      - MONGO_REST=http://univerdustry_mongo_rest:6000
+      - SCHOLAR_REST=http://univerdustry_scholar_rest:9000
+      - ELASTICSEARCH_REST=http://univerdustry_elasticsearch:9200
+  worker_2:
+    build: ./worker
+    container_name: univerdustry_worker_2
+    command: ["celery", "worker", "-A", "application.celery", "-P", "eventlet", "--loglevel=info", "-n",
+              "worker_2"]
+    volumes:
+      - data_log:/application/logs
+      - data_worker:/application/files
+    networks:
+      - net_worker
+      - net_mongo_rest
+      - net_elasticsearch
+    depends_on:
+      - redis
+      - mongo_rest
+      - elasticsearch
+    environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - CELERY_BROKER_URL=redis://univerdustry_redis:6379/0
+      - TZ=Europe/Istanbul
+      - FLASK_ENV=development
+      - FILE_LOG_LEVEL=DEBUG
+      - CONSOLE_LOG_LEVEL=INFO
+      - MONGO_REST=http://univerdustry_mongo_rest:6000
+      - SCHOLAR_REST=http://univerdustry_scholar_rest:9000
+      - ELASTICSEARCH_REST=http://univerdustry_elasticsearch:9200
 
 volumes:
-  db_data:
-  redis_data:
-  log_data:
-  workers_data:
+  data_log:
+  data_mongo:
+  data_redis:
+  data_worker:
 
 networks:
-  db_nw:
-  gateway_nw:
-  worker_nw:
+  net_mongo:
+  net_worker:
+  net_mongo_rest:
+  net_elasticsearch:

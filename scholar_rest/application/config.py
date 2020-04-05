@@ -72,8 +72,7 @@ class ProductionConfig(BaseConfig):
 
     # We are fixing this because sometimes when we recreate application
     # Device users may not be reachable.
-    AES_IV = md5("univerdustry".encode("utf-8")).hexdigest()[:16].encode(
-        "utf-8")
+    AES_IV = md5("univerdustry".encode("utf-8")).hexdigest()[:16].encode("utf-8")
 
     # This for avoiding token invalidation. Because every time application
     # built, secret key will change. When secret key changed token will be

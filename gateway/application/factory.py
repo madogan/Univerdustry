@@ -42,6 +42,11 @@ def create_app(environment: str = "development") -> Flask:
     from flask import Flask
     app = Flask(__name__)
 
+    # This is to solve conflicts between `Vue.JS` and `Jinja` rendering of
+    # html files.
+    app.jinja_env.variable_start_string = "(|"
+    app.jinja_env.variable_end_string = "|)"
+
     # Add special converter for comma separated arguments.
     from application.utils.url_converters import (ListConverter,
                                                   IntListConverter)
@@ -101,6 +106,9 @@ def register_blueprints(_app: Flask) -> None:
     """
     from application.bps.index import bp_index
     _app.register_blueprint(bp_index)
+
+    from application.bps.organization import bp_organization
+    _app.register_blueprint(bp_organization)
 
 
 def initialize_extensions(_app: Flask) -> None:

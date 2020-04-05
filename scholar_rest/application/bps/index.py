@@ -1,9 +1,9 @@
 from flask import Blueprint
 
-index_bp = Blueprint("index_bp", __name__)
+bp_index = Blueprint("bp_index", __name__)
 
 
-@index_bp.route("/", defaults={"path": ""})
-@index_bp.route("/<path:path>")
+@bp_index.route("/", defaults={"path": ""})
+@bp_index.route("/<path:path>")
 def index(path):
     return "Running..."

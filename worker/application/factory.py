@@ -46,6 +46,17 @@ def create_app(environment: str = "development") -> Flask:
     from flask import Flask
     app = Flask(__name__)
 
+    # This is to solve conflicts between `Vue.JS` and `Jinja` rendering of
+    # html files.
+    app.jinja_env.variable_start_string = "(|"
+    app.jinja_env.variable_end_string = "|)"
+
+    # Add special converter for comma separated arguments.
+    from application.utils.url_converters import (ListConverter,
+                                                  IntListConverter)
+    app.url_map.converters["list"] = ListConverter
+    app.url_map.converters["int_list"] = IntListConverter
+
     # Get application environment from environmental variable if given.
     environment = os.getenv("FLASK_ENV") or environment
 
@@ -97,11 +108,7 @@ def register_blueprints(_app: Flask) -> None:
     Args:
         _app: Address of :flask:`Flask` application instance.
     """
-    from application.bps.index import index_bp
-    _app.register_blueprint(index_bp)
-
-    from application.bps.tasks import tasks_bp
-    _app.register_blueprint(tasks_bp)
+    pass
 
 
 def initialize_extensions(_app: Flask) -> None:
@@ -132,9 +139,6 @@ def create_celery(app_name: str) -> Celery:
                     broker=os.getenv("CELERY_BROKER_URL"),
                     include=[app_name])
 
-    # # Configure celery with app config.
-    # celery.conf.update(_app.config)
-
     # Configure celery.
     # noinspection PyTypeChecker
     celery.conf.update(
@@ -142,14 +146,22 @@ def create_celery(app_name: str) -> Celery:
         accept_content=["application/json"],
         result_serializer="json",
         enable_utc=True,
+        imports=(
+            "application.tasks.authors_scraper",
+            "application.tasks.publications_scraper",
+            "application.tasks.scrape_publication_of_author"
+        ),
         task_create_missing_queues=True,
-        # celery_queues=(
-        #     Queue("background", Exchange("background"),
-        #           routing_key="background"),
-        #     Queue("foreground", Exchange("foreground"),
-        #           routing_key="foreground")
-        # ),
-        # task_default_queue="background"
+        beat_schedule={
+            # "task-authors-scraper": {
+            #     "task": "authors_scraper",
+            #     "schedule": crontab(hour=0, minute=0)
+            # },
+            # "task-publications-scraper": {
+            #     "task": "publications_scraper",
+            #     "schedule": crontab(minute="*/15")
+            # }
+        }
     )
 
     # noinspection PyPep8Naming

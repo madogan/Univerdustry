@@ -1,1 +1,1 @@
-loguru==0.3.2gunicorn==20.0.2eventlet==0.25.1Flask==1.1.1
+loguru==0.3.2gunicorn==20.0.2eventlet==0.25.1Flask==1.1.1requests==2.22.0

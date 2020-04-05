@@ -14,4 +14,4 @@ RUN apk add --no-cache tzdata
 RUN echo $TZ > /etc/timezone
 COPY . /application
 WORKDIR /application
-EXPOSE 5090
+EXPOSE 9000

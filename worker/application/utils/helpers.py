@@ -4,74 +4,47 @@
 import datetime
 from string import ascii_lowercase, digits
 
-from flask import (_app_ctx_stack, current_app, has_app_context)
-
-
-def ensure_app_context(function):
-    """Decorator function to make sure a function works in app context.
-
-    Args:
-        function: A function that will be wrapped with context.
-    """
-    def wrapper(*args, **kwargs):
-        """Decorate function here.
-
-        Args:
-            *args: Arguments of the function.
-            **kwargs: Keyword arguments of the function.
-
-        Returns:
-            :obj:`function`: Wrapped function.
-        """
-        is_pushed = push_app_context_if_has_not_app_context()
-        return_value = function(*args, **kwargs)
-        pop_app_context_if_pushed(is_pushed)
-
-        return return_value
-
-    # To avoid naming conflicts.
-    wrapper.__name__ = function.__name__
-    return wrapper
-
-
-def push_app_context_if_has_not_app_context() -> [bool, None]:
-    """Check app context and push an app context manually."""
-    if not has_app_context():
-        # If out of app context, push app context.
-        from application import app
-        ctx = app.app_context()
-        ctx.push()
-        return True
-
-
-def pop_app_context_if_pushed(is_pushed: bool) -> None:
-    """Pop app context if pushed
-    
-    Arguments:
-        is_pushed: If it is True, pop app context from stack.
-    """
-    if is_pushed is True:
-        from application import app
-        ctx = app.app_context()
-        if ctx == _app_ctx_stack.top:
-            ctx.pop()
+import pdfplumber
+from flask import current_app
+from application import logger
+from application.utils.contextor import ensure_app_context
 
 
 @ensure_app_context
-def get_time_limit():
-    now = datetime.datetime.now()
-    time_limit = now - datetime.timedelta(
-        days=current_app.config["DB_HISTORY_DAYS_LIMIT"]
-    )
-    return time_limit
+def get_config(name):
+    return current_app.config.get(name, None)
+
+
+@ensure_app_context
+def set_config(name, value):
+    current_app.config[name] = value
+
+
+@ensure_app_context
+def get_logger():
+    return logger
+
+
+def clean_text(text: str):
+    accepted_chars = ascii_lowercase + digits + "_ " + " "
+
+    s1 = " ".join(text.split())
+    s2 = "".join([c for c in s1 if c in accepted_chars])
+    return s2
 
 
 def extract_file_name_from_url(url):
     file_name = url.split("/")[-1].split(".")[0].lower().replace(" ", "")
-    accepted_chars = ascii_lowercase + digits + "_"
-    file_name = "".join([c for c in file_name if c in accepted_chars])
+    file_name = clean_text(file_name)
     return file_name
 
 
-def clean_text(text: str):
-    return " ".join(text.split())
+def get_content_of_pdf(file_path):
+    text_of_pages = ""
+
+    pdf = pdfplumber.open(file_path)
+    for page in pdf.pages:
+        text_of_pages += page.extract_text()
+    pdf.close()
+
+    return clean_text(text_of_pages)

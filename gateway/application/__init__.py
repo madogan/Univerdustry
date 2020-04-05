@@ -35,6 +35,9 @@ ROOT_DIR = os.path.join(os.path.dirname(__file__), "..")
 # More about loguru: https://loguru.readthedocs.io/en/stable/overview.html
 from loguru import logger
 
+# Remove default handler.
+logger.remove()
+
 # Console logger.
 logger.add(sink=sys.stderr, level=os.environ.get("CONSOLE_LOG_LEVEL", "INFO"),
            format="|{time}| |{process}| |{level}| |{name}:{function}:{line}| "
@@ -43,10 +46,13 @@ logger.add(sink=sys.stderr, level=os.environ.get("CONSOLE_LOG_LEVEL", "INFO"),
 # File logger.
 logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
            serialize=True,
-           rotation="100 MB",  # Every log file max size.
+           rotation="10 MB",  # Every log file max size.
            # Remove logs older than 3 days.
            retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
 
 # Create application instance.
 from application.factory import create_app
 app = create_app()
+
+from application.utils.before_first_request_funcs import init_db
+init_db()

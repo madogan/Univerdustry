@@ -35,6 +35,8 @@ ROOT_DIR = os.path.join(os.path.dirname(__file__), "..")
 # More about loguru: https://loguru.readthedocs.io/en/stable/overview.html
 from loguru import logger
 
+# Remove default handler.
+logger.remove()
 
 # Console logger.
 logger.add(sink=sys.stderr, level=os.environ.get("CONSOLE_LOG_LEVEL", "INFO"),
@@ -49,6 +51,9 @@ logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
            retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
 
 
+from elasticsearch import Elasticsearch
+es = Elasticsearch(os.getenv("ELASTICSEARCH_REST"))
+
 # Configure and create redis instance.
 from application.factory import create_redis
 redis = create_redis()
@@ -60,3 +65,18 @@ celery = create_celery(__name__)
 # Create application instance.
 from application.factory import create_app
 app = create_app()
+
+# TODO: Remove here befor prod. This is only for development.
+import socket
+hostname = socket.gethostname()
+IPAddr = socket.gethostbyname(hostname)
+logger.info(f'\n\n\n{IPAddr}\n\n\n')
+
+if IPAddr == "172.21.0.6":
+    logger.info("\n\n\nRUN\n\n\n")
+    from application.tasks.authors_scraper import task_authors_scraper
+    task_authors_scraper.apply_async()
+
+    # from application.tasks.publications_scraper import task_publications_scraper
+    # task_publications_scraper.apply_async()
+

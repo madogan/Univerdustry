@@ -4,64 +4,30 @@
 import datetime
 from string import ascii_lowercase, digits
 
-from flask import (_app_ctx_stack, current_app, has_app_context)
-
-
-def ensure_app_context(function):
-    """Decorator function to make sure a function works in app context.
-
-    Args:
-        function: A function that will be wrapped with context.
-    """
-    def wrapper(*args, **kwargs):
-        """Decorate function here.
-
-        Args:
-            *args: Arguments of the function.
-            **kwargs: Keyword arguments of the function.
-
-        Returns:
-            :obj:`function`: Wrapped function.
-        """
-        is_pushed = push_app_context_if_has_not_app_context()
-        return_value = function(*args, **kwargs)
-        pop_app_context_if_pushed(is_pushed)
-
-        return return_value
-
-    # To avoid naming conflicts.
-    wrapper.__name__ = function.__name__
-    return wrapper
-
-
-def push_app_context_if_has_not_app_context() -> [bool, None]:
-    """Check app context and push an app context manually."""
-    if not has_app_context():
-        # If out of app context, push app context.
-        from application import app
-        ctx = app.app_context()
-        ctx.push()
-        return True
-
-
-def pop_app_context_if_pushed(is_pushed: bool) -> None:
-    """Pop app context if pushed
-    
-    Arguments:
-        is_pushed: If it is True, pop app context from stack.
-    """
-    if is_pushed is True:
-        from application import app
-        ctx = app.app_context()
-        if ctx == _app_ctx_stack.top:
-            ctx.pop()
+from flask import current_app
+from application import logger
+from application.utils.contextor import ensure_app_context
 
 
 @ensure_app_context
+def get_config(name):
+    return current_app.config.get(name, None)
+
+
+@ensure_app_context
+def set_config(name, value):
+    current_app.config[name] = value
+
+
+@ensure_app_context
+def get_logger():
+    return logger
+
+
 def get_time_limit():
     now = datetime.datetime.now()
     time_limit = now - datetime.timedelta(
-        days=current_app.config["DB_HISTORY_DAYS_LIMIT"]
+        days=get_config("DB_HISTORY_DAYS_LIMIT")
     )
     return time_limit
 

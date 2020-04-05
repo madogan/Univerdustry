@@ -39,6 +39,10 @@ class BaseConfig(object):
     CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
     CELERY_RESULT_BACKEND = os.getenv("CELERY_BROKER_URL")
 
+    MONGO_REST = os.getenv("MONGO_REST")
+    SCHOLAR_REST = os.getenv("SCHOLAR_REST")
+    ELASTICSEARCH_REST = os.getenv("ELASTICSEARCH_REST")
+
     DB_HISTORY_DAYS_LIMIT = 30
 
 

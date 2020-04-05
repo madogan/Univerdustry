@@ -1,1 +1,0 @@
-loguru==0.3.2gunicorn==20.0.2eventlet==0.25.1Flask==1.1.1Flask-Migrate==2.5.2Flask-SQLAlchemy==2.4.1SQLAlchemy-Utils==0.35.0psycopg2==2.8.4
