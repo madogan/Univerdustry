@@ -1,8 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1b4fed88-a539-4f04-9c30-42019d1a46f5" name="Default Changelist" comment="" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <list default="true" id="1b4fed88-a539-4f04-9c30-42019d1a46f5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Univerdustry_v03.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/application/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libgen_rest/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/libgen_rest/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mongo_rest/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/mongo_rest/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nginx/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/nginx/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scholar_rest/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/scholar_rest/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/worker/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/factory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/rests/elasticsearch.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/rests/scholar.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/rests/scholar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/authors_scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/authors_scraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/download_pdf.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/download_pdf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/publications_scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/publications_scraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/scrape_publication_of_author.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/utils/helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/utils/helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/worker/requirements.txt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,13 +38,25 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="NamedScopeManager">
-    <scope name="libgen_rest" pattern="file[Univerdustry_v03]:libgen_rest//*" />
+    <scope name="libgen_rest" pattern="file[Univerdustry]:libgen_rest//*" />
+    <scope name="worker" pattern="file[Univerdustry]:worker//*" />
   </component>
   <component name="ProjectId" id="1Z9lAad6gCCfcz6Uqs1CUl3PvP5" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/libgen_rest/application/utils" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -37,18 +72,6 @@
       <recent name="C:\Users\pc\Desktop\Univerdustry_v03\worker\application" />
       <recent name="C:\Users\pc\Desktop\Univerdustry_v03\mongo_rest\application\utils" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -74,10 +97,39 @@
       <workItem from="1586008509674" duration="7837000" />
       <workItem from="1586018179223" duration="466000" />
       <workItem from="1586026800376" duration="14000" />
+      <workItem from="1586255696784" duration="7102000" />
+      <workItem from="1586275359301" duration="13653000" />
+      <workItem from="1586331433165" duration="875000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1586293129835">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1586293129835" />
+    <state x="461" y="162" key="SettingsEditor" timestamp="1586274770146">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="461" y="162" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1586274770146" />
+    <state x="656" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1586331434851">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1586331434851" />
+    <state x="769" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586267634082">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="769" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1586267634082" />
+    <state x="656" y="118" width="737" height="804" key="find.popup" timestamp="1586293250238">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="656" y="118" width="737" height="804" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1586293250238" />
+    <state x="552" y="179" key="scopes" timestamp="1586267560731">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="179" key="scopes/0.0.1920.1040@0.0.1920.1040" timestamp="1586267560731" />
   </component>
 </project>

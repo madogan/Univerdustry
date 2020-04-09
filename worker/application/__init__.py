@@ -52,7 +52,7 @@ logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
 
 
 from elasticsearch import Elasticsearch
-es = Elasticsearch(os.getenv("ELASTICSEARCH_REST"))
+es = Elasticsearch(os.getenv("ELASTICSEARCH"))
 
 # Configure and create redis instance.
 from application.factory import create_redis
@@ -66,17 +66,12 @@ celery = create_celery(__name__)
 from application.factory import create_app
 app = create_app()
 
-# TODO: Remove here befor prod. This is only for development.
+# TODO: Remove here before prod. This is only for development.
 import socket
 hostname = socket.gethostname()
 IPAddr = socket.gethostbyname(hostname)
-logger.info(f'\n\n\n{IPAddr}\n\n\n')
+logger.info(f'\n\n\nIP ADDR: {IPAddr}\n\n\n')
 
-if IPAddr == "172.21.0.6":
-    logger.info("\n\n\nRUN\n\n\n")
+if IPAddr == "192.168.160.6":
     from application.tasks.authors_scraper import task_authors_scraper
     task_authors_scraper.apply_async()
-
-    # from application.tasks.publications_scraper import task_publications_scraper
-    # task_publications_scraper.apply_async()
-

@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 """This module consists several necessary function independently."""
 
-import datetime
+import io
 from string import ascii_lowercase, digits
 
-import pdfplumber
 from flask import current_app
+from pdfminer.converter import TextConverter
+from pdfminer.pdfinterp import PDFPageInterpreter
+from pdfminer.pdfinterp import PDFResourceManager
+from pdfminer.pdfpage import PDFPage
+
 from application import logger
 from application.utils.contextor import ensure_app_context
 
@@ -39,12 +43,21 @@ def extract_file_name_from_url(url):
     return file_name
 
 
-def get_content_of_pdf(file_path):
-    text_of_pages = ""
+def extract_text_from_pdf(pdf_path):
+    resource_manager = PDFResourceManager()
+    fake_file_handle = io.StringIO()
+    converter = TextConverter(resource_manager, fake_file_handle)
+    page_interpreter = PDFPageInterpreter(resource_manager, converter)
 
-    pdf = pdfplumber.open(file_path)
-    for page in pdf.pages:
-        text_of_pages += page.extract_text()
-    pdf.close()
+    with open(pdf_path, 'rb') as fh:
+        for page in PDFPage.get_pages(fh, caching=True, check_extractable=True):
+            page_interpreter.process_page(page)
 
-    return clean_text(text_of_pages)
+        text = fake_file_handle.getvalue()
+
+    converter.close()
+
+    fake_file_handle.close()
+
+    if text:
+        return text

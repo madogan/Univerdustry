@@ -149,7 +149,9 @@ def create_celery(app_name: str) -> Celery:
         imports=(
             "application.tasks.authors_scraper",
             "application.tasks.publications_scraper",
-            "application.tasks.scrape_publication_of_author"
+            "application.tasks.scrape_publications_of_author",
+            "application.tasks.download_pdf",
+            "application.tasks.add_to_elasticsearch"
         ),
         task_create_missing_queues=True,
         beat_schedule={
