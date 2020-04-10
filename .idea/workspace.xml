@@ -2,44 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1b4fed88-a539-4f04-9c30-42019d1a46f5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/application/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/application/bps/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/application/bps/articles.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/application/bps/index.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/application/config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/application/exceptions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/application/factory.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/application/utils/contextor.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/application/utils/custom_json_encoder.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/application/utils/decorators.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/application/utils/url_converters.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libgen_rest/run.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/bps/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/bps/author.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/bps/index.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/bps/publication.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/exceptions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/factory.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/utils/contextor.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/utils/custom_json_encoder.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/utils/decorators.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/utils/generators.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/utils/helpers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/application/utils/url_converters.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/requirements.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scholar_rest/run.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/word_embedder/utils.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/word_embedder/word_vec_file.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/application/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/application/tasks/download_pdf.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/download_pdf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/rests/vectorizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/rests/vectorizer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

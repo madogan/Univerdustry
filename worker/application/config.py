@@ -42,6 +42,7 @@ class BaseConfig(object):
     MONGO_REST = os.getenv("MONGO_REST")
     SCHOLAR_REST = os.getenv("SCHOLAR_REST")
     ELASTICSEARCH = os.getenv("ELASTICSEARCH")
+    VECTORIZER = os.getenv("VECTORIZER")
 
     DB_HISTORY_DAYS_LIMIT = 30
 
