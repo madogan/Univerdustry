@@ -1,5 +1,0 @@
-eventlet==0.25.1
-loguru==0.4.0
-gunicorn==20.0.4
-Flask==1.1.1
-scholarly==0.2.5

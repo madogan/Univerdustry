@@ -42,9 +42,6 @@ def create_app(environment: str = "development") -> Flask:
     from flask import Flask
     app = Flask(__name__)
 
-    # Get application environment from environmental variable if given.
-    environment = os.getenv("FLASK_ENV") or environment
-
     # This is to solve conflicts between `Vue.JS` and `Jinja` rendering of
     # html files.
     app.jinja_env.variable_start_string = "(|"
@@ -55,6 +52,9 @@ def create_app(environment: str = "development") -> Flask:
                                                   IntListConverter)
     app.url_map.converters["list"] = ListConverter
     app.url_map.converters["int_list"] = IntListConverter
+
+    # Get application environment from environmental variable if given.
+    environment = os.getenv("FLASK_ENV") or environment
 
     # Configure application.
     from application.config import config
@@ -106,12 +106,6 @@ def register_blueprints(_app: Flask) -> None:
     """
     from application.bps.index import bp_index
     _app.register_blueprint(bp_index)
-    
-    from application.bps.author import bp_author
-    _app.register_blueprint(bp_author)
-
-    from application.bps.publication import bp_publication
-    _app.register_blueprint(bp_publication)
 
 
 def initialize_extensions(_app: Flask) -> None:

@@ -1,8 +1,10 @@
 import os
 import base64
+
+
 import numpy as np
 
-from word_embedder.utils import tokenize
+from application.utils.helpers import tokenize
 
 
 class WordVecFile:
@@ -11,37 +13,47 @@ class WordVecFile:
         self.fp = open(fpath, "rt", encoding='utf-8', newline='\n',
                        errors='ignore')
 
+        self._word_len = 200
+        self._number_len = 16
+
         if not_formatted_file is True:
             self._convert_file_format()
 
-        self.n, self.dim = self._get_word_count_and_dim()
-        self._word_indices = self._get_word_indices()
+        self._line_len = self._set_line_len()
+        self._first_line_len = self._set_first_line_len()
 
-        self.line_len = self._set_line_len()
+        self._word_indices = self._get_word_indices()
+        self.n, self.dim = self._get_word_count_and_dim()
 
     def get_word_vector(self, word):
-        word = base64.b64encode(word.encode("utf-8", errors="ignore"))\
-            .decode("utf-8", errors="ignore")
+        word = base64.b64encode(word.encode("utf-8", errors="ignore")).decode(
+            "utf-8", errors="ignore")
         word_index = self._word_indices.get(word, None)
 
         if not word_index:
             return np.zeros(300)
 
         self.fp.seek(0)
+        self.fp.seek(self._first_line_len + (word_index * self._line_len))
 
-        self.fp.seek(51 + (word_index * 2601))
-        word_line = self.fp.read(2601)
+        word_line = self.fp.read(self._line_len)
 
-        print(word_line)
+        #         print(word_line)
 
         tokens = word_line.split()
 
         vector = np.array(list(map(float, tokens[1:])))
+
         self.fp.seek(0)
         return vector
 
-    def get_sentence_vector(self, sentence):
-        words = tokenize(sentence)
+    def get_sentence_vector(self, sentence,
+                            is_tokenized=True):
+        if is_tokenized is True:
+            words = sentence
+        else:
+            words = tokenize(sentence)
+
         word_vectors = [self.get_word_vector(w) for w in words]
         return np.mean(word_vectors, axis=0)
 
@@ -67,6 +79,12 @@ class WordVecFile:
     def _set_line_len(self):
         self.fp.seek(0)
         self.fp.readline()
+        len_line = len(self.fp.readline())
+        self.fp.seek(0)
+        return len_line
+
+    def _set_first_line_len(self):
+        self.fp.seek(0)
         len_line = len(self.fp.readline())
         self.fp.seek(0)
         return len_line
@@ -100,12 +118,12 @@ class WordVecFile:
                     token.encode("utf-8", errors="ignore")
                 ).decode("utf-8", errors="ignore")
                 line_str += token
-                line_str += " " * (200 - len(token))
+                line_str += " " * (self._word_len - len(token))
 
                 vector = tokens[1:]
                 for v in vector:
                     len_v = len(v)
-                    spaces = " " * (8 - len_v)
+                    spaces = " " * (self._number_len - len_v)
 
                     v = spaces + v
 

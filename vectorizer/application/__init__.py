@@ -8,7 +8,7 @@ Attributes:
     ROOT_DIR (str): This variable store absolute path of
         root dir of application.
 """
-
+# Version of the application.
 __version__ = "0.1"
 
 # This lib. provides safe threading. For more information: http://eventlet.net/
@@ -49,6 +49,16 @@ logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
            rotation="10 MB",  # Every log file max size.
            # Remove logs older than 3 days.
            retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
+
+
+from fasttext import load_model
+model_en = load_model(os.path.join(ROOT_DIR, "application",
+                                             "embeddings", "cc.en.300.bin"))
+
+model_tr = load_model(os.path.join(ROOT_DIR, "application",
+                                             "embeddings", "cc.tr.300.bin"))
+
+models = {"tr": model_tr, "en": model_en}
 
 # Create application instance.
 from application.factory import create_app

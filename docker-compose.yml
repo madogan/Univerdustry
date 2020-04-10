@@ -62,7 +62,6 @@ services:
       - FILE_LOG_LEVEL=DEBUG
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://univerdustry_mongo_rest:6000
-      - SCHOLAR_REST=http://univerdustry_scholar_rest:9000
       - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
@@ -74,8 +73,6 @@ services:
       - "9300:9300"
     networks:
       - net_elasticsearch
-    depends_on:
-      - scholar_rest
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
   kibana:
@@ -122,12 +119,13 @@ services:
       - FLOWER_BROKER_URL=redis://univerdustry_redis:6379/0
       - TZ=Europe/Istanbul
       - FLOWER_PORT=5555
-  scholar_rest:
-    build: ./scholar_rest
-    container_name: univerdustry_scholar_rest
+  vectorizer:
+    build: ./vectorizer
+    container_name: univerdustry_vectorizer
     command: ["python3", "./run.py"]
     volumes:
       - data_log:/application/logs
+      - data_embeddings:/application/embeddings
     ports:
       - "9000:9000"
     networks:
@@ -165,7 +163,6 @@ services:
       - FILE_LOG_LEVEL=DEBUG
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://univerdustry_mongo_rest:6000
-      - SCHOLAR_REST=http://univerdustry_scholar_rest:9000
       - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
   worker_1:
     build: ./worker
@@ -193,7 +190,6 @@ services:
       - FILE_LOG_LEVEL=DEBUG
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://univerdustry_mongo_rest:6000
-      - SCHOLAR_REST=http://univerdustry_scholar_rest:9000
       - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
   worker_2:
     build: ./worker
@@ -221,7 +217,6 @@ services:
       - FILE_LOG_LEVEL=DEBUG
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://univerdustry_mongo_rest:6000
-      - SCHOLAR_REST=http://univerdustry_scholar_rest:9000
       - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
 #  worker_3:
 #    build: ./worker
@@ -249,7 +244,6 @@ services:
 #      - FILE_LOG_LEVEL=DEBUG
 #      - CONSOLE_LOG_LEVEL=INFO
 #      - MONGO_REST=http://univerdustry_mongo_rest:6000
-#      - SCHOLAR_REST=http://univerdustry_scholar_rest:9000
 #      - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
 #  worker_4:
 #    build: ./worker
@@ -277,7 +271,6 @@ services:
 #      - FILE_LOG_LEVEL=DEBUG
 #      - CONSOLE_LOG_LEVEL=INFO
 #      - MONGO_REST=http://univerdustry_mongo_rest:6000
-#      - SCHOLAR_REST=http://univerdustry_scholar_rest:9000
 #      - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
 #  worker_5:
 #    build: ./worker
@@ -305,7 +298,6 @@ services:
 #      - FILE_LOG_LEVEL=DEBUG
 #      - CONSOLE_LOG_LEVEL=INFO
 #      - MONGO_REST=http://univerdustry_mongo_rest:6000
-#      - SCHOLAR_REST=http://univerdustry_scholar_rest:9000
 #      - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
 
 volumes:
@@ -313,6 +305,7 @@ volumes:
   data_mongo:
   data_redis:
   data_worker:
+  data_embeddings:
 
 networks:
   net_mongo:

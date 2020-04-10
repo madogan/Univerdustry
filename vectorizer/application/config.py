@@ -9,7 +9,7 @@ object.
 Attributes:
     config (dict): It gives config according to key of environment.
 """
-
+import os
 from _md5 import md5
 
 from application.utils.custom_json_encoder import CustomJsonEncoder
@@ -19,27 +19,23 @@ class BaseConfig(object):
     """Base configuration class for application."""
 
     DEBUG = False
-
-    ENCODING = "utf-8"
-
     DATETIME_FORMAT = "%d-%m-%Y"
-
     RESTFUL_JSON = {'cls': CustomJsonEncoder}
+    SECRET_KEY = os.urandom(16).hex()  # It results 32 length hex string.
 
-    SECRET_KEY = md5("univerdustry".encode(ENCODING)).hexdigest()
-
-    # Enable CSRF tokens in the Forms.
-    WTF_CSRF_ENABLED = True
-
-    DB_HISTORY_DAYS_LIMIT = 30
-
-    DEFAULT_PROFILE_IMAGE_URL = "https://haberajandanet.com/img/anonim.png"
+    MONGO_REST = os.getenv("MONGO_REST")
+    ELASTICSEARCH = os.getenv("ELASTICSEARCH")
 
 
 class DevelopmentConfig(BaseConfig):
     """Development specified configuration class."""
 
     DEBUG = True
+
+    # This for avoiding token invalidation. Because every time application
+    # built, secret key will change. When secret key changed token will be
+    # invalid.
+    SECRET_KEY = "VCcbkFCUwOrtxBdrVCcbkFCUwOrtxBdr"
     CONSOLE_LOG_LEVEL = "DEBUG"
 
 
@@ -52,9 +48,6 @@ class TestingConfig(BaseConfig):
     # handling so that you get better error reports when performing test
     # requests against the application.
     TESTING = True
-
-    # Disable CSRF tokens in the Forms (only valid for testing purposes!)
-    WTF_CSRF_ENABLED = False
 
     # Because of the error: ``Popped wrong app context.``
     # See Also:
@@ -72,8 +65,7 @@ class ProductionConfig(BaseConfig):
 
     # We are fixing this because sometimes when we recreate application
     # Device users may not be reachable.
-    AES_IV = md5("univerdustry".encode("utf-8")).hexdigest()[:16].encode(
-        "utf-8")
+    AES_IV = md5("univerdustry".encode("utf-8")).hexdigest()[:16].encode("utf-8")
 
     # This for avoiding token invalidation. Because every time application
     # built, secret key will change. When secret key changed token will be
