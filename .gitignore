@@ -146,7 +146,7 @@ media
 static
 
 # PyCharm
-.idea/
+.idea
 */.idea/
 
 # Image Formats
