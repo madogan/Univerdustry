@@ -146,7 +146,8 @@ media
 static
 
 # PyCharm
-.idea
+.idea/
+.idea/*.*
 */.idea/
 
 # Image Formats
@@ -157,3 +158,4 @@ static
 *.vec
 
 */*.vec
+.idea/workspace.xml
