@@ -160,4 +160,4 @@ static
 */*.vec
 .idea/workspace.xml
 
-.bin
+*.bin
