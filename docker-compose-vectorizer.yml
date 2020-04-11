@@ -1,7 +1,6 @@
 version: "3"
 
 services:
-
   vectorizer:
     build: ./vectorizer
     container_name: univerdustry_vectorizer
@@ -18,7 +17,3 @@ services:
       - FLASK_ENV=production
       - FILE_LOG_LEVEL=DEBUG
       - CONSOLE_LOG_LEVEL=INFO
-    deploy:
-      resources:
-        limits:
-          memory: 20480M
