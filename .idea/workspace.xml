@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1b4fed88-a539-4f04-9c30-42019d1a46f5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/application/rests/vectorizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/rests/vectorizer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/scrape_publications_of_author.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/scrape_publications_of_author.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
