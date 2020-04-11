@@ -18,4 +18,7 @@ services:
       - FLASK_ENV=production
       - FILE_LOG_LEVEL=DEBUG
       - CONSOLE_LOG_LEVEL=INFO
-    mem_limit: 20480mb
+    deploy:
+      resources:
+        limits:
+          memory: 20480M
