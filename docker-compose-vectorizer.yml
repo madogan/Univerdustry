@@ -15,6 +15,7 @@ services:
       - TZ=Europe/Istanbul
       - EXPOSE_PORT=9000
       - FLASK_APP=application/app
-      - FLASK_ENV=development
+      - FLASK_ENV=production
       - FILE_LOG_LEVEL=DEBUG
       - CONSOLE_LOG_LEVEL=INFO
+    mem_limit: 20480mb
