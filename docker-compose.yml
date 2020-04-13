@@ -119,27 +119,6 @@ services:
       - FLOWER_BROKER_URL=redis://univerdustry_redis:6379/0
       - TZ=Europe/Istanbul
       - FLOWER_PORT=5555
-  vectorizer:
-    build: ./vectorizer
-    container_name: univerdustry_vectorizer
-    command: ["python3", "./run.py"]
-    volumes:
-      - data_log:/application/logs
-      - data_embeddings:/application/embeddings
-    ports:
-      - "9000:9000"
-    networks:
-      - net_worker
-    environment:
-      - LANG=tr_TR.UTF-8
-      - LANGUAGE=tr_TR:tr
-      - LC_ALL=tr_TR.UTF-8
-      - TZ=Europe/Istanbul
-      - EXPOSE_PORT=9000
-      - FLASK_APP=application/app
-      - FLASK_ENV=development
-      - FILE_LOG_LEVEL=DEBUG
-      - CONSOLE_LOG_LEVEL=INFO
   schedule_worker:
     build: ./worker
     container_name: univerdustry_schedule_worker
@@ -191,7 +170,6 @@ services:
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://univerdustry_mongo_rest:6000
       - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
-      - VECTORIZER=http://univerdustry_vectorizer:9000
   worker_2:
     build: ./worker
     container_name: univerdustry_worker_2
@@ -219,7 +197,6 @@ services:
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://univerdustry_mongo_rest:6000
       - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
-      - VECTORIZER=http://univerdustry_vectorizer:9000
 #  worker_3:
 #    build: ./worker
 #    container_name: univerdustry_worker_3
@@ -247,7 +224,6 @@ services:
 #      - CONSOLE_LOG_LEVEL=INFO
 #      - MONGO_REST=http://univerdustry_mongo_rest:6000
 #      - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
-#      - VECTORIZER=http://univerdustry_vectorizer:9000
 #  worker_4:
 #    build: ./worker
 #    container_name: univerdustry_worker_4
@@ -275,7 +251,6 @@ services:
 #      - CONSOLE_LOG_LEVEL=INFO
 #      - MONGO_REST=http://univerdustry_mongo_rest:6000
 #      - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
-#      - VECTORIZER=http://univerdustry_vectorizer:9000
 #  worker_5:
 #    build: ./worker
 #    container_name: univerdustry_worker_5
@@ -303,7 +278,6 @@ services:
 #      - CONSOLE_LOG_LEVEL=INFO
 #      - MONGO_REST=http://univerdustry_mongo_rest:6000
 #      - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
-#      - VECTORIZER=http://univerdustry_vectorizer:9000
 
 volumes:
   data_log:
