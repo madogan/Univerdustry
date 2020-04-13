@@ -1,1 +1,0 @@
-def parse_comma_separated_strings(data):    try:        splitted = data.split(",")        result = [v.strip() for v in splitted]    except Exception:        result = None    return result
