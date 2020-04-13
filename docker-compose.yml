@@ -5,6 +5,8 @@ services:
     build: ./vectorizer
     container_name: univerdustry_vectorizer
     command: ["python3", "./run.py"]
+    volumes:
+      - ./embeddings:/embeddings
     ports:
       - "9000:9000"
     environment:

@@ -52,11 +52,8 @@ logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
 
 
 from fasttext import load_model
-model_en = load_model(os.path.join(ROOT_DIR, "application",
-                                             "embeddings", "cc.en.300.bin"))
-
-model_tr = load_model(os.path.join(ROOT_DIR, "application",
-                                             "embeddings", "cc.tr.300.bin"))
+model_en = load_model(os.path.join(ROOT_DIR, "embeddings", "cc.en.300.bin"))
+model_tr = load_model(os.path.join(ROOT_DIR, "embeddings", "cc.tr.300.bin"))
 
 models = {"tr": model_tr, "en": model_en}
 
