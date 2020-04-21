@@ -51,12 +51,15 @@ logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
            retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
 
 
-from fasttext import load_model
-model_en = load_model(os.path.join(ROOT_DIR, "embeddings", "cc.en.300.bin"))
-model_tr = load_model(os.path.join(ROOT_DIR, "embeddings", "cc.tr.300.bin"))
-
-models = {"tr": model_tr, "en": model_en}
+# from fasttext import load_model
+# model_en = load_model("/embeddings/cc.en.300.bin")
+# model_tr = load_model("/embeddings/cc.tr.300.bin")
+#
+# models = {"tr": model_tr, "en": model_en}
+models = {"tr": None, "en": None}
 
 # Create application instance.
 from application.factory import create_app
 app = create_app()
+
+logger.info("App is created!")
