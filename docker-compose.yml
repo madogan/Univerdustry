@@ -63,6 +63,7 @@ services:
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://univerdustry_mongo_rest:6000
       - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
+      - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
     container_name: univerdustry_elasticsearch
@@ -143,6 +144,7 @@ services:
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://univerdustry_mongo_rest:6000
       - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
+      - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com
   worker_1:
     build: ./worker
     container_name: univerdustry_worker_1
@@ -170,6 +172,7 @@ services:
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://univerdustry_mongo_rest:6000
       - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
+      - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com
   worker_2:
     build: ./worker
     container_name: univerdustry_worker_2
@@ -197,6 +200,7 @@ services:
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://univerdustry_mongo_rest:6000
       - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
+      - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com
 #  worker_3:
 #    build: ./worker
 #    container_name: univerdustry_worker_3

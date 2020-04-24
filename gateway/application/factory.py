@@ -110,6 +110,9 @@ def register_blueprints(_app: Flask) -> None:
     from application.bps.organization import bp_organization
     _app.register_blueprint(bp_organization)
 
+    from application.bps.elasticsearch import bp_elasticsearch
+    _app.register_blueprint(bp_elasticsearch)
+
 
 def initialize_extensions(_app: Flask) -> None:
     """This function initialize to integrate flask extensions.

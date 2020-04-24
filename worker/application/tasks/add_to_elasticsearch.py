@@ -1,3 +1,5 @@
+from _md5 import md5
+
 from application import celery, es
 from application.rests.mongo import find_one
 
@@ -33,6 +35,7 @@ def task_add_to_elasticsearch(self, pub_id: str):
     publication.pop("source")
     publication.pop("_id")
 
-    es.index("publication", publication, doc_type="publication")
+    _id = md5(publication["title"].encode("utf-8")).hexdigest()
+    es.index("publication", publication, id=_id, doc_type="publication")
 
     return resd

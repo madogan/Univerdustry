@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1b4fed88-a539-4f04-9c30-42019d1a46f5" name="Default Changelist" comment="">
+    <list default="true" id="a7cd2f07-e6ab-4edb-90ba-277e3c3acdfe" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/gateway/application/rests/elasticsearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway/TODO" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway/application/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/application/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/application/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway/application/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/application/factory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mongo_rest/TODO" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/nginx/env_file" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/application/bps/elasticsearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/add_to_elasticsearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/add_to_elasticsearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/add_vector.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/add_vector.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,43 +33,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="NamedScopeManager">
-    <scope name="libgen_rest" pattern="file[Univerdustry]:libgen_rest//*" />
-    <scope name="worker" pattern="file[Univerdustry]:worker//*" />
-  </component>
-  <component name="ProjectId" id="1Z9lAad6gCCfcz6Uqs1CUl3PvP5" />
-  <component name="ProjectViewState">
-    <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
-    <option name="showLibraryContents" value="true" />
-  </component>
+  <component name="ProjectId" id="1axFRAI3C9PcYC4vTJp4OcEw7bq" />
   <component name="PropertiesComponent">
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="true" />
-    <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
-    <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
-    <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
-    <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
-    <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/word_embedder" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
-  </component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\HSN\Desktop\Ali\Univerdustry\word_embedder" />
-      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\libgen_rest\application\utils" />
-      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\worker\application\utils" />
-      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\scholar_rest\application\utils" />
-      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\worker\application" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\HSN\Desktop\Ali\Univerdustry\word_embedder\application" />
-      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\gateway\application\rests" />
-      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\gateway\application" />
-      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\gateway\application\utils" />
-      <recent name="C:\Users\pc\Desktop\Univerdustry_v03\mongo_rest\application\utils" />
-    </key>
+    <property name="WebServerToolWindowFactoryState" value="false" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -75,30 +55,13 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="1b4fed88-a539-4f04-9c30-42019d1a46f5" name="Default Changelist" comment="" />
-      <created>1584259048776</created>
+      <changelist id="a7cd2f07-e6ab-4edb-90ba-277e3c3acdfe" name="Default Changelist" comment="" />
+      <created>1587669327154</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1584259048776</updated>
-      <workItem from="1584259061793" duration="12215000" />
-      <workItem from="1584377838610" duration="28316000" />
-      <workItem from="1584470967915" duration="721000" />
-      <workItem from="1584523851121" duration="31439000" />
-      <workItem from="1584736622380" duration="172000" />
-      <workItem from="1585670441235" duration="6226000" />
-      <workItem from="1585752233105" duration="3803000" />
-      <workItem from="1585813491370" duration="814000" />
-      <workItem from="1585848963313" duration="1199000" />
-      <workItem from="1585911191702" duration="37000" />
-      <workItem from="1585924463094" duration="8872000" />
-      <workItem from="1586008509674" duration="7837000" />
-      <workItem from="1586018179223" duration="466000" />
-      <workItem from="1586026800376" duration="14000" />
-      <workItem from="1586255696784" duration="7102000" />
-      <workItem from="1586275359301" duration="13653000" />
-      <workItem from="1586331433165" duration="875000" />
-      <workItem from="1586794803339" duration="1194000" />
-      <workItem from="1587566223621" duration="748000" />
+      <updated>1587669327154</updated>
+      <workItem from="1587669339642" duration="877000" />
+      <workItem from="1587739314912" duration="3130000" />
     </task>
     <servers />
   </component>
@@ -110,47 +73,12 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="552" y="178" key="#Deployment" timestamp="1586796574045">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="552" y="178" key="#Deployment/0.0.1920.1040@0.0.1920.1040" timestamp="1586796574045" />
-    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1586293129835">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1586293129835" />
-    <state x="461" y="139" key="SettingsEditor" timestamp="1586534841745">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="369" y="-970" key="SettingsEditor/0.0.1920.1040/0.-1080.1536.824@0.-1080.1536.824" timestamp="1586512818081" />
-    <state x="461" y="139" key="SettingsEditor/0.0.1920.1040/0.-1080.1536.824@0.0.1920.1040" timestamp="1586534841745" />
-    <state x="461" y="162" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1586274770146" />
-    <state x="656" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1586331434851">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1586331434851" />
-    <state x="769" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586267634082">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="769" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1586267634082" />
-    <state x="656" y="118" width="737" height="804" key="find.popup" timestamp="1586796220917">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="656" y="118" width="737" height="804" key="find.popup/0.0.1920.1040/0.-1080.1536.824@0.0.1920.1040" timestamp="1586536370890" />
-    <state x="656" y="118" width="737" height="804" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1586796220917" />
-    <state x="552" y="179" key="scopes" timestamp="1586267560731">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="552" y="179" key="scopes/0.0.1920.1040@0.0.1920.1040" timestamp="1586267560731" />
-    <state x="143" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1586536317723">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="143" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/0.-1080.1536.824@0.0.1920.1040" timestamp="1586536317723" />
   </component>
 </project>

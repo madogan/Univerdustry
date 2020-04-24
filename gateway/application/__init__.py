@@ -50,6 +50,9 @@ logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
            # Remove logs older than 3 days.
            retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
 
+from elasticsearch import Elasticsearch
+es = Elasticsearch(os.getenv("ELASTICSEARCH"))
+
 # Create application instance.
 from application.factory import create_app
 app = create_app()

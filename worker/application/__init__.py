@@ -50,7 +50,7 @@ logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
            # Remove logs older than 3 days.
            retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
 
-#This is for disabling pdfminer logs
+# This is for disabling pdfminer logs
 import logging
 logging.propagate = False
 logging.getLogger().setLevel(logging.ERROR)
