@@ -22,7 +22,7 @@ services:
       - FILE_LOG_LEVEL=DEBUG
       - CONSOLE_LOG_LEVEL=INFO
   nginx:
-    image: hub.allconfig.com/nginx:latest
+    image: nginx:latest
     build: ./nginx
     container_name: nginx
     ports:
