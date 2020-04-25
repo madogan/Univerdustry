@@ -2,20 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a7cd2f07-e6ab-4edb-90ba-277e3c3acdfe" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/gateway/application/rests/elasticsearch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway/TODO" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway/application/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/application/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/application/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway/application/factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/application/factory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mongo_rest/TODO" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/nginx/env_file" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/application/bps/elasticsearch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/application/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/application/tasks/add_to_elasticsearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/add_to_elasticsearch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/worker/application/tasks/add_vector.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/add_vector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/authors_scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/authors_scraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/scrape_publications_of_author.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/scrape_publications_of_author.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -62,6 +51,7 @@
       <updated>1587669327154</updated>
       <workItem from="1587669339642" duration="877000" />
       <workItem from="1587739314912" duration="3130000" />
+      <workItem from="1587749094479" duration="973000" />
     </task>
     <servers />
   </component>
