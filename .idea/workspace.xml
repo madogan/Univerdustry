@@ -2,9 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a7cd2f07-e6ab-4edb-90ba-277e3c3acdfe" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/gateway/application/templates/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gateway/application/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway/application/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/application/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway/application/bps/elasticsearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/application/bps/elasticsearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway/application/rests/elasticsearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/application/rests/elasticsearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway/application/utils/before_first_request_funcs.py" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/application/utils/before_first_request_funcs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gateway/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/gateway/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kibana/kibana.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kibana/kibana.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/rests/vectorizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/rests/vectorizer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/add_to_elasticsearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/add_to_elasticsearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/add_vector.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/add_vector.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worker/application/tasks/authors_scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/authors_scraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/download_pdf.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/download_pdf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/tasks/publications_scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/publications_scraper.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/worker/application/tasks/scrape_publications_of_author.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/tasks/scrape_publications_of_author.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/application/utils/decorators.py" beforeDir="false" afterPath="$PROJECT_DIR$/worker/application/utils/decorators.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/worker/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/worker/requirements.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,7 +43,18 @@
   <component name="ProjectId" id="1axFRAI3C9PcYC4vTJp4OcEw7bq" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/gateway/application" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\pc\Desktop\Univerdustry\gateway\application" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -52,6 +81,10 @@
       <workItem from="1587669339642" duration="877000" />
       <workItem from="1587739314912" duration="3130000" />
       <workItem from="1587749094479" duration="973000" />
+      <workItem from="1588075135196" duration="18849000" />
+      <workItem from="1588157099769" duration="16306000" />
+      <workItem from="1588339709590" duration="3121000" />
+      <workItem from="1588411288748" duration="12047000" />
     </task>
     <servers />
   </component>

@@ -10,6 +10,6 @@ def get_vector(text: str):
     response = requests.get(
         url=url,
         json={"text": text}
-    )
+    ).json()
 
-    return response.json()
+    return response

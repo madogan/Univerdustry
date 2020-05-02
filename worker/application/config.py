@@ -16,7 +16,7 @@ from _md5 import md5
 from application.utils.custom_json_encoder import CustomJsonEncoder
 
 
-class BaseConfig(object):
+class BaseConfig:
     """Base configuration class for application."""
 
     DEBUG = False

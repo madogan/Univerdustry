@@ -1,10 +1,14 @@
 from _md5 import md5
 
+from langdetect import detect
+
 from application import celery, es
 from application.rests.mongo import find_one
+from application.utils.decorators import celery_exception_handler
 
 
-@celery.task(bind=True, name="add_to_elasticsearch")
+@celery.task(bind=True, name="add_to_elasticsearch", max_retries=3)
+@celery_exception_handler(ConnectionError)
 def task_add_to_elasticsearch(self, pub_id: str):
     resd = {"status": "ok"}
 
@@ -22,20 +26,22 @@ def task_add_to_elasticsearch(self, pub_id: str):
             "author",
             {"filter": {"id": {"$eq": author_id}}}
         )
-        authors.append(author)
+        authors.append(author["name"])
 
     publication["authors"] = authors
-    publication["title"] = publication["bib"].get("title", "unknown_title")
-    publication["year"] = publication["bib"].get("year", 9999)
 
-    publication.pop("_filled")
-    publication.pop("bib")
+    try:
+        publication["lang"] = detect(publication.get("content",
+                                                     publication["title"]))
+    except Exception:
+        publication["lang"] = "en"
+
     publication.pop("created_at")
     publication.pop("raw_base64")
-    publication.pop("source")
+    publication.pop("name")
     publication.pop("_id")
 
-    _id = md5(publication["title"].encode("utf-8")).hexdigest()
-    es.index("publication", publication, id=_id, doc_type="publication")
+    es.index("publication", publication, id=publication.pop("id"),
+             doc_type="publication")
 
     return resd

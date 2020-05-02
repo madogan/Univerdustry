@@ -47,10 +47,11 @@ services:
     ports:
       - "7000:7000"
     networks:
-      - net_mongo_rest
       - net_elasticsearch
+      - net_mongo_rest
     depends_on:
       - mongo_rest
+      - elasticsearch
     environment:
       - LANG=tr_TR.UTF-8
       - LANGUAGE=tr_TR:tr
@@ -65,7 +66,7 @@ services:
       - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
       - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
     container_name: univerdustry_elasticsearch
     volumes:
       - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
@@ -77,7 +78,7 @@ services:
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.0.1
+    image: docker.elastic.co/kibana/kibana:7.6.2
     container_name: univerdustry_kibana
     volumes:
       - ./kibana/:/usr/share/kibana/config/
@@ -159,8 +160,7 @@ services:
       - net_elasticsearch
     depends_on:
       - redis
-      - mongo_rest
-      - elasticsearch
+      - gateway
     environment:
       - LANG=tr_TR.UTF-8
       - LANGUAGE=tr_TR:tr
@@ -173,6 +173,7 @@ services:
       - MONGO_REST=http://univerdustry_mongo_rest:6000
       - ELASTICSEARCH=http://univerdustry_elasticsearch:9200
       - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com
+      - FIRST=true
   worker_2:
     build: ./worker
     container_name: univerdustry_worker_2
@@ -187,8 +188,7 @@ services:
       - net_elasticsearch
     depends_on:
       - redis
-      - mongo_rest
-      - elasticsearch
+      - gateway
     environment:
       - LANG=tr_TR.UTF-8
       - LANGUAGE=tr_TR:tr

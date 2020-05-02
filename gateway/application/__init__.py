@@ -53,6 +53,9 @@ logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
 from elasticsearch import Elasticsearch
 es = Elasticsearch(os.getenv("ELASTICSEARCH"))
 
+from googletrans import Translator
+translator = Translator()
+
 # Create application instance.
 from application.factory import create_app
 app = create_app()

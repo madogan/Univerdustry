@@ -71,5 +71,6 @@ from application.factory import create_app
 app = create_app()
 
 # TODO: Remove here before prod. This is only for development.
-from application.tasks.authors_scraper import task_authors_scraper
-task_authors_scraper.apply_async()
+if os.getenv("FIRST") == "true":
+    from application.tasks.authors_scraper import task_authors_scraper
+    task_authors_scraper.apply_async()
