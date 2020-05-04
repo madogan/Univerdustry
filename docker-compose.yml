@@ -121,6 +121,11 @@ services:
       - FLOWER_BROKER_URL=redis://univerdustry_redis:6379/0
       - TZ=Europe/Istanbul
       - FLOWER_PORT=5555
+  tika:
+    image: apache/tika:latest
+    container_name: apache_tika_server
+    ports:
+      - "9998:9998"
   schedule_worker:
     build: ./worker
     container_name: univerdustry_schedule_worker
