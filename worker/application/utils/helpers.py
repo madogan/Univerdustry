@@ -48,6 +48,7 @@ def extract_text_from_pdf(pdf_path):
     data = open(pdf_path, 'rb').read()
     response = requests.put('http://apache_tika_server:9998/tika', headers=headers, data=data)
     text = response.text
+    data.close()
 
     if text:
         return text
