@@ -21,21 +21,21 @@ services:
       - FLASK_ENV=development
       - FILE_LOG_LEVEL=DEBUG
       - CONSOLE_LOG_LEVEL=INFO
-  nginx:
-    image: nginx:latest
-    build: ./nginx
-    container_name: nginx
-    ports:
-      - "80:80"
-    networks:
-      - net_app
-    depends_on:
-      - vectorizer
-    environment:
-      - LANG=tr_TR.UTF-8
-      - LANGUAGE=tr_TR:tr
-      - LC_ALL=tr_TR.UTF-8
-      - TZ=Europe/Istanbul
+#  nginx:
+#    image: nginx:latest
+#    build: ./nginx
+#    container_name: nginx
+#    ports:
+#      - "80:80"
+#    networks:
+#      - net_app
+#    depends_on:
+#      - vectorizer
+#    environment:
+#      - LANG=tr_TR.UTF-8
+#      - LANGUAGE=tr_TR:tr
+#      - LC_ALL=tr_TR.UTF-8
+#      - TZ=Europe/Istanbul
 
 
 networks:
