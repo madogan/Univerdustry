@@ -7,22 +7,22 @@ from application.rests.mongo import find, find_one, insert_one, update_one
 from application.rests.scholar import (get_authors, get_next_page,
                                        get_organization_page, parse_author)
 from application.tasks.scrape_publications_of_author import \
-    task_scrape_publications_of_author
+    t_scrape_publications_of_author
 from application.utils.decorators import celery_exception_handler
 
 
 @celery.task(bind=True, name="authors_scraper", max_retries=3)
 @celery_exception_handler(ConnectionError)
-def task_authors_scraper(self):
+def t_authors_scraper(self):
     organizations = find("organization")  # Get all organizations.
 
     len_organizations = len(organizations)
 
-    logger.info(f'Starting for {len_organizations} organizations.')
+    logger.info(f'There are {len_organizations} organizations.')
 
     count = 0
     for org in organizations:
-        logger.info(f'{org["domain"]}')
+        logger.info(f'Starting for <{org["domain"]}>')
 
         org_page = get_organization_page(org["domain"])
 
@@ -43,7 +43,7 @@ def task_authors_scraper(self):
                     result = insert_one("author", author_dict)
 
                     if result is not None:
-                        logger.info(f'"{author_dict["name"]}" is inserted!')
+                        logger.info(f'<{author_dict["name"]}> is inserted!')
                 else:
                     update_one(
                         "author",
@@ -59,9 +59,11 @@ def task_authors_scraper(self):
                         }
                     )
 
-                    logger.info(f'"{author_dict["name"]}" is updated!')
+                    logger.info(f'<{author_dict["name"]}> is updated!')
 
-                task_scrape_publications_of_author.apply_async((author_dict,))
+                t_scrape_publications_of_author.apply_async(
+                    (author_dict["id"], author_dict["name"])
+                )
                 count += 1
 
             next_page = get_next_page(org_page, counter)

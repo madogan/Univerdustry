@@ -1,0 +1,1 @@
+from application import celeryfrom application.utils.decorators import celery_exception_handler@celery.task(bind=True, name="download_pdf", max_retries=3)@celery_exception_handler(ConnectionError)def t_find_pdf_secondarily(self, title: str, authors: list):    pass

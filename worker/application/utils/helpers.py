@@ -41,14 +41,11 @@ def extract_file_name_from_url(url):
 
 
 def extract_text_from_pdf(pdf_path):
-    headers = {
-        'Content-type': 'application/pdf',
-    }
-
-    data = open(pdf_path, 'rb').read()
-    response = requests.put('http://apache_tika_server:9998/tika', headers=headers, data=data)
-    text = response.text
-    data.close()
+    with open(pdf_path, "rb") as fp:
+        response = requests.put(get_config("APACHE_TIKA") + "/tika",
+                                data=fp.read(),
+                                headers={"Content-type": "application/pdf"})
+        text = response.text
 
     if text:
         return text

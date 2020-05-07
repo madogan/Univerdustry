@@ -1,0 +1,1 @@
+from string import ascii_lowercase, digitsdef clean_text(text: str):    accepted_chars = ascii_lowercase + digits + "_ " + " " + "ğüşöçĞÜİŞÖÇ"    s1 = " ".join(text.split())    s2 = "".join([c for c in s1 if c in accepted_chars])    return s2def tokenize(s):    return [w.strip() for w in s.split()]
