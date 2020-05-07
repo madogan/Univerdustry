@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
 """This module consists several necessary function independently."""
 
-import io
+import re
 from string import ascii_lowercase, digits
 
+import nltk
+import requests
+from cleantext import clean
 from flask import current_app
+from nltk.stem import WordNetLemmatizer
 
 from application import logger
 from application.utils.contextor import ensure_app_context
 
-import requests
-
-import re
-from cleantext import clean
-
-import nltk
-from nltk.stem import WordNetLemmatizer
 
 @ensure_app_context
 def get_config(name):
@@ -54,30 +51,36 @@ def extract_text_from_pdf(pdf_path):
         text = response.text
 
     if text:
-        return text
+        return preprocess_text(text)
 
 
 def preprocess_text(text):
-    clean_text = ''
-    for line in text.splitlines():    # cleaning - character at the end of lines
+    cleaned_text = ''
+    for line in text.splitlines():  # cleaning - character at the end of lines
         if len(line) > 0:
             if line[-1] == '-':
                 line = line[:-1]
             else:
                 line += " "
-            clean_text += line
+            cleaned_text += line
 
-    document = clean(clean_text,
+    document = clean(cleaned_text,
                      fix_unicode=True,  # fix various unicode errors
-                     to_ascii=True,  # transliterate to closest ASCII representation
+                     to_ascii=True,
+                     # transliterate to closest ASCII representation
                      lower=True,  # lowercase text
-                     no_line_breaks=False,  # fully strip line breaks as opposed to only normalizing them
+                     no_line_breaks=False,
+                     # fully strip line breaks as opposed to only normalizing them
                      no_urls=True,  # replace all URLs with a special token
-                     no_emails=True,  # replace all email addresses with a special token
-                     no_phone_numbers=True,  # replace all phone numbers with a special token
-                     no_numbers=True,  # replace all numbers with a special token
+                     no_emails=True,
+                     # replace all email addresses with a special token
+                     no_phone_numbers=True,
+                     # replace all phone numbers with a special token
+                     no_numbers=True,
+                     # replace all numbers with a special token
                      no_digits=True,  # replace all digits with a special token
-                     no_currency_symbols=False,  # replace all currency symbols with a special token
+                     no_currency_symbols=False,
+                     # replace all currency symbols with a special token
                      no_punct=True,  # fully remove punctuation
                      replace_with_url=" ",
                      replace_with_email=" ",
@@ -88,7 +91,9 @@ def preprocess_text(text):
 
     stemmer = WordNetLemmatizer()
 
-    en_stop = set(nltk.corpus.stopwords.words('english') + nltk.corpus.stopwords.words('turkish'))
+    en_stop = set(
+        nltk.corpus.stopwords.words('english') + nltk.corpus.stopwords.words(
+            'turkish'))
 
     # Remove all the special characters
     document = re.sub(r'\W', ' ', str(document))
