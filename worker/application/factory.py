@@ -9,6 +9,7 @@ function and extensions initialization function.
 import os
 
 from celery import Celery
+from celery.schedules import crontab
 from flask import Flask
 from redis import Redis
 
@@ -150,19 +151,17 @@ def create_celery(app_name: str) -> Celery:
             "application.tasks.authors_scraper",
             "application.tasks.publications_scraper",
             "application.tasks.scrape_publications_of_author",
-            "application.tasks.download_pdf",
-            "application.tasks.elasticsearch_indexing"
+            "application.tasks.find_pdf_primarily",
+            "application.tasks.find_pdf_secondarily",
+            "application.tasks.elasticsearch_indexing",
+            "application.tasks.vector_indexing"
         ),
         task_create_missing_queues=True,
         beat_schedule={
-            # "task-authors-scraper": {
-            #     "task": "authors_scraper",
-            #     "schedule": crontab(hour=0, minute=0)
-            # },
-            # "task-publications-scraper": {
-            #     "task": "publications_scraper",
-            #     "schedule": crontab(minute="*/15")
-            # }
+            "task-authors-scraper": {
+                "task": "authors_scraper",
+                "schedule": crontab(0, 0, day_of_month='1')
+            }
         }
     )
 

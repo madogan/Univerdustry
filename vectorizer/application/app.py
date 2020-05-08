@@ -57,10 +57,9 @@ app = FastAPI()
 
 model_en = load_model("/embeddings/cc.en.300.bin")
 model_tr = load_model("/embeddings/cc.tr.300.bin")
-model_muse = VecFile("/embeddings/wiki.multi.tr.vec")
+# model_muse = VecFile("/embeddings/wiki.multi.tr.vec")
 
-models = {"fasttext_tr": model_tr, "fasttext_en": model_en,
-          "muse": model_muse}
+models = {"fasttext_tr": model_tr, "fasttext_en": model_en}
 
 
 @app.get("/")

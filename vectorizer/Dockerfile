@@ -7,4 +7,4 @@ RUN python3 -m pip install -r requirements.txt
 RUN git clone https://github.com/facebookresearch/fastText.git && cd fastText && pip install .
 COPY . /application
 WORKDIR /application
-EXPOSE 9000
+EXPOSE 9005

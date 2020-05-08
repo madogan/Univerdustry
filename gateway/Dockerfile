@@ -6,4 +6,4 @@ COPY requirements.txt requirements.txt
 RUN python3 -m pip install -r requirements.txt
 COPY . /application
 WORKDIR /application
-EXPOSE 7000
+EXPOSE 9001
