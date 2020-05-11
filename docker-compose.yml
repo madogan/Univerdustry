@@ -64,7 +64,7 @@ services:
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://mongo_rest:9000
       - ELASTICSEARCH=http://elasticsearch:9200
-      - VECTORIZER=http://vectorizer:9005
+      - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com:9005
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
     container_name: elasticsearch
@@ -83,7 +83,7 @@ services:
     volumes:
       - ./kibana/:/usr/share/kibana/config/
     ports:
-      - "9002:9002"
+      - "5601:5601"
     networks:
       - net_elasticsearch
     depends_on:
@@ -120,32 +120,32 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - FLOWER_BROKER_URL=redis://redis:6379/0
       - TZ=Europe/Istanbul
-      - FLOWER_PORT=5555
+      - FLOWER_PORT=9003
   apache_tika:
     image: apache/tika:latest
     container_name: apache_tika
     ports:
       - "9004:9004"
-  vectorizer:
-    build: ./vectorizer
-    container_name: vectorizer
-    command: ["python3", "./run.py"]
-    volumes:
-      - ./embeddings:/embeddings
-    networks:
-      - net_worker
-    ports:
-      - "9005:9005"
-    environment:
-      - LANG=tr_TR.UTF-8
-      - LANGUAGE=tr_TR:tr
-      - LC_ALL=tr_TR.UTF-8
-      - TZ=Europe/Istanbul
-      - EXPOSE_PORT=9005
-      - FLASK_APP=application/app
-      - FLASK_ENV=development
-      - FILE_LOG_LEVEL=DEBUG
-      - CONSOLE_LOG_LEVEL=INFO
+#  vectorizer:
+#    build: ./vectorizer
+#    container_name: vectorizer
+#    command: ["python3", "./run.py"]
+#    volumes:
+#      - ./embeddings:/embeddings
+#    networks:
+#      - net_worker
+#    ports:
+#      - "9005:9005"
+#    environment:
+#      - LANG=tr_TR.UTF-8
+#      - LANGUAGE=tr_TR:tr
+#      - LC_ALL=tr_TR.UTF-8
+#      - TZ=Europe/Istanbul
+#      - EXPOSE_PORT=9005
+#      - FLASK_APP=application/app
+#      - FLASK_ENV=development
+#      - FILE_LOG_LEVEL=DEBUG
+#      - CONSOLE_LOG_LEVEL=INFO
   schedule_worker:
     build: ./worker
     container_name: schedule_worker
@@ -170,7 +170,7 @@ services:
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://mongo_rest:9000
       - ELASTICSEARCH=http://elasticsearch:9200
-      - VECTORIZER=http://vectorizer:9005
+      - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com:9005
       - APACHE_TIKA=http://apache_tika:9004
   worker_1:
     build: ./worker
@@ -199,7 +199,7 @@ services:
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://mongo_rest:9000
       - ELASTICSEARCH=http://elasticsearch:9200
-      - VECTORIZER=http://vectorizer:9005
+      - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com:9005
       - APACHE_TIKA=http://apache_tika:9004
   worker_2:
     build: ./worker
@@ -227,7 +227,91 @@ services:
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://mongo_rest:9000
       - ELASTICSEARCH=http://elasticsearch:9200
-      - VECTORIZER=http://vectorizer:9005
+      - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com:9005
+      - APACHE_TIKA=http://apache_tika:9004
+  worker_3:
+    build: ./worker
+    container_name: worker_3
+    command: ["celery", "worker", "-A", "application.celery", "-P", "eventlet", "--loglevel=info", "-n",
+              "worker_3"]
+    volumes:
+      - data_log:/application/logs
+      - data_worker:/application/files
+    networks:
+      - net_worker
+      - net_mongo_rest
+      - net_elasticsearch
+    depends_on:
+      - redis
+      - gateway
+    environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - TZ=Europe/Istanbul
+      - FLASK_ENV=development
+      - FILE_LOG_LEVEL=DEBUG
+      - CONSOLE_LOG_LEVEL=INFO
+      - MONGO_REST=http://mongo_rest:9000
+      - ELASTICSEARCH=http://elasticsearch:9200
+      - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com:9005
+      - APACHE_TIKA=http://apache_tika:9004
+  worker_4:
+    build: ./worker
+    container_name: worker_4
+    command: ["celery", "worker", "-A", "application.celery", "-P", "eventlet", "--loglevel=info", "-n",
+              "worker_4"]
+    volumes:
+      - data_log:/application/logs
+      - data_worker:/application/files
+    networks:
+      - net_worker
+      - net_mongo_rest
+      - net_elasticsearch
+    depends_on:
+      - redis
+      - gateway
+    environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - TZ=Europe/Istanbul
+      - FLASK_ENV=development
+      - FILE_LOG_LEVEL=DEBUG
+      - CONSOLE_LOG_LEVEL=INFO
+      - MONGO_REST=http://mongo_rest:9000
+      - ELASTICSEARCH=http://elasticsearch:9200
+      - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com:9005
+      - APACHE_TIKA=http://apache_tika:9004
+  worker_5:
+    build: ./worker
+    container_name: worker_5
+    command: ["celery", "worker", "-A", "application.celery", "-P", "eventlet", "--loglevel=info", "-n",
+              "worker_5"]
+    volumes:
+      - data_log:/application/logs
+      - data_worker:/application/files
+    networks:
+      - net_worker
+      - net_mongo_rest
+      - net_elasticsearch
+    depends_on:
+      - redis
+      - gateway
+    environment:
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - TZ=Europe/Istanbul
+      - FLASK_ENV=development
+      - FILE_LOG_LEVEL=DEBUG
+      - CONSOLE_LOG_LEVEL=INFO
+      - MONGO_REST=http://mongo_rest:9000
+      - ELASTICSEARCH=http://elasticsearch:9200
+      - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com:9005
       - APACHE_TIKA=http://apache_tika:9004
 
 volumes:
