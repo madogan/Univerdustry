@@ -1,9 +1,7 @@
-from _md5 import md5
-
 from langdetect import detect
-
 from application import celery, es
 from application.rests.mongo import find_one
+from application.tasks.vector_indexing import t_vector_indexing
 from application.utils.decorators import celery_exception_handler
 
 
@@ -34,5 +32,7 @@ def t_elasticsearch_indexing(self, pub_id: str):
     publication.pop("_id")
 
     es.index(index="publication", body=publication, id=publication.pop("id"))
+
+    t_vector_indexing.apply_async((pub_id, publication["content"]))
 
     return resd

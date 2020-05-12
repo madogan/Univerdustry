@@ -24,11 +24,14 @@ def t_authors_scraper(self):
     for org in organizations:
         logger.info(f'Starting for <{org["domain"]}>')
 
-        org_page = get_organization_page(org["domain"])
+        tree, org_href = get_organization_page(org["domain"])
 
         counter = 10
         while True:
-            authors = get_authors(org_page)
+            authors = get_authors(tree)
+
+            if authors is None:
+                break
 
             for author in authors:
                 author_dict = parse_author(author)
@@ -66,14 +69,11 @@ def t_authors_scraper(self):
                 )
                 count += 1
 
-            next_page = get_next_page(org_page, counter)
+            tree = get_next_page(tree, counter, org_href)
 
             counter += 10
 
-            if not next_page:
-                break
-
-            sleep(int(random() * 4))
+            sleep(int(random() * 7))
 
     return {"status": "ok", "count": count,
             "num_organizations": len_organizations}

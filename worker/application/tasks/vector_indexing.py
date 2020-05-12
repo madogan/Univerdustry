@@ -19,10 +19,15 @@ def t_vector_indexing(self, pub_id: str, content: str):
         lang = "en"
 
     fasttext_vector = get_vector(content, f'fasttext_{lang}')
+    muse_vector = get_vector(content, f'muse')
 
     result = update_one("publication", {
         "filter": {"id": {"$eq": pub_id}},
-        "update": {"$set": {"fasttext": fasttext_vector}}
+        "update": {"$set": {
+            "fasttext": fasttext_vector,
+            "muse": muse_vector,
+            "lang": lang
+        }}
     })
 
     resd["db_result"] = result
@@ -33,6 +38,9 @@ def t_vector_indexing(self, pub_id: str, content: str):
             "properties": {
                 "fasttext": {
                     "type": "dense_vector", "dims": 300
+                },
+                "muse": {
+                    "type": "dense_vector", "dims": 300
                 }
             }
         }
@@ -40,7 +48,7 @@ def t_vector_indexing(self, pub_id: str, content: str):
 
     result = es.update(
         index="publication", id=pub_id,
-        body=f'{{"doc": {{ "fasttext": {fasttext_vector}}} }}'
+        body=f'{{"doc": {{ "fasttext": {fasttext_vector}, "muse": {muse_vector}, "lang": {lang} }} }}'
     )
 
     resd["es_result"] = result
