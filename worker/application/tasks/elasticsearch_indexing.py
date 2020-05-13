@@ -1,6 +1,7 @@
 from langdetect import detect
-from application import celery, es
-from application.rests.mongo import find_one
+from application import celery, es, logger
+from application.rests.vectorizer import get_vector
+from application.rests.mongo import find_one, update_one
 from application.tasks.vector_indexing import t_vector_indexing
 from application.utils.decorators import celery_exception_handler
 
@@ -15,7 +16,10 @@ def t_elasticsearch_indexing(self, pub_id: str):
     authors = list()
     for author_id in publication.get("authors", list()):
         author = find_one("author", {"filter": {"id": {"$eq": author_id}}})
-        authors.append(author["name"])
+        authors.append({
+            "name": author["name"],
+            "affiliation": author.get("affiliation", None)
+        })
 
     publication["authors"] = authors
 
@@ -26,13 +30,18 @@ def t_elasticsearch_indexing(self, pub_id: str):
     except Exception:
         publication["lang"] = "en"
 
-    publication.pop("created_at")
-    publication.pop("raw_base64")
-    publication.pop("name")
-    publication.pop("_id")
+    publication.pop("created_at", None)
+    publication.pop("raw_base64", None)
+    publication.pop("name", None)
+    publication.pop("_id", None)
 
-    es.index(index="publication", body=publication, id=publication.pop("id"))
+    pub_id = publication.pop("id")
 
-    t_vector_indexing.apply_async((pub_id, publication["content"]))
+    result = es.index(index="publication", body=publication, id=pub_id)
+
+    resd["es_result"] = result
+
+    t_vector_indexing.apply_async(pub_id, publication.get("content", None),
+                                  publication.get("title", None))
 
     return resd

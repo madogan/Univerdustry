@@ -1,3 +1,5 @@
+import json
+
 from elasticsearch import NotFoundError
 from langdetect import detect
 
@@ -9,25 +11,34 @@ from application.utils.decorators import celery_exception_handler
 
 @celery.task(bind=True, name="vector_indexing", max_retries=3)
 @celery_exception_handler(ConnectionError, NotFoundError)
-def t_vector_indexing(self, pub_id: str, content: str):
+def t_vector_indexing(self, pub_id: str, content: str = None,
+                      title: str = None):
     resd = {"status": "ok"}
 
+    vector_field_tokens = list()
+
+    if content is not None:
+        vector_field_tokens += content.split()
+
+    if title is not None and not title.startswith("unk_"):
+        vector_field_tokens += title.split()
+
+    vector_field = " ".join(vector_field_tokens)
+
     try:
-        lang = detect(content)
+        lang = detect(vector_field)
     except Exception as e:
         logger.error(f'Content lang. detection error: {str(e)}')
         lang = "en"
 
-    fasttext_vector = get_vector(content, f'fasttext_{lang}')
-    muse_vector = get_vector(content, f'muse')
+    muse = get_vector(vector_field, f'muse')
+    fasttext = get_vector(vector_field, f'fasttext_{lang}')
+
+    doc = {"fasttext": fasttext["vector"], "muse": muse["vector"], "lang": lang}
 
     result = update_one("publication", {
         "filter": {"id": {"$eq": pub_id}},
-        "update": {"$set": {
-            "fasttext": fasttext_vector,
-            "muse": muse_vector,
-            "lang": lang
-        }}
+        "update": {"$set": doc}
     })
 
     resd["db_result"] = result
@@ -41,6 +52,9 @@ def t_vector_indexing(self, pub_id: str, content: str):
                 },
                 "muse": {
                     "type": "dense_vector", "dims": 300
+                },
+                "lang": {
+                    "type": "text"
                 }
             }
         }
@@ -48,7 +62,7 @@ def t_vector_indexing(self, pub_id: str, content: str):
 
     result = es.update(
         index="publication", id=pub_id,
-        body=f'{{"doc": {{ "fasttext": {fasttext_vector}, "muse": {muse_vector}, "lang": {lang} }} }}'
+        body=json.dumps(doc)
     )
 
     resd["es_result"] = result

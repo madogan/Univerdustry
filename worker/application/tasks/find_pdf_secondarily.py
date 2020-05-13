@@ -1,18 +1,17 @@
-import base64
 import os
-from _md5 import md5
-
-import requests
+import base64
 import urllib3
-from bs4 import BeautifulSoup
-from fuzzywuzzy import fuzz
+import requests
 
+from _md5 import md5
+from fuzzywuzzy import fuzz
+from bs4 import BeautifulSoup
 from application import celery, logger
+from requests.exceptions import SSLError
 from application.rests.mongo import update_one
-from application.tasks.elasticsearch_indexing import t_elasticsearch_indexing
-from application.tasks.vector_indexing import t_vector_indexing
 from application.utils.decorators import celery_exception_handler
 from application.utils.helpers import extract_text_from_pdf, get_config
+from application.tasks.elasticsearch_indexing import t_elasticsearch_indexing
 
 
 @celery.task(bind=True, name="find_pdf_secondarily", max_retries=3)
@@ -78,7 +77,10 @@ def t_find_pdf_secondarily(self, pub_id: str, title: str, authors: list):
                         'td', {'align': 'center'}
                     )[0].find_all('a', href=True)[0]['href']
 
-                    pdf_raw = requests.get(pdf_url).content
+                    try:
+                        pdf_raw = requests.get(pdf_url).content
+                    except SSLError:
+                        pdf_raw = requests.get(pdf_url, verify=False).content
 
                     files_path = get_config("FILES_PATH")
 
@@ -101,7 +103,7 @@ def t_find_pdf_secondarily(self, pub_id: str, title: str, authors: list):
                         logger.debug(e)
                         content = None
 
-                    result = update_one("publication", {
+                    update_one("publication", {
                         "filter": {"id": {"$eq": pub_id}},
                         "update": {
                             "$set": {
@@ -112,9 +114,7 @@ def t_find_pdf_secondarily(self, pub_id: str, title: str, authors: list):
                         "upsert": True
                     })
 
-                    logger.info(f'Result: {result} | Content: {content}')
-
-                    if result and content:
+                    if content:
                         logger.info(f'Content is added to publication.')
 
                         t_elasticsearch_indexing.apply_async((pub_id,))

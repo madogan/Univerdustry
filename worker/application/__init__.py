@@ -72,5 +72,8 @@ app = create_app()
 
 # TODO: Remove here before prod. This is only for development.
 if os.getenv("FIRST") == "true":
+    logger.info(f'First worker is runnning!')
     from application.tasks.authors_scraper import t_authors_scraper
     t_authors_scraper.apply_async()
+
+logger.info(f'Worker is runnning!')

@@ -2,15 +2,17 @@
 """This module consists several necessary function independently."""
 
 import re
-from string import ascii_lowercase, digits
 
 import nltk
 import requests
 from cleantext import clean
 from flask import current_app
-from nltk.stem import WordNetLemmatizer
+from langdetect import detect
+from turkish.deasciifier import Deasciifier
 
 from application import logger
+from nltk.stem import WordNetLemmatizer
+from string import ascii_lowercase, digits
 from application.utils.contextor import ensure_app_context
 
 
@@ -91,7 +93,7 @@ def preprocess_text(text):
 
     stemmer = WordNetLemmatizer()
 
-    en_stop = set(
+    stop_words = set(
         nltk.corpus.stopwords.words('english') + nltk.corpus.stopwords.words(
             'turkish'))
 
@@ -99,18 +101,23 @@ def preprocess_text(text):
     document = re.sub(r'\W', ' ', str(document))
 
     # remove all single characters
-    document = re.sub(r'\s+[a-zA-Z]\s+', ' ', document)
+    document = re.sub(r'\s+[a-zA-ZğüşöçıIİĞÜŞÖÇ]\s+', ' ', document)
 
     # Remove single characters from the start
-    document = re.sub(r'\^[a-zA-Z]\s+', ' ', document)
+    document = re.sub(r'\^[a-zA-ZğüşöçıIİĞÜŞÖÇ]\s+', ' ', document)
 
     # Substituting multiple spaces with single space
     document = re.sub(r'\s+', ' ', document, flags=re.I)
 
     # Lemmatization
-    tokens = document.split()
-    tokens = [stemmer.lemmatize(word) for word in tokens]
-    tokens = [word for word in tokens if word not in en_stop]
+    if detect(document) == 'tr':
+        deasciifier = Deasciifier(document)
+        tokens = deasciifier.convert_to_turkish().split()
+    else:
+        tokens = document.split()
+        tokens = [stemmer.lemmatize(word) for word in tokens]
+
+    tokens = [word for word in tokens if word not in stop_words]
     tokens = [word for word in tokens if len(word) > 3]
 
     preprocessed_text = ' '.join(tokens)
