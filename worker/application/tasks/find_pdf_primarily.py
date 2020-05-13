@@ -6,7 +6,7 @@ import requests
 from requests.exceptions import SSLError
 
 from application import celery, logger
-from application.rests.mongo import update_one, find
+from application.rests.mongo import update_one, find, find_one
 from application.utils.decorators import celery_exception_handler
 from application.utils.helpers import extract_text_from_pdf, get_config
 from application.tasks.find_pdf_secondarily import t_find_pdf_secondarily
@@ -46,7 +46,7 @@ def t_find_pdf_primarily(self, pub_id: str, title: str, authors: list,
             logger.debug(e)
             content = None
 
-        update_one("publication", {
+        update_result = update_one("publication", {
             "filter": {"id": {"$eq": pub_id}},
             "update": {
                 "$set": {
@@ -56,6 +56,8 @@ def t_find_pdf_primarily(self, pub_id: str, title: str, authors: list,
             },
             "upsert": True
         })
+
+        logger.info(f'Update Result: {update_result}')
 
         if content:
             logger.info(f'Content is added to publication.')

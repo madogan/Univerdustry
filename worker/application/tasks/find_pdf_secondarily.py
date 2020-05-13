@@ -107,7 +107,8 @@ def t_find_pdf_secondarily(self, pub_id: str, title: str, authors: list):
                         "filter": {"id": {"$eq": pub_id}},
                         "update": {
                             "$set": {
-                                "raw_base64": base64.encodebytes(pdf_raw).decode("utf-8"),
+                                "raw_base64": base64.encodebytes(
+                                    pdf_raw).decode("utf-8"),
                                 "content": content
                             }
                         },

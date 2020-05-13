@@ -81,8 +81,7 @@ def t_get_author(self, author, org_domain):
         author["organizations"] = [org_domain]
         result = insert_one("author", author)
 
-        if result is not None:
-            logger.info(f'<{author["name"]}> is inserted!')
+        logger.info(f'<{author["name"]}> is inserted! | {result}')
 
     t_scrape_publications_of_author.apply_async((author["id"], author["name"]))
 
@@ -99,7 +98,7 @@ def t_authors_scraper(self):
     proxies = ["http://192.116.142.153:8080", "http://192.241.149.83:80",
                "http://192.241.150.4:80"]
 
-    for org in organizations[20:25]:
+    for org in organizations[10:50]:
         logger.info(f'Starting for <{org["domain"]}>')
 
         proxy = choice(proxies)
@@ -113,7 +112,7 @@ def t_authors_scraper(self):
             if authors is None:
                 break
 
-            for author in authors[:3]:
+            for author in authors:
                 author = parse_author(author)
 
                 logger.info(f'Starting for <{author["name"]}>')

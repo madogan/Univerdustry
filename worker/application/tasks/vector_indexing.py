@@ -62,7 +62,7 @@ def t_vector_indexing(self, pub_id: str, content: str = None,
 
     result = es.update(
         index="publication", id=pub_id,
-        body=json.dumps(doc)
+        body=json.dumps({"doc": doc})
     )
 
     resd["es_result"] = result

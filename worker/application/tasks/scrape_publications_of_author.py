@@ -26,8 +26,10 @@ def t_scrape_publications_of_author(self, author_id, author_name):
             break
 
         pub_id = publication.id_citations.split(":")[1].strip()
+
         title = publication.bib.get("title", f'unk_{counter}')
-        title = preprocess_text(title)
+        if not title.startswith("unk_"):
+            title = preprocess_text(title)
 
         if title.strip() == "":
             continue
@@ -36,7 +38,7 @@ def t_scrape_publications_of_author(self, author_id, author_name):
             "publication", {"filter": {"id": {"$eq": pub_id}}}
         )
 
-        if not pub_in_mongo or pub_in_mongo.get("title", None) is None:
+        if not pub_in_mongo:
             publication = publication.fill().__dict__
 
             publication["title_md5"] = md5(title.encode("utf-8")).hexdigest()
@@ -50,26 +52,41 @@ def t_scrape_publications_of_author(self, author_id, author_name):
 
             publication = {**publication, **publication.pop("bib", dict()),
                            "title": title}
-        elif pub_in_mongo:
-            updates.append(pub_id)
-
-            publication = pub_in_mongo
-
-            publication["authors"] = list(set(
-                publication.get("authors", list()) + [author_id]
-            ))
-
-            logger.info(f'Pub is updated!')
-
-        if not pub_in_mongo:
             insert_result = insert_one("publication", publication)
             logger.info(f'<{publication["title"]}> | {insert_result}')
-        elif pub_in_mongo.get("title", None) is None:
-            update_result = update_one("publication", {
-                "filter": {"id": {"$eq": pub_id}},
-                "update": {"$set": publication}
-            })
-            logger.info(f'<{publication["title"]}> | {update_result}')
+
+        if pub_in_mongo:
+            if pub_in_mongo.get("title", None) is None:
+                publication = publication.fill().__dict__
+
+                publication["title_md5"] = md5(
+                    title.encode("utf-8")).hexdigest()
+
+                publication["created_at"] = datetime.datetime.now().isoformat()
+                publication["authors"] = [author_id] + pub_in_mongo.get("authors", list())
+
+                publication.pop("id_citations", None)
+                publication.pop("_filled", None)
+                publication.pop("source", None)
+
+                publication = {**publication, **publication.pop("bib", dict()),
+                               "title": title}
+
+                update_result = update_one("publication", {
+                    "filter": {"id": {"$eq": pub_id}},
+                    "update": {"$set": publication}
+                })
+                logger.info(f'<{publication["title"]}> | {update_result}')
+            else:
+                updates.append(pub_id)
+
+                publication = pub_in_mongo
+
+                publication["authors"] = list(set(
+                    publication.get("authors", list()) + [author_id]
+                ))
+
+                logger.info(f'Pub is updated!')
 
         update_one("author", {
             "filter": {"id": {"$eq": author_id}},
