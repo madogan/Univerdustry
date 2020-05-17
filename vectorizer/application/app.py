@@ -26,42 +26,28 @@ logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
            # Remove logs older than 3 days.
            retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
 
-import io
 import numpy as np
 
 from fastapi import FastAPI
 from pydantic import BaseModel
-from fasttext import load_model
 from application.utils.helpers import tokenize
-
-
-def load_vectors(fname):
-    fin = io.open(fname, 'r', encoding='utf-8', newline='\n', errors='ignore')
-    _, _ = map(int, fin.readline().split())
-    data = {}
-    for line in fin:
-        tokens = line.rstrip().split(' ')
-        data[tokens[0]] = map(float, tokens[1:])
-    return data
-
-
-class VecFile:
-    def __init__(self, path):
-        self.model = load_vectors(path)
-
-    def get_word_vector(self, word):
-        return self.model.get(word, np.zeros(300))
-
+from application.word_vec_file import WordVecFile
 
 app = FastAPI()
 
-model_fasttext_en = load_model("./embeddings/cc.en.300.bin")
-model_fasttext_tr = load_model("./embeddings/cc.tr.300.bin")
-model_muse = VecFile("./embeddings/wiki.multi.tr.vec")
+path_model_tr = "../embeddings/formatted_wiki.multi.tr.vec"
+path_model_en = "../embeddings/formatted_wiki.multi.en.vec"
+path_model_fr = "../embeddings/formatted_wiki.multi.fr.vec"
+path_model_de = "../embeddings/formatted_wiki.multi.de.vec"
+path_model_ar = "../embeddings/formatted_wiki.multi.ar.vec"
 
-models = {"fasttext_tr": model_fasttext_en,
-          "fasttext_en": model_fasttext_en,
-          "muse": model_muse}
+models = {
+    "tr": WordVecFile(path_model_tr),
+    "en": WordVecFile(path_model_en),
+    "fr": WordVecFile(path_model_fr),
+    "de": WordVecFile(path_model_de),
+    "ar": WordVecFile(path_model_ar),
+}
 
 
 @app.get("/")
@@ -83,7 +69,7 @@ async def get_vector(model, text_model: TextModel):
 
         tokens = tokenize(text)
 
-        model = models.get(model, models["muse"])
+        model = models.get(model, models["en"])
 
         vectors = list()
         for token in tokens:

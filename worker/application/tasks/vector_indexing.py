@@ -1,8 +1,7 @@
 import json
 
-from elasticsearch import NotFoundError
 from langdetect import detect
-
+from elasticsearch import NotFoundError
 from application import celery, es, logger
 from application.rests.mongo import update_one
 from application.rests.vectorizer import get_vector
@@ -31,10 +30,9 @@ def t_vector_indexing(self, pub_id: str, content: str = None,
         logger.error(f'Content lang. detection error: {str(e)}')
         lang = "en"
 
-    muse = get_vector(vector_field, f'muse')
-    fasttext = get_vector(vector_field, f'fasttext_{lang}')
+    vectorizer_response = get_vector(vector_field, lang)
 
-    doc = {"fasttext": fasttext["vector"], "muse": muse["vector"], "lang": lang}
+    doc = {"vector": vectorizer_response["vector"], "lang": lang}
 
     result = update_one("publication", {
         "filter": {"id": {"$eq": pub_id}},
@@ -47,10 +45,7 @@ def t_vector_indexing(self, pub_id: str, content: str = None,
         index="publication",
         body={
             "properties": {
-                "fasttext": {
-                    "type": "dense_vector", "dims": 300
-                },
-                "muse": {
+                "vector": {
                     "type": "dense_vector", "dims": 300
                 },
                 "lang": {

@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3"
 
 services:
   vectorizer:
@@ -6,7 +6,7 @@ services:
     container_name: vectorizer
     command: ["python3", "./run.py"]
     volumes:
-      - ./embeddings:/embeddings:ro,shared
+      - /home/ackdogan/Univerdustry/embeddings:/embeddings:shared
     ports:
       - "9005:9005"
     environment:
