@@ -56,32 +56,26 @@ def extract_text_from_pdf(pdf_path):
 
 
 def preprocess_text(text):
-    cleaned_text = ''
-    for line in text.splitlines():  # cleaning - character at the end of lines
+    clean_text = ''
+    for line in text.splitlines():    # cleaning - character at the end of lines
         if len(line) > 0:
             if line[-1] == '-':
                 line = line[:-1]
             else:
                 line += " "
-            cleaned_text += line
-
-    document = clean(cleaned_text,
+            clean_text += line
+    document = clean_text.replace("-", " ")
+    document = clean(document,
                      fix_unicode=True,  # fix various unicode errors
-                     to_ascii=True,
-                     # transliterate to closest ASCII representation
+                     to_ascii=True,  # transliterate to closest ASCII representation
                      lower=True,  # lowercase text
-                     no_line_breaks=False,
-                     # fully strip line breaks as opposed to only normalizing them
+                     no_line_breaks=False,  # fully strip line breaks as opposed to only normalizing them
                      no_urls=True,  # replace all URLs with a special token
-                     no_emails=True,
-                     # replace all email addresses with a special token
-                     no_phone_numbers=True,
-                     # replace all phone numbers with a special token
-                     no_numbers=True,
-                     # replace all numbers with a special token
+                     no_emails=True,  # replace all email addresses with a special token
+                     no_phone_numbers=True,  # replace all phone numbers with a special token
+                     no_numbers=True,  # replace all numbers with a special token
                      no_digits=True,  # replace all digits with a special token
-                     no_currency_symbols=False,
-                     # replace all currency symbols with a special token
+                     no_currency_symbols=False,  # replace all currency symbols with a special token
                      no_punct=True,  # fully remove punctuation
                      replace_with_url=" ",
                      replace_with_email=" ",
@@ -90,38 +84,51 @@ def preprocess_text(text):
                      replace_with_digit=" ",
                      )
 
+    document = document.split()
+    n = 12   # words count
+    document = [' '.join(document[i:i + n]) for i in range(0, len(document), n)]
+
     stemmer = WordNetLemmatizer()
+    stop_words_en = nltk.corpus.stopwords.words('english')
+    stop_words_tr = nltk.corpus.stopwords.words('turkish')
 
-    stop_words = set(
-        nltk.corpus.stopwords.words('english') + nltk.corpus.stopwords.words(
-            'turkish'))
+    complete_text = ''
 
-    # Remove all the special characters
-    document = re.sub(r'\W', ' ', str(document))
+    for item in document:
+        # Remove all the special characters
+        item = re.sub(r'\W', ' ', str(item))
 
-    # remove all single characters
-    document = re.sub(r'\s+[a-zA-ZğüşöçıIİĞÜŞÖÇ]\s+', ' ', document)
+        # remove all single characters
+        item = re.sub(r'\s+[a-zA-ZğüşöçıIİĞÜŞÖÇ]\s+', ' ', item)
 
-    # Remove single characters from the start
-    document = re.sub(r'\^[a-zA-ZğüşöçıIİĞÜŞÖÇ]\s+', ' ', document)
+        # Remove single characters from the start
+        item = re.sub(r'\^[a-zA-ZğüşöçıIİĞÜŞÖÇ]\s+', ' ', item)
 
-    # Substituting multiple spaces with single space
-    document = re.sub(r'\s+', ' ', document, flags=re.I)
+        # Substituting multiple spaces with single space
+        item = re.sub(r'\s+', ' ', item, flags=re.I)
 
-    # Lemmatization
-    if detect(document) == 'tr':
-        deasciifier = Deasciifier(document)
-        tokens = deasciifier.convert_to_turkish().split()
-    else:
-        tokens = document.split()
-        tokens = [stemmer.lemmatize(word) for word in tokens]
+        if len(item) > 1:
+            print(item)
+            if detect(item) == 'tr':
+                print("tr")
+                deasciifier = Deasciifier(item)
+                tokens = deasciifier.convert_to_turkish().split()
+                tokens = [word for word in tokens if word not in stop_words_tr]
+            else:
+                print("en")
+                tokens = item.split()
+                tokens = [stemmer.lemmatize(word) for word in tokens]
+                tokens = [word for word in tokens if word not in stop_words_en]
 
-    tokens = [word for word in tokens if word not in stop_words]
-    tokens = [word for word in tokens if len(word) > 3]
+        tokens = [word for word in tokens if len(word) > 3]
 
-    preprocessed_text = ' '.join(tokens)
+        preprocessed_text = ' '.join(tokens)
 
-    return preprocessed_text
+        complete_text += preprocessed_text + " "
+
+    complete_text = re.sub(r'\s+', ' ', complete_text, flags=re.I)
+
+    return complete_text
 
 
 def download(url):
