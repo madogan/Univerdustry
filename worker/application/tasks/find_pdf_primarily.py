@@ -54,9 +54,7 @@ def t_find_pdf_primarily(self, pub_id: str, title: str, authors: list,
 
         logger.info(f'Update Result: {update_result}')
 
-        if content:
-            logger.info(f'Content is added to publication.')
-            t_elasticsearch_indexing.apply_async((pub_id,))
+        t_elasticsearch_indexing.apply_async((pub_id,))
     else:
         authors = find("author", {
             "filter": {"id": {"$in": authors}},

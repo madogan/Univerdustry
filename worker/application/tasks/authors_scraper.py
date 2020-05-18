@@ -98,7 +98,7 @@ def t_authors_scraper(self):
     proxies = ["http://192.116.142.153:8080", "http://192.241.149.83:80",
                "http://192.241.150.4:80"]
 
-    for org in organizations[:25]:
+    for org in organizations:
         logger.info(f'Starting for <{org["domain"]}>')
 
         proxy = choice(proxies)
@@ -114,16 +114,12 @@ def t_authors_scraper(self):
 
             for author in authors:
                 author = parse_author(author)
-
                 logger.info(f'Starting for <{author["name"]}>')
-
                 t_get_author.apply_async((author, org["domain"]))
 
             proxy = choice(proxies)
             tree = get_next_page(tree, counter, org_href, proxy)
 
             counter += 10
-
-            break
 
     return {"status": "ok", "num_organizations": len_organizations}

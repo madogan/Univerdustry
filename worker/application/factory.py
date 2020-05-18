@@ -154,7 +154,6 @@ def create_celery(app_name: str) -> Celery:
             "application.tasks.find_pdf_primarily",
             "application.tasks.find_pdf_secondarily",
             "application.tasks.elasticsearch_indexing",
-            "application.tasks.vector_indexing",
             "application.tasks.starter"
         ),
         task_create_missing_queues=True,

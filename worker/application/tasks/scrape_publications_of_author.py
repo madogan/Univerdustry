@@ -22,9 +22,6 @@ def t_scrape_publications_of_author(self, author_id, author_name):
 
     counter = 1
     for publication in author_info.publications:
-        if counter == 3:
-            break
-
         pub_id = publication.id_citations.split(":")[1].strip()
 
         title = publication.bib.get("title", f'unk_{counter}')
@@ -53,6 +50,7 @@ def t_scrape_publications_of_author(self, author_id, author_name):
 
             publication = {**publication, **publication.pop("bib", dict()),
                            "title": title}
+
             insert_result = insert_one("publication", publication)
             logger.info(f'<{publication["title"]}> | {insert_result}')
 
@@ -101,7 +99,7 @@ def t_scrape_publications_of_author(self, author_id, author_name):
 
         counter += 1
 
-        sleep(int(random() * 1))
+        sleep(int(random() * 2))
 
     update_one(
         "publication", {

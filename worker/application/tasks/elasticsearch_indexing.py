@@ -1,7 +1,7 @@
 from langdetect import detect
 from application import celery, es
-from application.rests.mongo import find_one
-from application.tasks.vector_indexing import t_vector_indexing
+from application.rests.mongo import find_one, update_one
+from application.rests.vectorizer import get_vector
 from application.utils.decorators import celery_exception_handler
 
 
@@ -35,12 +35,30 @@ def t_elasticsearch_indexing(self, pub_id: str):
     publication.pop("_id", None)
 
     pub_id = publication.pop("id")
+    title = publication.get("title", None)
+    content = publication.get("content", None)
+
+    vector_field_tokens = list()
+
+    if content is not None:
+        vector_field_tokens += content.split()
+
+    if title is not None and not title.startswith("unk_"):
+        vector_field_tokens += title.split()
+
+    vector_field = " ".join(vector_field_tokens)
+
+    vectorizer_response = get_vector(vector_field, publication["lang"])
+
+    publication["vector"] = vectorizer_response["vector"]
+
+    update_one("publication", {
+        "filter": {"id": {"$eq": pub_id}},
+        "update": {"vector": {"$set": publication["vector"]}}
+    })
 
     result = es.index(index="publication", body=publication, id=pub_id)
 
-    resd["es_result"] = result
-
-    t_vector_indexing.apply_async((pub_id, publication.get("content", None),
-                                   publication.get("title", None)))
+    resd["result"] = result
 
     return resd
