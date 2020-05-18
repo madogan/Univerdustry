@@ -50,10 +50,6 @@ logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
            # Remove logs older than 3 days.
            retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
 
-# This is for disabling pdfminer logs
-import logging
-logging.propagate = False
-logging.getLogger().setLevel(logging.ERROR)
 
 from elasticsearch import Elasticsearch
 es = Elasticsearch(os.getenv("ELASTICSEARCH"))
@@ -73,7 +69,7 @@ app = create_app()
 # TODO: Remove here before prod. This is only for development.
 if os.getenv("FIRST") == "true":
     logger.info(f'First worker is runnning!')
-    from application.tasks.authors_scraper import t_authors_scraper
-    t_authors_scraper.apply_async()
+    from application.tasks.starter import t_starter
+    t_starter.apply_async(countdown=60)
 
 logger.info(f'Worker is runnning!')

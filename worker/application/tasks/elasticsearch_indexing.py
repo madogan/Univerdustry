@@ -31,7 +31,6 @@ def t_elasticsearch_indexing(self, pub_id: str):
 
     publication.pop("created_at", None)
     publication.pop("raw_base64", None)
-    publication.pop("raw_base64", None)
     publication.pop("title_md5", None)
     publication.pop("_id", None)
 

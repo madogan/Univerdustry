@@ -41,6 +41,7 @@ def t_scrape_publications_of_author(self, author_id, author_name):
         if not pub_in_mongo:
             publication = publication.fill().__dict__
 
+            publication["id"] = pub_id
             publication["title_md5"] = md5(title.encode("utf-8")).hexdigest()
 
             publication["created_at"] = datetime.datetime.now().isoformat()

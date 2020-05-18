@@ -1,7 +1,7 @@
 import os
 import sys
 
-print(sys.argv)
+
 try:
     for lang in sys.argv[1:]:
         os.system(

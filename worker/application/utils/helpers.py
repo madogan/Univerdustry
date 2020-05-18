@@ -2,17 +2,16 @@
 """This module consists several necessary function independently."""
 
 import re
-
 import nltk
 import requests
+
 from cleantext import clean
 from flask import current_app
 from langdetect import detect
-from turkish.deasciifier import Deasciifier
-
 from application import logger
 from nltk.stem import WordNetLemmatizer
 from string import ascii_lowercase, digits
+from turkish.deasciifier import Deasciifier
 from application.utils.contextor import ensure_app_context
 
 
@@ -123,3 +122,14 @@ def preprocess_text(text):
     preprocessed_text = ' '.join(tokens)
 
     return preprocessed_text
+
+
+def download(url):
+    data = b''
+
+    with requests.get(url, stream=True, verify=False) as r:
+        r.raise_for_status()
+        for chunk in r.iter_content(chunk_size=8192):
+            data += chunk
+
+    return data

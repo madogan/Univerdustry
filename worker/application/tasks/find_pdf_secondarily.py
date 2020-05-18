@@ -10,7 +10,8 @@ from application import celery, logger
 from requests.exceptions import SSLError
 from application.rests.mongo import update_one
 from application.utils.decorators import celery_exception_handler
-from application.utils.helpers import extract_text_from_pdf, get_config
+from application.utils.helpers import (extract_text_from_pdf, get_config,
+                                       download)
 from application.tasks.elasticsearch_indexing import t_elasticsearch_indexing
 
 
@@ -77,10 +78,7 @@ def t_find_pdf_secondarily(self, pub_id: str, title: str, authors: list):
                         'td', {'align': 'center'}
                     )[0].find_all('a', href=True)[0]['href']
 
-                    try:
-                        pdf_raw = requests.get(pdf_url).content
-                    except SSLError:
-                        pdf_raw = requests.get(pdf_url, verify=False).content
+                    pdf_raw = download(pdf_url)
 
                     files_path = get_config("FILES_PATH")
 

@@ -98,7 +98,7 @@ def t_authors_scraper(self):
     proxies = ["http://192.116.142.153:8080", "http://192.241.149.83:80",
                "http://192.241.150.4:80"]
 
-    for org in organizations[10:50]:
+    for org in organizations[:25]:
         logger.info(f'Starting for <{org["domain"]}>')
 
         proxy = choice(proxies)

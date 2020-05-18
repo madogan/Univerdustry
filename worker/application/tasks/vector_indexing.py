@@ -41,20 +41,6 @@ def t_vector_indexing(self, pub_id: str, content: str = None,
 
     resd["db_result"] = result
 
-    es.indices.put_mapping(
-        index="publication",
-        body={
-            "properties": {
-                "vector": {
-                    "type": "dense_vector", "dims": 300
-                },
-                "lang": {
-                    "type": "text"
-                }
-            }
-        }
-    )
-
     result = es.update(
         index="publication", id=pub_id,
         body=json.dumps({"doc": doc})
