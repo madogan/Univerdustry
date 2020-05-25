@@ -1,9 +1,7 @@
-import json
-
 from langdetect import detect
 from application import celery, es
-from application.rests.mongo import find_one, update_one
 from application.rests.vectorizer import get_vector
+from application.rests.mongo import find, find_one, update_one
 from application.utils.decorators import celery_exception_handler
 from application.utils.mappings import publication_mappings
 
@@ -15,17 +13,14 @@ def t_elasticsearch_indexing(self, pub_id: str):
 
     publication = find_one("publication", {"filter": {"id": {"$eq": pub_id}}})
 
-    authors = list()
-    for author_id in publication.get("authors", list()):
-        author = find_one("author", {"filter": {"id": {"$eq": author_id}}})
-        if author_id:
-            authors.append({
-                "id": author["id"],
-                "name": author["name"],
-                "affiliation": author.get("affiliation", None)
-            })
-
-    publication["authors"] = authors
+    publication["authors"] = find(
+        "author",
+        {
+            "filter": {"id": {"$in": publication.get("authors", [])}},
+            "projection": ["id", "name", "affiliation", "citedby", "interests",
+                           "organizations"]
+        }
+    )
 
     try:
         publication["lang"] = detect(
@@ -62,8 +57,13 @@ def t_elasticsearch_indexing(self, pub_id: str):
         "update": {"$set": {"vector": publication["vector"]}}
     })
 
+    es.indices.create(
+        index="publication",
+        body={"mappings": publication_mappings},
+        ignore=400
+    )
+
     result = es.index(index="publication",
-                      doc_type=publication.get("lang", "en"),
                       body=publication,
                       id=pub_id)
 
