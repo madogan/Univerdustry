@@ -107,15 +107,14 @@ def preprocess_text(text):
         # Substituting multiple spaces with single space
         item = re.sub(r'\s+', ' ', item, flags=re.I)
 
+        tokens = list()
+
         if len(item) > 1:
-            print(item)
             if detect(item) == 'tr':
-                print("tr")
                 deasciifier = Deasciifier(item)
                 tokens = deasciifier.convert_to_turkish().split()
                 tokens = [word for word in tokens if word not in stop_words_tr]
             else:
-                print("en")
                 tokens = item.split()
                 tokens = [stemmer.lemmatize(word) for word in tokens]
                 tokens = [word for word in tokens if word not in stop_words_en]

@@ -24,6 +24,7 @@ class BaseConfig(object):
     SECRET_KEY = os.urandom(16).hex()  # It results 32 length hex string.
 
     MONGO_REST = os.getenv("MONGO_REST")
+    WORKER_REST = os.getenv("WORKER_REST")
     VECTORIZER = os.getenv("VECTORIZER")
     ELASTICSEARCH = os.getenv("ELASTICSEARCH")
 

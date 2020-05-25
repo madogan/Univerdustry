@@ -109,7 +109,12 @@ def register_blueprints(_app: Flask) -> None:
     Args:
         _app: Address of :flask:`Flask` application instance.
     """
-    pass
+    if os.getenv("REST", "false") == "true":
+        from application.bps.index import bp_index
+        _app.register_blueprint(bp_index)
+
+        from application.bps.tasks import bp_tasks
+        _app.register_blueprint(bp_tasks)
 
 
 def initialize_extensions(_app: Flask) -> None:
