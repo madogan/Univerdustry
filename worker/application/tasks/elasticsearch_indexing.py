@@ -16,6 +16,7 @@ def t_elasticsearch_indexing(self, pub_id: str):
     for author_id in publication.get("authors", list()):
         author = find_one("author", {"filter": {"id": {"$eq": author_id}}})
         authors.append({
+            "id": author["id"],
             "name": author["name"],
             "affiliation": author.get("affiliation", None)
         })
@@ -57,7 +58,10 @@ def t_elasticsearch_indexing(self, pub_id: str):
         "update": {"vector": {"$set": publication["vector"]}}
     })
 
-    result = es.index(index="publication", body=publication, id=pub_id)
+    result = es.index(index="publication",
+                      doc_type=publication.get("lang", "en"),
+                      body=publication,
+                      id=pub_id)
 
     resd["result"] = result
 

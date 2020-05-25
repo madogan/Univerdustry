@@ -1,1 +1,20 @@
-from langdetect import detectfrom application import translator, loggerfrom flask import Blueprint, request, jsonifyfrom application.rests.elasticsearch import searchbp_elasticsearch = Blueprint("bp_elasticsearch", __name__,                             url_prefix="/elasticsearch")@bp_elasticsearch.route("/search/publication", methods=["GET"])def search_publication():    text = request.args["text"]    text = text.replace("\n", "").replace("\r", "")    text = translator.translate(text, dest="en").text    result = search("publication", text)    return jsonify(result)
+from flask import Blueprint, request, jsonify
+from application.rests.elasticsearch import search
+
+bp_elasticsearch = Blueprint("bp_elasticsearch", __name__,
+                             url_prefix="/elasticsearch")
+
+
+@bp_elasticsearch.route("/search/publication", methods=["GET"])
+def search_publication():
+    response = search("publication", request.json["text"])
+
+    # hits = response.get("hits", {}).get("hits", [])
+    # total = response.get("hits", {}).get("total", {})
+    #
+    # authors = dict()
+    # for hit in hits:
+    #     pub_authors = hit.get("_source", {}).get("authors", [])
+    #
+
+    return jsonify(response)

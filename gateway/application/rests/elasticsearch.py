@@ -24,16 +24,29 @@ def search(index: str, text: str):
         logger.error(f'Content lang. detection error: {str(e)}')
         lang = "en"
 
-    fasttext = get_vector(text, f'fasttext_{lang}')
+    vectorization_response = get_vector(text, f'{lang}')
 
     query_json = {
         "query": {
             "script_score": {
-                "query": {"match": {"content": text}},
+                "query": {
+                    "multi_match": {
+                        "query": text,
+                        "fields": ["title", "content"]
+                    }
+                },
                 "script": {
-                    "source": "cosineSimilarity(params.query_vector, 'fasttext') + 1.0",
-                    "params": {"query_vector": fasttext["vector"]}
+                    "source": "cosineSimilarity(params.query_vector, "
+                              "'vector') + 1.0",
+                    "params": {"query_vector": vectorization_response["vector"]}
                 }
+            }
+        },
+        "highlight": {
+            "fragment_size": 100,
+            "fields": {
+                "content": {},
+                "title": {}
             }
         }
     }
