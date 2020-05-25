@@ -1,8 +1,11 @@
+import json
+
 from langdetect import detect
 from application import celery, es
 from application.rests.mongo import find_one, update_one
 from application.rests.vectorizer import get_vector
 from application.utils.decorators import celery_exception_handler
+from application.utils.mappings import publication_mappings
 
 
 @celery.task(bind=True, name="elasticsearch_indexing", max_retries=3)
@@ -15,10 +18,11 @@ def t_elasticsearch_indexing(self, pub_id: str):
     authors = list()
     for author_id in publication.get("authors", list()):
         author = find_one("author", {"filter": {"id": {"$eq": author_id}}})
-        authors.append({
-            "name": author["name"],
-            "affiliation": author.get("affiliation", None)
-        })
+        if author_id:
+            authors.append({
+                "name": author["name"],
+                "affiliation": author.get("affiliation", None)
+            })
 
     publication["authors"] = authors
 
@@ -54,8 +58,12 @@ def t_elasticsearch_indexing(self, pub_id: str):
 
     update_one("publication", {
         "filter": {"id": {"$eq": pub_id}},
-        "update": {"vector": {"$set": publication["vector"]}}
+        "update": {"$set": {"vector": publication["vector"]}}
     })
+
+    es.indices.create(index="publication",
+                      body={"mappings": publication_mappings},
+                      ignore=400)
 
     result = es.index(index="publication", body=publication, id=pub_id)
 

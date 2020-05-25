@@ -12,3 +12,5 @@ RUN python3 -m nltk.downloader stopwords
 RUN python3 -m pip install -r requirements.txt
 COPY . /application
 WORKDIR /application
+EXPOSE 9004
+

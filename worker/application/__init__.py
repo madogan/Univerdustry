@@ -46,7 +46,7 @@ logger.add(sink=sys.stderr, level=os.environ.get("CONSOLE_LOG_LEVEL", "INFO"),
 # File logger.
 logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
            serialize=True,
-           rotation="100 MB",  # Every log file max size.
+           rotation="20 MB",  # Every log file max size.
            # Remove logs older than 3 days.
            retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
 
@@ -65,11 +65,3 @@ celery = create_celery(__name__)
 # Create application instance.
 from application.factory import create_app
 app = create_app()
-
-# TODO: Remove here before prod. This is only for development.
-if os.getenv("FIRST") == "true":
-    logger.info(f'First worker is runnning!')
-    from application.tasks.starter import t_starter
-    t_starter.apply_async(countdown=60)
-
-logger.info(f'Worker is runnning!')

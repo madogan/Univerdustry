@@ -64,12 +64,12 @@ services:
       - FILE_LOG_LEVEL=DEBUG
       - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://mongo_rest:9000
+      - WORKER_REST=http://worker_rest:9004
       - ELASTICSEARCH=http://elasticsearch:9200
       - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com:9005
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
     container_name: elasticsearch
-    restart: always
     volumes:
       - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
@@ -93,7 +93,6 @@ services:
   redis:
     image: bitnami/redis:latest
     container_name: redis
-    restart: always
     ports:
       - "6379:6379"
     volumes:
@@ -127,16 +126,44 @@ services:
   apache_tika:
     image: apache/tika:latest
     container_name: apache_tika
-    restart: always
+    restart: on-failure
     networks:
       - net_worker
     ports:
       - "9998:9998"
+  worker_rest:
+    build: ./worker
+    container_name: worker_rest
+    command: ["python3", "./run.py"]
+    ports:
+      - "9004:9004"
+    volumes:
+      - data_log:/application/logs
+      - data_worker:/application/files
+    networks:
+      - net_worker
+      - net_mongo_rest
+      - net_elasticsearch
+    depends_on:
+      - redis
+    environment:
+      - REST=true
+      - LANG=tr_TR.UTF-8
+      - LANGUAGE=tr_TR:tr
+      - LC_ALL=tr_TR.UTF-8
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - TZ=Europe/Istanbul
+      - FLASK_ENV=development
+      - FILE_LOG_LEVEL=DEBUG
+      - CONSOLE_LOG_LEVEL=INFO
+      - MONGO_REST=http://mongo_rest:9000
+      - ELASTICSEARCH=http://elasticsearch:9200
+      - VECTORIZER=http://projecttest.westeurope.cloudapp.azure.com:9005
+      - APACHE_TIKA=http://apache_tika:9998
   schedule_worker:
     build: ./worker
     container_name: schedule_worker
     command: ["celery", "beat", "-A", "application.celery", "--loglevel=debug"]
-    restart: always
     volumes:
       - data_log:/application/logs
       - data_worker:/application/files
@@ -176,7 +203,6 @@ services:
       - gateway
       - elasticsearch
     environment:
-      - FIRST=true
       - LANG=tr_TR.UTF-8
       - LANGUAGE=tr_TR:tr
       - LC_ALL=tr_TR.UTF-8
