@@ -19,7 +19,7 @@ def search_publication():
 
         pub.pop("_index")
 
-        pub_authors = pub["_source"].pop("authors", list())
+        pub_authors = pub["_source"].get("authors", list())
 
         for pub_author in pub_authors:
             author_id = pub_author.pop("id")
