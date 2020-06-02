@@ -23,7 +23,7 @@ class BaseConfig(object):
     RESTFUL_JSON = {'cls': CustomJsonEncoder}
     SECRET_KEY = os.urandom(16).hex()  # It results 32 length hex string.
 
-    LANGUAGES = ["en", "tr", "fr", "ar", "de"]
+    LANGUAGES = ["en", "tr"]
 
     MONGO_REST = os.getenv("MONGO_REST")
     WORKER_REST = os.getenv("WORKER_REST")

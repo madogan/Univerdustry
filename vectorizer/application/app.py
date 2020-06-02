@@ -44,9 +44,9 @@ path_model_ar = "../embeddings/formatted_wiki.multi.ar.vec"
 models = {
     "tr": WordVecFile(path_model_tr),
     "en": WordVecFile(path_model_en),
-    "fr": WordVecFile(path_model_fr),
-    "de": WordVecFile(path_model_de),
-    "ar": WordVecFile(path_model_ar),
+    # "fr": WordVecFile(path_model_fr),
+    # "de": WordVecFile(path_model_de),
+    # "ar": WordVecFile(path_model_ar),
 }
 
 

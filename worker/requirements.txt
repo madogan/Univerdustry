@@ -19,3 +19,4 @@ urllib3==1.25.7
 fuzzywuzzy==0.18.0
 python-Levenshtein==0.12.0
 git+https://github.com/emres/turkish-deasciifier.git
+googletrans==2.4.0

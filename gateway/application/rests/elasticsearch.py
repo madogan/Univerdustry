@@ -19,22 +19,27 @@ def get_vector(text: str, model: str = "fasttext_tr"):
 
 
 def search(index: str, text: str):
-    try:
-        real_lang = detect(text)
-    except Exception as e:
-        logger.error(f'Content lang. detection error: {str(e)}')
-        real_lang = "en"
+    translator = Translator()
 
-    vector = get_vector(text, real_lang)["vector"]
+    try:
+        src_lang = translator.detect(text).lang
+    except Exception:
+        src_lang = None
+
+    if src_lang is None:
+        try:
+            src_lang = detect(text)
+        except Exception:
+            src_lang = "en"
 
     langs = get_config("LANGUAGES")
 
-    translator = Translator()
-
     result = list()
     for lang in langs:
-        if lang != real_lang:
-            text = translator.translate(text, dest=lang).text
+        if lang != src_lang:
+            text = translator.translate(text, dest=lang, src=src_lang).text
+
+        vector = get_vector(text, lang)["vector"]
 
         query_json = {
             "_source": ["title", "url", "authors", "citedby", "year",

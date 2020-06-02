@@ -1,9 +1,10 @@
 from langdetect import detect
 from application import celery, es
+from googletrans import Translator
 from application.rests.vectorizer import get_vector
+from application.utils.mappings import publication_mappings
 from application.rests.mongo import find, find_one, update_one
 from application.utils.decorators import celery_exception_handler
-from application.utils.mappings import publication_mappings
 
 
 @celery.task(bind=True, name="elasticsearch_indexing", max_retries=3)
@@ -13,21 +14,28 @@ def t_elasticsearch_indexing(self, pub_id: str):
 
     publication = find_one("publication", {"filter": {"id": {"$eq": pub_id}}})
 
-    publication["authors"] = find(
-        "author",
-        {
-            "filter": {"id": {"$in": publication.get("authors", [])}},
-            "projection": ["id", "name", "affiliation", "citedby", "interests",
-                           "organizations"]
-        }
-    )
+    publication["authors"] = find("author", {
+        "filter": {"id": {"$in": publication.get("authors", [])}},
+        "projection": ["id", "name", "affiliation", "citedby", "interests",
+                       "organizations"]
+    })
+
+    translator = Translator()
 
     try:
-        publication["lang"] = detect(
+        publication["lang"] = translator.detect(
             publication.get("content", publication["title"])
-        )
+        ).lang
     except Exception:
-        publication["lang"] = "en"
+        publication["lang"] = None
+
+    if publication["lang"] is None:
+        try:
+            publication["lang"] = detect(
+                publication.get("content", publication["title"])
+            )
+        except Exception:
+            publication["lang"] = "en"
 
     publication.pop("created_at", None)
     publication.pop("raw_base64", None)

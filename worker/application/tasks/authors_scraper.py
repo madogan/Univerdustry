@@ -2,11 +2,10 @@ from random import choice
 from cleantext import clean
 from scholarly import search_author
 from application import celery, logger
+from application.rests.mongo import update_many
 from application.utils.helpers import preprocess_text
+from application.rests.mongo import find, find_one, insert_one
 from application.utils.decorators import celery_exception_handler
-from application.rests.mongo import find, find_one, insert_one, update_one
-from application.tasks.scrape_publications_of_author import \
-    t_scrape_publications_of_author
 from application.rests.scholar import (get_authors, get_next_page,
                                        get_organization_page, parse_author)
 
@@ -53,37 +52,15 @@ def get_author(author_name):
 @celery.task(bind=True, name="get_author", max_retries=3)
 @celery_exception_handler(ConnectionError)
 def t_get_author(self, author, org_domain):
-    author_in_mongo = find_one(
-        "author",
-        {"filter": {"id": {"$eq": author["id"]}}}
-    )
+    scraped_author = get_author(author["name"])
 
-    if author_in_mongo:
-        update_one(
-            "author",
-            {
-                "filter": {
-                    "id": {"$eq": author["id"]}
-                },
-                "update": {
-                    "$addToSet": {
-                        "organizations": org_domain
-                    }
-                }
-            }
-        )
-    else:
-        scraped_author = get_author(author["name"])
+    if scraped_author is not None:
+        author = scraped_author
 
-        if scraped_author is not None:
-            author = scraped_author
+    author["organizations"] = [org_domain]
+    result = insert_one("author", author)
 
-        author["organizations"] = [org_domain]
-        result = insert_one("author", author)
-
-        logger.info(f'<{author["name"]}> is inserted! | {result}')
-
-    t_scrape_publications_of_author.apply_async((author["id"], author["name"]))
+    logger.info(f'<{author["name"]}> is inserted! | {result}')
 
 
 @celery.task(bind=True, name="authors_scraper", max_retries=3)
@@ -106,6 +83,7 @@ def t_authors_scraper(self):
         tree, org_href = get_organization_page(org["domain"], proxy)
 
         counter = 10
+        updates = list()
         while True:
             authors = get_authors(tree)
 
@@ -114,12 +92,35 @@ def t_authors_scraper(self):
 
             for author in authors:
                 author = parse_author(author)
-                logger.info(f'Starting for <{author["name"]}>')
-                t_get_author.apply_async((author, org["domain"]))
+
+                author_in_mongo = find_one(
+                    "author",
+                    {"filter": {"id": {"$eq": author["id"]}}}
+                )
+
+                if not author_in_mongo:
+                    logger.info(f'Starting for <{author["name"]}>')
+                    t_get_author.apply_async((author, org["domain"]))
+                else:
+                    updates.append(author["id"])
 
             proxy = choice(proxies)
             tree = get_next_page(tree, counter, org_href, proxy)
 
             counter += 10
+
+        update_many(
+            "author",
+            {
+                "filter": {
+                    "id": {"$in": updates}
+                },
+                "update": {
+                    "$addToSet": {
+                        "organizations": org["domain"]
+                    }
+                }
+            }
+        )
 
     return {"status": "ok", "num_organizations": len_organizations}
