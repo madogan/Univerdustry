@@ -1,12 +1,11 @@
 import requests as rq
 from langdetect import detect
-
 from application import logger
 from googletrans import Translator
 from application.utils.helpers import get_config
 
 
-def get_vector(text: str, model: str = "fasttext_tr"):
+def get_vector(text: str, model: str = "tr"):
     url = get_config("VECTORIZER")
     url += f'/{model}/vectorize'
 
