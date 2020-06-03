@@ -158,3 +158,5 @@ static
 */*.vec
 
 *.bin
+/embeddings/*.ftz
+/embeddings/*.vec
