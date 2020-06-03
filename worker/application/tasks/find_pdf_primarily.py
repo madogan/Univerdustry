@@ -1,14 +1,14 @@
-import base64
 import os
-from _md5 import md5
+import base64
 
+from _md5 import md5
 from application import celery, logger
 from application.rests.mongo import update_one, find
 from application.utils.decorators import celery_exception_handler
-from application.utils.helpers import (extract_text_from_pdf, get_config,
-                                       download)
 from application.tasks.find_pdf_secondarily import t_find_pdf_secondarily
 from application.tasks.elasticsearch_indexing import t_elasticsearch_indexing
+from application.utils.helpers import (extract_text_from_pdf, get_config,
+                                       download)
 
 
 @celery.task(bind=True, name="find_pdf_primarily", max_retries=3)

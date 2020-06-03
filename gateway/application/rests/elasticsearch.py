@@ -1,44 +1,19 @@
 import requests as rq
-from langdetect import detect
-from application import logger
-from googletrans import Translator
 from application.utils.helpers import get_config
-
-
-def get_vector(text: str, model: str = "tr"):
-    url = get_config("VECTORIZER")
-    url += f'/{model}/vectorize'
-
-    response = rq.get(
-        url=url,
-        json={"text": text}
-    ).json()
-
-    return response
+from application.rests.vectorizer import lang_detect, get_vector, translate
 
 
 def search(index: str, text: str):
-    translator = Translator()
-
-    try:
-        src_lang = translator.detect(text).lang
-    except Exception:
-        src_lang = None
-
-    if src_lang is None:
-        try:
-            src_lang = detect(text)
-        except Exception:
-            src_lang = "en"
+    src_lang = lang_detect(text)
 
     langs = get_config("LANGUAGES")
 
     result = list()
     for lang in langs:
         if lang != src_lang:
-            text = translator.translate(text, dest=lang, src=src_lang).text
+            text = translate(text, lang)
 
-        vector = get_vector(text, lang)["vector"]
+        vector = get_vector(text)["vector"]
 
         query_json = {
             "_source": ["title", "url", "authors", "citedby", "year",

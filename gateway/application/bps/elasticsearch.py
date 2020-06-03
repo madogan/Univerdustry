@@ -1,4 +1,3 @@
-from application import logger
 from collections import defaultdict
 from flask import Blueprint, request, jsonify
 from application.rests.elasticsearch import search
@@ -30,6 +29,10 @@ def search_publication():
                 "id": pub["_id"], "title": pub["_source"]["title"]
             })
 
+    author_scores = dict(author_scores)
+    for author_id, score in author_scores.items():
+        author_scores[author_id] = score / aurhor_pub_counts[author_id]
+
     author_scores = dict(sorted(
         author_scores.items(), key=lambda x: x[1],  reverse=True
     ))
@@ -37,7 +40,7 @@ def search_publication():
     authors_sorted_list = list()
     for author_id, score in author_scores.items():
         authors_sorted_list.append({
-            **authors[author_id], "score": score / aurhor_pub_counts[author_id],
+            **authors[author_id], "score": score,
             "matched_pub_count": aurhor_pub_counts[author_id],
             "matched_pubs": author_pubs[author_id]
         })

@@ -1,6 +1,4 @@
-from langdetect import detect
 from application import celery, es
-from googletrans import Translator
 from application.rests.vectorizer import get_vector
 from application.utils.mappings import publication_mappings
 from application.rests.mongo import find, find_one, update_one
@@ -19,23 +17,6 @@ def t_elasticsearch_indexing(self, pub_id: str):
         "projection": ["id", "name", "affiliation", "citedby", "interests",
                        "organizations"]
     })
-
-    translator = Translator()
-
-    try:
-        publication["lang"] = translator.detect(
-            publication.get("content", publication["title"])
-        ).lang
-    except Exception:
-        publication["lang"] = None
-
-    if publication["lang"] is None:
-        try:
-            publication["lang"] = detect(
-                publication.get("content", publication["title"])
-            )
-        except Exception:
-            publication["lang"] = "en"
 
     publication.pop("created_at", None)
     publication.pop("raw_base64", None)
@@ -56,8 +37,9 @@ def t_elasticsearch_indexing(self, pub_id: str):
 
     vector_field = " ".join(vector_field_tokens)
 
-    vectorizer_response = get_vector(vector_field, publication["lang"])
+    vectorizer_response = get_vector(vector_field)
 
+    publication["lang"] = vectorizer_response["lang"]
     publication["vector"] = vectorizer_response["vector"]
 
     update_one("publication", {

@@ -1,1 +1,1 @@
-loguru==0.3.2fastapi==0.54.1uvicorn==0.11.3numpy==1.18.2langdetect==1.0.8# fasttext==0.9.1
+loguru==0.3.2fastapi==0.54.1uvicorn==0.11.3numpy==1.18.2requests==2.22.0googletrans==2.4.0

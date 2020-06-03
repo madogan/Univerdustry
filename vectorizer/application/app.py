@@ -26,14 +26,18 @@ logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
            # Remove logs older than 3 days.
            retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
 
+
+import fasttext
 import numpy as np
 
 from fastapi import FastAPI
 from pydantic import BaseModel
-from application.utils.helpers import tokenize
 from application.word_vec_file import WordVecFile
+from application.utils.helpers import lang_detect, tokenize, translate
 
 app = FastAPI()
+
+lang_model = fasttext.load_model("../embeddings/lid.176.ftz")
 
 path_model_tr = "../embeddings/formatted_wiki.multi.tr.vec"
 path_model_en = "../embeddings/formatted_wiki.multi.en.vec"
@@ -59,9 +63,10 @@ class TextModel(BaseModel):
     text: str = ""
 
 
-@app.get("/{model}/vectorize")
-async def get_vector(model, text_model: TextModel):
+@app.get("/vectorize")
+async def get_vector(text_model: TextModel):
     text = text_model.text.strip()
+    lang = lang_detect(text)
 
     try:
         if not text:
@@ -69,7 +74,7 @@ async def get_vector(model, text_model: TextModel):
 
         tokens = tokenize(text)
 
-        model = models.get(model, models["en"])
+        model = models.get(lang)
 
         vectors = list()
         for token in tokens:
@@ -82,7 +87,34 @@ async def get_vector(model, text_model: TextModel):
 
     result = {
         "text": text,
+        "lang": lang,
         "vector": vector
     }
 
     return result
+
+
+@app.get("/detect/lang")
+async def detect_lang(text_model: TextModel):
+    text = text_model.text.strip()
+
+    if not text:
+        raise ValueError("Empty text!")
+
+    return {"lang": lang_detect(text), "status": "ok"}
+
+
+class TranslationTextModel(BaseModel):
+    text: str = ""
+    dest_lang: str = "en"
+
+
+@app.get("/translate")
+async def translate_text(params: TranslationTextModel):
+    text = params.text.strip()
+    dest_lang = params.dest_lang.strip() or "en"
+
+    if not text:
+        raise ValueError("Empty text!")
+
+    return {"text": translate(text, dest_lang), "status": "ok"}

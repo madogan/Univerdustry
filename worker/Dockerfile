@@ -9,6 +9,7 @@ RUN python3 -m pip install --upgrade nltk
 RUN python3 -m nltk.downloader punkt
 RUN python3 -m nltk.downloader wordnet
 RUN python3 -m nltk.downloader stopwords
+RUN git clone https://github.com/facebookresearch/fastText.git && cd fastText && pip install .
 RUN python3 -m pip install -r requirements.txt
 COPY . /application
 WORKDIR /application

@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
 """This module consists several necessary function independently."""
 
-import re
-import nltk
 import requests
 
-from cleantext import clean
 from flask import current_app
-from langdetect import detect
-from application import logger
-from nltk.stem import WordNetLemmatizer
 from string import ascii_lowercase, digits
-from turkish.deasciifier import Deasciifier
+from application.utils.text import preprocess_text
 from application.utils.contextor import ensure_app_context
 
 
@@ -23,11 +17,6 @@ def get_config(name):
 @ensure_app_context
 def set_config(name, value):
     current_app.config[name] = value
-
-
-@ensure_app_context
-def get_logger():
-    return logger
 
 
 def clean_text(text: str):
@@ -53,81 +42,6 @@ def extract_text_from_pdf(pdf_path):
 
     if text:
         return preprocess_text(text)
-
-
-def preprocess_text(text):
-    clean_text = ''
-    for line in text.splitlines():    # cleaning - character at the end of lines
-        if len(line) > 0:
-            if line[-1] == '-':
-                line = line[:-1]
-            else:
-                line += " "
-            clean_text += line
-    document = clean_text.replace("-", " ")
-    document = clean(document,
-                     fix_unicode=True,  # fix various unicode errors
-                     to_ascii=True,  # transliterate to closest ASCII representation
-                     lower=True,  # lowercase text
-                     no_line_breaks=False,  # fully strip line breaks as opposed to only normalizing them
-                     no_urls=True,  # replace all URLs with a special token
-                     no_emails=True,  # replace all email addresses with a special token
-                     no_phone_numbers=True,  # replace all phone numbers with a special token
-                     no_numbers=True,  # replace all numbers with a special token
-                     no_digits=True,  # replace all digits with a special token
-                     no_currency_symbols=False,  # replace all currency symbols with a special token
-                     no_punct=True,  # fully remove punctuation
-                     replace_with_url=" ",
-                     replace_with_email=" ",
-                     replace_with_phone_number=" ",
-                     replace_with_number=" ",
-                     replace_with_digit=" ",
-                     )
-
-    document = document.split()
-    n = 12   # words count
-    document = [' '.join(document[i:i + n]) for i in range(0, len(document), n)]
-
-    stemmer = WordNetLemmatizer()
-    stop_words_en = nltk.corpus.stopwords.words('english')
-    stop_words_tr = nltk.corpus.stopwords.words('turkish')
-
-    complete_text = ''
-
-    for item in document:
-        # Remove all the special characters
-        item = re.sub(r'\W', ' ', str(item))
-
-        # remove all single characters
-        item = re.sub(r'\s+[a-zA-ZğüşöçıIİĞÜŞÖÇ]\s+', ' ', item)
-
-        # Remove single characters from the start
-        item = re.sub(r'\^[a-zA-ZğüşöçıIİĞÜŞÖÇ]\s+', ' ', item)
-
-        # Substituting multiple spaces with single space
-        item = re.sub(r'\s+', ' ', item, flags=re.I)
-
-        tokens = list()
-
-        if len(item) > 1:
-            if detect(item) == 'tr':
-                deasciifier = Deasciifier(item)
-                tokens = deasciifier.convert_to_turkish().split()
-                tokens = [word for word in tokens if word not in stop_words_tr]
-            else:
-                tokens = item.split()
-                tokens = [stemmer.lemmatize(word) for word in tokens]
-                tokens = [word for word in tokens if word not in stop_words_en]
-
-        tokens = [word for word in tokens if len(word) > 3]
-
-        preprocessed_text = ' '.join(tokens)
-
-        complete_text += preprocessed_text + " "
-
-    complete_text = re.sub(r'\s+', ' ', complete_text, flags=re.I)
-
-    return complete_text
 
 
 def download(url):
