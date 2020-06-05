@@ -24,14 +24,10 @@ def search_publication():
             author_id = pub_author.pop("id")
             authors[author_id] = pub_author
             aurhor_pub_counts[author_id] += 1
-            author_scores[author_id] += pub["_score"] * 100
+            author_scores[author_id] += pub["_score"]
             author_pubs[author_id].append({
                 "id": pub["_id"], "title": pub["_source"]["title"]
             })
-
-    author_scores = dict(author_scores)
-    for author_id, score in author_scores.items():
-        author_scores[author_id] = score / aurhor_pub_counts[author_id]
 
     author_scores = dict(sorted(
         author_scores.items(), key=lambda x: x[1],  reverse=True

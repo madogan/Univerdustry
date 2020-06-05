@@ -1,1 +1,1 @@
-TODO: Optimze search endpoint.TODO: Change vectorizer name.TODO: Use pytorch binaries instead vec text.
+TODO: Optimze search endpoint.TODO: Change vectorizer name.TODO: Use pytorch binaries instead vec text.TODO: Collect data without preprocess and keep preprocessed data in a different field.
