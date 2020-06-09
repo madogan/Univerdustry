@@ -43,6 +43,20 @@ def search_publication():
                 pub_author["pub_counts"] = 1
                 authors[author_id] = pub_author
 
+        title = pub["_source"].get("title", None) or pub["_source"].get(f'title_{pub["_source"]["lang"]}', "unknown")
+        content = pub["_source"].get("content", None) or pub["_source"].get(f'content_{pub["_source"]["lang"]}', "unknown")
+
+        title_keys = [k for k in pub["_source"].keys() if k.startswith("title_")]
+        content_keys = [k for k in pub["_source"].keys() if k.startswith("content_")]
+
+        removal_keys = title_keys + content_keys
+
+        for key in removal_keys:
+            del pub["_source"][key]
+
+        pub["_source"]["title"] = title
+        pub["_source"]["content"] = content
+
     return jsonify({
         "authors": {"count": author_count, "items": authors.values()[:100]},
         "pubs": {"count": pub_count, "items": pubs}
