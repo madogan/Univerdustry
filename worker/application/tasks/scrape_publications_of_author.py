@@ -5,7 +5,7 @@ from time import sleep
 from random import random
 from scholarly import search_author
 from application import celery, logger
-from application.utils.helpers import preprocess_text
+from application.utils.text import preprocess_text
 from application.utils.decorators import celery_exception_handler
 from application.rests.mongo import find_one, insert_one, update_one
 from application.tasks.find_pdf_primarily import t_find_pdf_primarily

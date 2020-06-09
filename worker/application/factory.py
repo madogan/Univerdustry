@@ -158,6 +158,7 @@ def create_celery(app_name: str) -> Celery:
             "application.tasks.scrape_publications_of_author",
             "application.tasks.find_pdf_primarily",
             "application.tasks.find_pdf_secondarily",
+            "application.tasks.pdf_extraction",
             "application.tasks.elasticsearch_indexing",
             "application.tasks.starter"
         ),

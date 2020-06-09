@@ -1,7 +1,10 @@
-from application import logger
+import numpy as np
+
 from flask import Blueprint, request, jsonify
-from application.rests.elasticsearch import search
+from application.rests.elasticsearch import search, get_docs, update_vector
+from application.rests.vectorizer import get_vector
 from application.utils.auto_sorted_dict import AutoSortedDict
+
 
 bp_elasticsearch = Blueprint("bp_elasticsearch", __name__,
                              url_prefix="/elasticsearch")
@@ -31,7 +34,7 @@ def search_publication():
                 })
 
                 authors[author_id] = current_author
-            else:
+            elif author_count < 100:
                 author_count += 1
                 pub_author["score"] = pub["_score"]
                 pub_author["pubs"] = [{
@@ -41,6 +44,31 @@ def search_publication():
                 authors[author_id] = pub_author
 
     return jsonify({
-        "authors": {"count": author_count, "items": authors.values()},
+        "authors": {"count": author_count, "items": authors.values()[:100]},
         "pubs": {"count": pub_count, "items": pubs}
     })
+
+
+@bp_elasticsearch.route("/relevance-feedback", methods=["PUT"])
+def relevance_feedback():
+    """Update document vectors with relevance feedback of user.
+    Expects a dictionary named feedback which has relevance_count,
+    irrelevance_count, pubs. Every pub has pub_id, relevance, position,
+    matched_word_count
+    """
+    # Get client data.
+    feedback = request.json.get("feedback")
+    pubs = feedback["pubs"]
+    query = feedback["query"]
+    # rcount = feedback["rcount"]
+    # nrcount = feedback["nrcount"]
+
+    # Get vector and lang. of the query.
+    result = get_vector(query)
+    qvector = np.array(result["vector"])
+
+    for pub_id, values in pubs.items():
+        rcoef = values["matched_word_count"] / values["position"]
+        update_vector("publication", pub_id, qvector, rcoef, values["relevance"])
+
+    return jsonify({"status": "ok"})

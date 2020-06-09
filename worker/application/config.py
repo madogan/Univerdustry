@@ -25,6 +25,8 @@ class BaseConfig:
 
     DATETIME_FORMAT = "%d-%m-%Y"
 
+    LANGUAGES = ["en", "tr"]
+
     RESTFUL_JSON = {'cls': CustomJsonEncoder}
 
     SECRET_KEY = md5("univerdustry".encode(ENCODING)).hexdigest()

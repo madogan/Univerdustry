@@ -1,6 +1,8 @@
-from application import celery, es
-from application.rests.vectorizer import get_vector
+from application import celery, es, logger
+from application.utils.helpers import get_config
+from application.utils.text import preprocess_text
 from application.utils.mappings import publication_mappings
+from application.rests.vectorizer import get_vector, translate
 from application.rests.mongo import find, find_one, update_one
 from application.utils.decorators import celery_exception_handler
 
@@ -10,41 +12,56 @@ from application.utils.decorators import celery_exception_handler
 def t_elasticsearch_indexing(self, pub_id: str):
     resd = {"status": "ok"}
 
-    publication = find_one("publication", {"filter": {"id": {"$eq": pub_id}}})
+    pub = find_one("publication", {
+        "filter": {"id": {"$eq": pub_id}, "vector": {"$exists": True}}
+    })
 
-    publication["authors"] = find("author", {
-        "filter": {"id": {"$in": publication.get("authors", [])}},
+    pub["authors"] = find("author", {
+        "filter": {"id": {"$in": pub.get("authors", [])}},
         "projection": ["id", "name", "affiliation", "citedby", "interests",
                        "organizations"]
     })
 
-    publication.pop("created_at", None)
-    publication.pop("raw_base64", None)
-    publication.pop("title_md5", None)
-    publication.pop("_id", None)
+    pub.pop("created_at", None)
+    pub.pop("raw_base64", None)
+    pub.pop("title_md5", None)
+    pub.pop("_id", None)
 
-    pub_id = publication.pop("id")
-    title = publication.get("title", None)
-    content = publication.get("content", None)
+    pub_id = pub.pop("id")
 
     vector_field_tokens = list()
 
-    if content is not None:
-        vector_field_tokens += content.split()
-
-    if title is not None and not title.startswith("unk_"):
-        vector_field_tokens += title.split()
+    if pub.get("content", None):
+        vector_field_tokens += pub["content"].split()
+    if not pub["title"].startswith("unk_"):
+        vector_field_tokens += pub["title"].split()
 
     vector_field = " ".join(vector_field_tokens)
+    vectorizer_response = get_vector(preprocess_text(vector_field))
 
-    vectorizer_response = get_vector(vector_field)
+    pub["lang"] = vectorizer_response["lang"]
+    pub["vector"] = vectorizer_response["vector"]
 
-    publication["lang"] = vectorizer_response["lang"]
-    publication["vector"] = vectorizer_response["vector"]
+    langs = get_config("LANGUAGES")
+
+    for lang in langs:
+        logger.info(f'src_lang: {lang} | dest_lang: {pub["lang"]}')
+
+        if lang != pub["lang"]:
+            pub[f'title_{lang}'] = preprocess_text(
+                translate(pub["title"], lang) or ""
+            )
+            if str(pub.get("content", None)).strip().lower() != "none":
+                pub[f'content_{lang}'] = preprocess_text(
+                    translate(pub["content"], lang) or ""
+                )
+        else:
+            pub[f'title_{lang}'] = preprocess_text(pub["title"])
+            pub[f'content_{lang}'] = preprocess_text(pub.get("content", ""))
 
     update_one("publication", {
         "filter": {"id": {"$eq": pub_id}},
-        "update": {"$set": {"vector": publication["vector"]}}
+        "update": {"$set": {"vector": pub["vector"]}}
     })
 
     es.indices.create(
@@ -52,11 +69,6 @@ def t_elasticsearch_indexing(self, pub_id: str):
         body={"mappings": publication_mappings},
         ignore=400
     )
-
-    result = es.index(index="publication",
-                      body=publication,
-                      id=pub_id)
-
+    result = es.index(index="publication", body=pub, id=pub_id)
     resd["result"] = result
-
     return resd

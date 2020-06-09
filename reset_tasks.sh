@@ -1,0 +1,1 @@
+docker-compose -f docker-compose-with-vec.yml down && docker volume rm univerdustry_data_redis univerdustry_data_worker -f && docker-compose -f docker-compose-with-vec.yml up --build --detach

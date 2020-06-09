@@ -1,1 +1,1 @@
-TODO: Change vectorizer name.TODO: Use pytorch binaries instead vec text.TODO: Collect data without preprocess and keep preprocessed data in a different field.TODO: Query preprocess.
+TODO: Change vectorizer name.TODO: Use pytorch binaries instead vec text.TODO: Collect data without preprocess and keep preprocessed data in a different field.TODO: Query preprocess.TODO: Elasticsearch fuzzy match.

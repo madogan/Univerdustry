@@ -3,7 +3,7 @@ from cleantext import clean
 from scholarly import search_author
 from application import celery, logger
 from application.rests.mongo import update_many
-from application.utils.helpers import preprocess_text
+from application.utils.text import preprocess_text
 from application.rests.mongo import find, find_one, insert_one
 from application.utils.decorators import celery_exception_handler
 from application.rests.scholar import (get_authors, get_next_page,
