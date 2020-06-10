@@ -51,8 +51,6 @@ def search(index: str, text: str):
     url = get_config("ELASTICSEARCH") + f'/{index}/_search'
     response = rq.get(url, json=query_json).json()
 
-    logger.info(f'Response: {response}')
-
     return response.get("hits", {}).get("hits", [])
 
 
@@ -75,10 +73,11 @@ def get_docs(ids, projections=None):
 
 
 def update_vector(index, _id, vector, rcoef, relevance):
-    sign = "+" if relevance is True else "-"
+    logger.info(f'{type(relevance)}: {relevance}')
 
-    inline = "for (int i=0; i<ctx._source.vector.length; ++i){ctx._source.vector[i]=(" \
-             "ctx._source.vector[i]" + sign + "(params.vector[i]*params.rcoef))/2}"
+    sign = "+" if str(relevance).strip().lower() == "true" else "-"
+
+    inline = "for (int i=0; i<ctx._source.vector.length; ++i){ctx._source.vector[i]=(ctx._source.vector[i]" + sign + "(params.vector[i]*params.rcoef))/2}"
 
     q = {
         "script": {

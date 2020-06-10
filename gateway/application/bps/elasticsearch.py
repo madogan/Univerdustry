@@ -83,6 +83,7 @@ def relevance_feedback():
 
     for pub_id, values in pubs.items():
         rcoef = values["matched_word_count"] / values["position"]
-        update_vector("publication", pub_id, qvector, rcoef, values["relevance"])
+        update_vector("publication", pub_id, qvector, rcoef ** 2, values[
+            "relevance"])
 
     return jsonify({"status": "ok"})
