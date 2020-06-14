@@ -7,31 +7,23 @@ from application.rests.vectorizer import lang_detect, get_vector, translate
 
 
 def search(index: str, text: str):
-    src_lang = lang_detect(text)
-
     query = preprocess_text(text.strip().lower())
 
     vector = get_vector(text)["vector"]
 
-    matches = [
-        {"match": {"title": query}},
-        {"match": {f'title_{src_lang}': query}},
-        {"match": {"content": query}},
-        {"match": {f'content_{src_lang}': query}},
-    ]
+    langs = get_config("LANGUAGES")
 
-    logger.info(f'matches: {matches}')
+    search_fields = list()
+    for lang in langs:
+        search_fields += [f'title_{lang}', f'content_{lang}']
 
     query_json = {
-        "_source": ["title", "url", "authors", "citedby", "year",
-                    "lang"],
+        "_source": ["url", "authors", "citedby", "year", "lang"] + [f'title_{l}' for l in langs],
         "query": {
             "script_score": {
-                "query": {
-                    "bool": {
-                        "should": [matches]
-                    }
-                },
+                "query": {"bool": {"should": [{
+                    "match": {f: query}} for f in search_fields
+                ]}},
                 "script": {
                     "source": "cosineSimilarity(params.query_vector, 'vector') + 1.0",
                     "params": {"query_vector": vector}
@@ -40,16 +32,15 @@ def search(index: str, text: str):
         },
         "highlight": {
             "fragment_size": 100,
-            "fields": {
-                "content": {},
-                "title": {}
-            }
+            "fields": {f: {} for f in search_fields}
         },
         "size": 100
     }
 
     url = get_config("ELASTICSEARCH") + f'/{index}/_search'
     response = rq.get(url, json=query_json).json()
+
+    logger.info(f'Resp: {response}')
 
     return response.get("hits", {}).get("hits", [])
 

@@ -1,10 +1,12 @@
 import numpy as np
 
+from application import logger
 from flask import Blueprint, request, jsonify
 from application.rests.elasticsearch import search, get_docs, update_vector
 from application.rests.vectorizer import get_vector
 from application.utils.auto_sorted_dict import AutoSortedDict
 
+from application.utils.helpers import get_config
 
 bp_elasticsearch = Blueprint("bp_elasticsearch", __name__,
                              url_prefix="/elasticsearch")
@@ -14,23 +16,26 @@ bp_elasticsearch = Blueprint("bp_elasticsearch", __name__,
 def search_publication():
     pubs = search("publication", request.args["text"])
 
+    langs = get_config("LANGUAGES")
     authors = AutoSortedDict(sort_field="score")
     author_count, pub_count = 0, 0
     for pub in pubs:
         pub_count += 1
         pub.pop("_index")
+        pub_lang = pub["_source"]["lang"]
         pub_authors = pub["_source"].get("authors", list())
         for pub_author in pub_authors:
             author_id = pub_author.pop("id")
-
             if authors.get(author_id, None) is not None:
                 current_author = authors[author_id]
+
                 del authors[author_id]
 
                 current_author["pub_counts"] += 1
                 current_author["score"] += pub["_score"]
                 current_author["pubs"].append({
-                    "id": pub["_id"], "title": pub["_source"]["title"]
+                    "id": pub["_id"],
+                    "title": pub["_source"][f'title_{pub_lang}']
                 })
 
                 authors[author_id] = current_author
@@ -38,24 +43,18 @@ def search_publication():
                 author_count += 1
                 pub_author["score"] = pub["_score"]
                 pub_author["pubs"] = [{
-                    "id": pub["_id"], "title": pub["_source"]["title"]
+                    "id": pub["_id"],
+                    "title": pub["_source"][f'title_{pub_lang}']
                 }]
                 pub_author["pub_counts"] = 1
                 authors[author_id] = pub_author
 
-        title = pub["_source"].get("title", None) or pub["_source"].get(f'title_{pub["_source"]["lang"]}', "unknown")
-        content = pub["_source"].get("content", None) or pub["_source"].get(f'content_{pub["_source"]["lang"]}', "unknown")
+        pub["_source"]["title"] = pub["_source"].get(f'title_{pub_lang}',
+                                                     "unknown")
 
-        title_keys = [k for k in pub["_source"].keys() if k.startswith("title_")]
-        content_keys = [k for k in pub["_source"].keys() if k.startswith("content_")]
-
-        removal_keys = title_keys + content_keys
-
-        for key in removal_keys:
-            del pub["_source"][key]
-
-        pub["_source"]["title"] = title
-        pub["_source"]["content"] = content
+        for k in langs:
+            pub["_source"].pop(f'title_{k}', None)
+            pub["_source"].pop(f'content_{k}', None)
 
     return jsonify({
         "authors": {"count": author_count, "items": authors.values()[:100]},

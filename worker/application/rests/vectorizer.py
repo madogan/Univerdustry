@@ -31,9 +31,12 @@ def translate(text, dest_lang):
     url = get_config("VECTORIZER")
     url += "/translate"
 
-    response = requests.get(
-        url=url,
-        json={"text": text, "dest_lang": dest_lang}
-    ).json()
+    try:
+        response = requests.get(
+            url=url,
+            json={"text": text, "dest_lang": dest_lang}
+        ).json().get("text", None)
+    except Exception:
+        response = False
 
-    return response.get("text", None)
+    return response

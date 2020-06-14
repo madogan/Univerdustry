@@ -1,3 +1,5 @@
+import requests as rq
+
 from application import celery, es, logger
 from application.utils.helpers import get_config
 from application.utils.text import preprocess_text
@@ -45,30 +47,51 @@ def t_elasticsearch_indexing(self, pub_id: str):
     langs = get_config("LANGUAGES")
 
     for lang in langs:
-        logger.info(f'src_lang: {lang} | dest_lang: {pub["lang"]}')
-
         if lang != pub["lang"]:
             pub[f'title_{lang}'] = preprocess_text(
                 translate(pub["title"], lang) or ""
             )
-            if str(pub.get("content", None)).strip().lower() != "none":
+            if str(pub.get("content", None)).strip().lower() not in ["none", ""]:
                 pub[f'content_{lang}'] = preprocess_text(
                     translate(pub["content"], lang) or ""
                 )
         else:
             pub[f'title_{lang}'] = preprocess_text(pub["title"])
-            pub[f'content_{lang}'] = preprocess_text(pub.get("content", ""))
+            pub[f'content_{lang}'] = preprocess_text(pub.get("content",
+                                                             "") or "")
+
+    if "title" in pub: del pub["title"]
+    if "content" in pub: del pub["content"]
 
     update_one("publication", {
         "filter": {"id": {"$eq": pub_id}},
-        "update": {"$set": {"vector": pub["vector"]}}
+        "update": {"$set": {"vector": pub["vector"],
+                            "lang": pub["lang"]}}
     })
 
-    es.indices.create(
-        index="publication",
-        body={"mappings": publication_mappings},
-        ignore=400
+    for lang in langs:
+        publication_mappings["properties"][f'title_{lang}'] = {"type": "text"}
+        publication_mappings["properties"][f'content_{lang}'] = {"type": "text"}
+
+    resp = rq.put(
+        get_config("ELASTICSEARCH") + "/publication",
+        json={"mappings": publication_mappings}
     )
+
+    if resp.status_code == 400:
+        resp = rq.put(
+            get_config("ELASTICSEARCH") + "/publication/_mappings",
+            json=publication_mappings
+        )
+
+    logger.info(f'Mapping Response: {resp.json()}')
+
+    # resp = es.indices.create(
+    #     index="publication",
+    #     body={"mappings": publication_mappings},
+    #     ignore=400
+    # )
+
     result = es.index(index="publication", body=pub, id=pub_id)
     resd["result"] = result
     return resd

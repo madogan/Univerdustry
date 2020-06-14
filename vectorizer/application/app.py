@@ -115,6 +115,8 @@ async def translate_text(params: TranslationTextModel):
     dest_lang = params.dest_lang.strip() or "en"
 
     if not text:
-        raise ValueError("Empty text!")
+        text = ""
+    else:
+        text = translate(text, dest_lang)
 
-    return {"text": translate(text, dest_lang), "status": "ok"}
+    return {"text": text, "status": "ok"}
