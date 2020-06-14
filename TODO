@@ -1,1 +1,1 @@
-TODO: Remove single vector fields in es.TODO: Solve vector field problem.TODO: Change vectorizer name.TODO: Use pytorch binaries instead vec text.TODO: Collect data without preprocess and keep preprocessed data in a different field.TODO: Query preprocess.TODO: Elasticsearch fuzzy match.
+TODO: Change vectorizer name.TODO: Use pytorch binaries instead vec text.TODO: Collect data without preprocess and keep preprocessed data in a different field.TODO: Query preprocess.TODO: Elasticsearch fuzzy match.
