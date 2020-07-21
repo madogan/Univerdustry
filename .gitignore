@@ -148,11 +148,6 @@ static
 # PyCharm
 .idea
 
-# Image Formats
-*.jpg
-*.jpeg
-*.png
-
 *.vec
 
 */*.vec
