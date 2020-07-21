@@ -17,8 +17,6 @@ Univerdustry is a machine learning based search engine. It uses Elasticsearch an
 
 ## Table of Contents
 
----
-
 - [Approach](#approach)
 - [Services](#services)
 - [Dataset](#dataset)
@@ -29,8 +27,6 @@ Univerdustry is a machine learning based search engine. It uses Elasticsearch an
 - [References](#references) 
 
 ## Approach <a name = "approach"></a>
-
----
 
 Mainly we have two part. One is front-end side which is developed by Vue.js framework. Vue is a progressive framework for building user interfaces. Unlike other monolithic frameworks, Vue is designed from the ground up to be incrementally adoptable. The core library is focused on the view layer only, and is easy to pick up and integrate with other libraries or existing projects. On the other hand, Vue is also perfectly capable of powering sophisticated Single-Page Applications when used in combination with modern tooling and supporting libraries.
 
@@ -52,11 +48,9 @@ We changed some parts of our first design while implementing. Firstly, we’ve c
 
 Also, we have added some extra services like Apache Tika [[3]](#ref_03) and remove some services like Scrapy.
 
-<img src="images/univerdustry_architecture_v2.jpg" align="center"/>
+<img src="images/univerdustry_architecture_v2.jpg" align="center" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
 
 ## Services <a name = "services"></a>
-
----
 
 <b>Gateway</b> service is a kind of request handler. It handles all requests come from client and query backed service in order to give response to client. Also, it manages Vue.js application. It is built using Python Flask Web Framework. Flask is a micro web framework written in Python. It is classified as a microframework because it does not require particular tools or libraries. It has no database abstraction layer, form validation, or any other components where pre-existing third-party libraries provide common functions. However, Flask supports extensions that can add application features as if they were implemented in Flask itself. Extensions exist for object-relational mappers, form validation, upload handling, various open authentication technologies and several common framework related tools. Extensions are updated far more frequently than the core Flask program [[4]](#ref_04).
 
@@ -85,17 +79,13 @@ Also, we have added some extra services like Apache Tika [[3]](#ref_03) and remo
 
 ## Dataset <a name = "dataset"></a>
 
----
-
 For demonstration we need a dataset. But data of publications are mostly not public. We use Google Scholar to collect data. We collect list of academics in a university using university mail domain. We collect data of academics according to their university. After that we collect publication details of academics. If pdf file of a publication is publicly available, we downloaded it and extracted using Apache Tika. After extraction we detect language of text and vectorize it.
 
-<img src="images/univerdustry_flow_diagram_v1.jpg" align="center"/>
+<img src="images/univerdustry_flow_diagram_v1.jpg" align="center" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
 
 ## Vectorizing and Scoring <a name = "vectorizing_and_scoring"></a>
 
----
-
-<img src="images/muse_outline.png" align="center"/>
+<img src="images/muse_outline.png" align="center" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
 
 For text vectorization we use MUSE common space aligned vectors. MUSE is a Python library for multilingual word embeddings, whose goal is to provide the community with:
 
@@ -112,15 +102,13 @@ We store vector of textual data in Elasticsearch and query with scoring using co
 
 ## Online Learning <a name = "online_learning"></a>
 
----
-
 We are capable to get feedback an update our model to improve results. We have used update version of Rocchio algorithm. The Rocchio algorithm is based on a method of relevance feedback found in information retrieval systems which stemmed from the SMART Information Retrieval System which was developed 1960-1964. Like many other retrieval systems, the Rocchio feedback approach was developed using the Vector Space Model. The algorithm is based on the assumption that most users have a general conception of which documents should be denoted as relevant or non-relevant. Therefore, the user's search query is revised to include an arbitrary percentage of relevant and non-relevant documents as a means of increasing the search engine's recall, and possibly the precision as well [[6]](#ref_06).
 
-<img src="images/online_learning_1.png" align="center"/>
+<img align="center" src="images/online_learning_1.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
 
 <br>
 
-<img src="images/online_learning_2.png" align="center"/>
+<img src="images/online_learning_2.png" align="center" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
 
 We update document vectors if client gives feedback as relevant or irrelevant using above formula.
 
