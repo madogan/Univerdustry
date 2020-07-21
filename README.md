@@ -52,7 +52,7 @@ We changed some parts of our first design while implementing. Firstly, we’ve c
 
 Also, we have added some extra services like Apache Tika [[3]](#ref_03) and remove some services like Scrapy.
 
-<img src="assets/images/univerdustry_architecture_v2.jpg" align="center"/>
+<img src="images/univerdustry_architecture_v2.jpg" align="center"/>
 
 ## Services <a name = "services"></a>
 
@@ -89,13 +89,13 @@ Also, we have added some extra services like Apache Tika [[3]](#ref_03) and remo
 
 For demonstration we need a dataset. But data of publications are mostly not public. We use Google Scholar to collect data. We collect list of academics in a university using university mail domain. We collect data of academics according to their university. After that we collect publication details of academics. If pdf file of a publication is publicly available, we downloaded it and extracted using Apache Tika. After extraction we detect language of text and vectorize it.
 
-<img src="assets/images/univerdustry_flow_diagram_v1.jpg" align="center"/>
+<img src="images/univerdustry_flow_diagram_v1.jpg" align="center"/>
 
 ## Vectorizing and Scoring <a name = "vectorizing_and_scoring"></a>
 
 ---
 
-<img src="assets/images/muse_outline.png" align="center"/>
+<img src="images/muse_outline.png" align="center"/>
 
 For text vectorization we use MUSE common space aligned vectors. MUSE is a Python library for multilingual word embeddings, whose goal is to provide the community with:
 
@@ -116,11 +116,11 @@ We store vector of textual data in Elasticsearch and query with scoring using co
 
 We are capable to get feedback an update our model to improve results. We have used update version of Rocchio algorithm. The Rocchio algorithm is based on a method of relevance feedback found in information retrieval systems which stemmed from the SMART Information Retrieval System which was developed 1960-1964. Like many other retrieval systems, the Rocchio feedback approach was developed using the Vector Space Model. The algorithm is based on the assumption that most users have a general conception of which documents should be denoted as relevant or non-relevant. Therefore, the user's search query is revised to include an arbitrary percentage of relevant and non-relevant documents as a means of increasing the search engine's recall, and possibly the precision as well [[6]](#ref_06).
 
-<img src="assets/images/online_learning_1.png" align="center"/>
+<img src="images/online_learning_1.png" align="center"/>
 
 <br>
 
-<img src="assets/images/online_learning_2.png" align="center"/>
+<img src="images/online_learning_2.png" align="center"/>
 
 We update document vectors if client gives feedback as relevant or irrelevant using above formula.
 
