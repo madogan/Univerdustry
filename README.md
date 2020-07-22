@@ -12,7 +12,7 @@
  -->
 
 <p align="center">
-Univerdustry is a machine learning based search engine. It uses Elasticsearch and MUSE library to build a semantic search for academic papers to find best academic consultants. 
+Univerdustry is a machine learning based search engine. It uses Elasticsearch and MUSE library to build a semantic search for academic papers to find best academic consultants.
 </p>
 
 ## Table of Contents
@@ -22,9 +22,9 @@ Univerdustry is a machine learning based search engine. It uses Elasticsearch an
 - [Dataset](#dataset)
 - [Vectorizing and Scoring](#vectorizing_and_scoring)
 - [Online Learning](#online_learning)
-- [TODO](TODO.md)  
+- [TODO](TODO.md)
 - [Contributing](CONTRIBUTING.md)
-- [References](#references) 
+- [References](#references)
 
 ## Approach <a name = "approach"></a>
 
@@ -42,13 +42,15 @@ Other is back-end side which is design as Micro Service Architecture. Microservi
 
 •	Owned by a small team
 
-The microservice architecture enables the rapid, frequent and reliable delivery of large, complex applications. It also enables an organization to evolve its technology stack [[1]](#ref_01). 
+The microservice architecture enables the rapid, frequent and reliable delivery of large, complex applications. It also enables an organization to evolve its technology stack [[1]](#ref_01).
 
 We changed some parts of our first design while implementing. Firstly, we’ve changed our database paradigm as NoSQL. We have chosen MongoDB [[2]](#ref_02) instead of PostgreSQL. NoSQL databases (aka "not only SQL") are non-tabular, and store data differently than relational tables. NoSQL databases come in a variety of types based on their data model. The main types are document, key-value, wide-column, and graph. They provide flexible schemas and scale easily with large amounts of data and high user loads.
 
-Also, we have added some extra services like Apache Tika [[3]](#ref_03) and remove some services like Scrapy.
+Also, we have added some extra services like Apache Tika [[3]](#ref_03).
 
-<img src="images/univerdustry_architecture_v2.jpg" align="center" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
+<p align="center">
+<img src="images/univerdustry_architecture_v2.jpg" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
+</p>
 
 ## Services <a name = "services"></a>
 
@@ -81,11 +83,15 @@ Also, we have added some extra services like Apache Tika [[3]](#ref_03) and remo
 
 For demonstration we need a dataset. But data of publications are mostly not public. We use Google Scholar to collect data. We collect list of academics in a university using university mail domain. We collect data of academics according to their university. After that we collect publication details of academics. If pdf file of a publication is publicly available, we downloaded it and extracted using Apache Tika. After extraction we detect language of text and vectorize it.
 
-<img src="images/univerdustry_flow_diagram_v1.jpg" align="center" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
+<p align="center">
+<img src="images/univerdustry_flow_diagram_v1.jpg" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
+</p>
 
 ## Vectorizing and Scoring <a name = "vectorizing_and_scoring"></a>
 
-<img src="images/muse_outline.png" align="center" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
+<p align="center">
+<img src="images/muse_outline.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
+</p>
 
 For text vectorization we use MUSE common space aligned vectors. MUSE is a Python library for multilingual word embeddings, whose goal is to provide the community with:
 
@@ -104,13 +110,22 @@ We store vector of textual data in Elasticsearch and query with scoring using co
 
 We are capable to get feedback an update our model to improve results. We have used update version of Rocchio algorithm. The Rocchio algorithm is based on a method of relevance feedback found in information retrieval systems which stemmed from the SMART Information Retrieval System which was developed 1960-1964. Like many other retrieval systems, the Rocchio feedback approach was developed using the Vector Space Model. The algorithm is based on the assumption that most users have a general conception of which documents should be denoted as relevant or non-relevant. Therefore, the user's search query is revised to include an arbitrary percentage of relevant and non-relevant documents as a means of increasing the search engine's recall, and possibly the precision as well [[6]](#ref_06).
 
-<img align="center" src="images/online_learning_1.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
 
-<br>
+<p align="center">
+<img src="images/online_learning_1.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
+</p>
 
-<img src="images/online_learning_2.png" align="center" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
+<!-- <img align="center" src="images/online_learning_1.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/> -->
 
-We update document vectors if client gives feedback as relevant or irrelevant using above formula.
+<!-- <br> -->
+
+<p align="center">
+<img src="images/online_learning_2.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
+</p>
+<!--
+<img src="images/online_learning_2.png" align="center" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/> -->
+
+We update document vectors using above formula if client gives feedback as relevant or irrelevant.
 
 ## References <a name = "references"></a>
 
