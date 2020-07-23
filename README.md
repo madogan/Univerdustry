@@ -49,7 +49,7 @@ We changed some parts of our first design while implementing. Firstly, we’ve c
 Also, we have added some extra services like Apache Tika [[3]](#ref_03).
 
 <p align="center">
-<img src="images/univerdustry_architecture_v2.jpg" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
+<img src=".github/images/univerdustry_architecture_v2.jpg" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
 </p>
 
 ## Services <a name = "services"></a>
@@ -84,13 +84,13 @@ Also, we have added some extra services like Apache Tika [[3]](#ref_03).
 For demonstration we need a dataset. But data of publications are mostly not public. We use Google Scholar to collect data. We collect list of academics in a university using university mail domain. We collect data of academics according to their university. After that we collect publication details of academics. If pdf file of a publication is publicly available, we downloaded it and extracted using Apache Tika. After extraction we detect language of text and vectorize it.
 
 <p align="center">
-<img src="images/univerdustry_flow_diagram_v1.jpg" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
+<img src=".github/images/univerdustry_flow_diagram_v1.jpg" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
 </p>
 
 ## Vectorizing and Scoring <a name = "vectorizing_and_scoring"></a>
 
 <p align="center">
-<img src="images/muse_outline.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
+<img src=".github/images/muse_outline.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
 </p>
 
 For text vectorization we use MUSE common space aligned vectors. MUSE is a Python library for multilingual word embeddings, whose goal is to provide the community with:
@@ -112,18 +112,18 @@ We are capable to get feedback an update our model to improve results. We have u
 
 
 <p align="center">
-<img src="images/online_learning_1.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
+<img src=".github/images/online_learning_1.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
 </p>
 
-<!-- <img align="center" src="images/online_learning_1.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/> -->
+<!-- <img align="center" src=".github/images/online_learning_1.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/> -->
 
 <!-- <br> -->
 
 <p align="center">
-<img src="images/online_learning_2.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
+<img src=".github/images/online_learning_2.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
 </p>
 <!--
-<img src="images/online_learning_2.png" align="center" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/> -->
+<img src=".github/images/online_learning_2.png" align="center" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/> -->
 
 We update document vectors using above formula if client gives feedback as relevant or irrelevant.
 
