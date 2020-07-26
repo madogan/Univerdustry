@@ -9,6 +9,7 @@ Attributes:
         root dir of application.
 """
 # Version of the application.
+# TODO: Research for SemVer for versioning.
 __version__ = "0.1"
 
 # This lib. provides safe threading. For more information: http://eventlet.net/
@@ -39,16 +40,10 @@ from loguru import logger
 logger.remove()
 
 # Console logger.
-logger.add(sink=sys.stderr, level=os.environ.get("CONSOLE_LOG_LEVEL", "INFO"),
-           format="|{time}| |{process}| |{level}| |{name}:{function}:{line}| "
-                  "{message}")
-
-# File logger.
-logger.add(sink=os.path.join(ROOT_DIR, "logs", "log_{time}.log"),
-           serialize=True,
-           rotation="10 MB",  # Every log file max size.
-           # Remove logs older than 3 days.
-           retention="3 days", level=os.environ.get("FILE_LOG_LEVEL", "DEBUG"))
+logger.add(
+    sink=sys.stderr, level=os.environ.get("LOG_LEVEL", "INFO"),
+    format="|{time}| |{process}| |{level}| |{name}:{function}:{line}| {message}"
+)
 
 from elasticsearch import Elasticsearch
 es = Elasticsearch(os.getenv("ELASTICSEARCH"))

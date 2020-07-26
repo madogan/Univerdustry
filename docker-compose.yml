@@ -54,15 +54,14 @@ services:
       - mongo_rest
       - elasticsearch
     environment:
+      - PORT=9001
+      - LOG_LEVEL=DEBUG
       - LANG=tr_TR.UTF-8
       - LANGUAGE=tr_TR:tr
       - LC_ALL=tr_TR.UTF-8
       - TZ=Europe/Istanbul
-      - EXPOSE_PORT=9001
       - FLASK_APP=application/app
       - FLASK_ENV=development
-      - FILE_LOG_LEVEL=DEBUG
-      - CONSOLE_LOG_LEVEL=INFO
       - MONGO_REST=http://mongo_rest:9000
       - WORKER_REST=http://worker_rest:9004
       - ELASTICSEARCH=http://elasticsearch:9200
