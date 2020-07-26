@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "embeddings"
+		},
+		{
+			"path": "gateway"
+		},
+		{
+			"path": "mongo_rest"
+		},
+		{
+			"path": "vectorizer"
+		},
+		{
+			"path": "worker"
+		}
+	],
+	"settings": {}
+}
