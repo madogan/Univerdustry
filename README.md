@@ -134,8 +134,8 @@ We update document vectors using above formula if client gives feedback as relev
 
 ## What we need? <a name = "whatweneed"></a>
 
-* We need a sponsorship for production.
-* We need front-end developer by using Flutter.
+* We need a sponsorship for server or cloud costs.
+* We need Flutter developer for GUI.
 
 ## References <a name = "references"></a>
 
