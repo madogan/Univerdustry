@@ -116,11 +116,6 @@ We are capable to get feedback an update our model to improve results. We have u
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. For more detail please go to [CONTRIBUTING.md]((CONTRIBUTING.md)).
 
-## What we need? <a name = "whatweneed"></a>
-
-* We need a sponsorship for production.
-* We need front-end developer by using Flutter.
-
 <p align="center">
 <img src=".github/images/online_learning_1.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
 </p>
@@ -136,6 +131,11 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 <img src=".github/images/online_learning_2.png" align="center" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/> -->
 
 We update document vectors using above formula if client gives feedback as relevant or irrelevant.
+
+## What we need? <a name = "whatweneed"></a>
+
+* We need a sponsorship for production.
+* We need front-end developer by using Flutter.
 
 ## References <a name = "references"></a>
 
