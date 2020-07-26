@@ -23,7 +23,8 @@ Univerdustry is a machine learning based search engine. It uses Elasticsearch an
 - [Vectorizing and Scoring](#vectorizing_and_scoring)
 - [Online Learning](#online_learning)
 - [TODO](TODO.md)
-- [Contributing](CONTRIBUTING.md)
+- [Contributing](#contributing)
+- [What we need?](#whatweneed)
 - [References](#references)
 
 ## Approach <a name = "approach"></a>
@@ -110,6 +111,15 @@ We store vector of textual data in Elasticsearch and query with scoring using co
 
 We are capable to get feedback an update our model to improve results. We have used update version of Rocchio algorithm. The Rocchio algorithm is based on a method of relevance feedback found in information retrieval systems which stemmed from the SMART Information Retrieval System which was developed 1960-1964. Like many other retrieval systems, the Rocchio feedback approach was developed using the Vector Space Model. The algorithm is based on the assumption that most users have a general conception of which documents should be denoted as relevant or non-relevant. Therefore, the user's search query is revised to include an arbitrary percentage of relevant and non-relevant documents as a means of increasing the search engine's recall, and possibly the precision as well [[6]](#ref_06).
 
+
+## Contributing <a name = "contributing"></a>
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. For more detail please go to [CONTRIBUTING.md]((CONTRIBUTING.md)).
+
+## What we need? <a name = "whatweneed"></a>
+
+* We need a sponsorship for production.
+* We need front-end developer by using Flutter.
 
 <p align="center">
 <img src=".github/images/online_learning_1.png" style="display:block;float:none;margin-left:auto;margin-right:auto;width:60%"/>
