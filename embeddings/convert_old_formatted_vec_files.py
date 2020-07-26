@@ -1,12 +1,23 @@
+# -*- coding: utf-8 -*-
+"""Convert standard `.vec` file format for our format.
+
+List files same directory with this script and look files
+ends with `.vec` and convert to format. Finally save
+by changing name of files as starts with `formatted_` .
+"""
+
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join('../vectorizer')))
 
+# FIXME: Find a way to ignore `unresolved-import` warning for vscode.
 from application.word_vec_file import WordVecFile
 
-model_names = os.listdir(".")
 
-for model_name in model_names:
-    if model_name.endswith(".vec") and not model_name.startswith("formatted_"):
-        if WordVecFile.check_is_file_formatted(model_name) is not True:
-            WordVecFile.convert_file_format(model_name)
+if __name__ == "__main__":
+    model_names = os.listdir(".")
+
+    for model_name in model_names:
+        if model_name.endswith(".vec") and not model_name.startswith("formatted_"):
+            if WordVecFile.check_is_file_formatted(model_name) is not True:
+                WordVecFile.convert_file_format(model_name)
