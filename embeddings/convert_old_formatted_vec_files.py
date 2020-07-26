@@ -11,6 +11,9 @@ import sys
 sys.path.append(os.path.abspath(os.path.join('../vectorizer')))
 
 # FIXME: Find a way to ignore `unresolved-import` warning for vscode.
+# This works because we are changing the working directory with above code.
+# So it is better to ignore below statement for `unresolved-import` error
+# for clean user experience.
 from application.word_vec_file import WordVecFile
 
 
