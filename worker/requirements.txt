@@ -5,7 +5,7 @@ redis==3.3.11
 gunicorn==20.0.4
 requests==2.22.0
 Flask==1.1.1
-lxml==4.4.2
+lxml==4.6.2
 elasticsearch==7.0.5
 scholarly==0.2.5
 langdetect==1.0.8
